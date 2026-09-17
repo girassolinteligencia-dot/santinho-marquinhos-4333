@@ -1,11 +1,11 @@
 {
-  "name": "Minha Colinha 2026",
-  "short_name": "Minha Colinha",
-  "description": "Monte sua colinha para as Eleições 2026 de forma fácil, rápida e com números gigantes.",
+  "name": "Vem com a Gente — Marquinhos Trad 4333",
+  "short_name": "Marquinhos 4333",
+  "description": "Monte sua colinha eleitoral 2026 completa com Marquinhos Trad Deputado Federal 4333 e seus candidatos preferidos.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#091b15",
-  "theme_color": "#10b981",
+  "background_color": "#14532d",
+  "theme_color": "#14532d",
   "icons": [
     {
       "src": "icons/icon-192.png",

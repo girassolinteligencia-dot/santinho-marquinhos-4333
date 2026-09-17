@@ -7,6 +7,21 @@
   <meta name="description" content="Vem com a Gente! Marquinhos Trad Deputado Federal 4333. Monte sua colinha eleitoral completa com Marquinhos Trad e seus candidatos para 2026.">
   <meta name="theme-color" content="#14532d">
   
+  <!-- Open Graph / WhatsApp / Facebook Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Vem com a Gente — Marquinhos Trad · Deputado Federal 4333">
+  <meta property="og:description" content="Monte sua colinha oficial para as Eleições 2026 com Marquinhos Trad 4333 e seus candidatos preferidos. Rápido, fácil e direto!">
+  <meta property="og:image" content="og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Marquinhos Trad Deputado Federal 4333 - Vem com a Gente">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vem com a Gente — Marquinhos Trad · Deputado Federal 4333">
+  <meta name="twitter:description" content="Monte sua colinha oficial 2026 com Marquinhos Trad 4333 e compartilhe com amigos e família.">
+  <meta name="twitter:image" content="og-image.jpg">
+
   <!-- Ícones e Favicon -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" href="favicon.png">
@@ -22,12 +37,18 @@
 </head>
 <body data-fundo="claro">
 
-  <!-- Topo Centralizado com Logomarca Oficial Marquinhos Trad 4333 -->
+  <!-- Topo Centralizado com Novo Ícone Oficial Marquinhos Trad 4333 -->
   <header class="app-header">
     <div class="header-content">
-      <div class="brand">
-        <img src="marquinhos_logo_oficial.png" alt="Marquinhos Trad Deputado Federal 4333" class="brand-icon brand-icon-marquinhos">
-        <span class="brand-sub">VEM COM A GENTE · ELEIÇÕES 2026</span>
+      <div class="brand brand-com-boneco">
+        <picture>
+          <source srcset="marquinhos_hero.webp" type="image/webp">
+          <img src="marquinhos_hero.png" alt="Marquinhos Trad Deputado Federal 4333" class="brand-hero-badge-img">
+        </picture>
+        <div class="brand-text-group">
+          <span class="brand-title-destaque">MARQUINHOS TRAD</span>
+          <span class="brand-sub">VEM COM A GENTE · ELEIÇÕES 2026</span>
+        </div>
       </div>
       <div class="header-actions">
         <button id="btn-ajuda" class="btn-header-icon" title="Como funciona o aplicativo" aria-label="Ver instruções de uso">
@@ -53,46 +74,42 @@
   </header>
 
   <main class="container-vitrine">
-    <!-- TELA DE BOAS-VINDAS TEMÁTICA (ONBOARDING) -->
+    <!-- TELA DE BOAS-VINDAS TEMÁTICA (ONBOARDING DESCOMPLICADO) -->
     <section class="welcome-card-wrap" id="welcome-section" style="display: none;" aria-label="Boas-vindas ao Vem com a Gente">
       <div class="welcome-card">
+        <div class="welcome-mascot-hero">
+          <picture>
+            <source srcset="marquinhos_hero.webp" type="image/webp">
+            <img src="marquinhos_hero.png" alt="Marquinhos Trad 4333" class="welcome-hero-badge-img">
+          </picture>
+        </div>
+
         <div class="welcome-badge">ELEIÇÕES 2026 · VEM COM A GENTE</div>
-        <h1 class="welcome-title">Sua Colinha com Marquinhos Trad 4333</h1>
-        <p class="welcome-desc">O seu 1º voto para <strong>Deputado Federal (4333)</strong> já está garantido! Agora escolha os seus outros candidatos e gere seu santinho oficial personalizado para compartilhar e levar no dia da votação.</p>
+        <h1 class="welcome-title">Monte sua Colinha em 3 Passos</h1>
+        <p class="welcome-desc-direta">Seu 1º voto já é <strong>Marquinhos Trad 4333</strong>. Agora escolha os outros 5:</p>
 
-        <div class="welcome-steps-list">
-          <div class="welcome-step-item">
-            <div class="welcome-step-icon">1️⃣</div>
-            <div class="welcome-step-content">
-              <strong>Deputado Federal: Marquinhos Trad 4333</strong>
-              <span>Já preenchido no seu santinho oficial com foto de alta resolução e número de urna.</span>
-            </div>
+        <div class="welcome-direct-steps">
+          <div class="direct-step-pill">
+            <span class="step-num">1</span>
+            <span class="step-text"><strong>Deputado Federal:</strong> Marquinhos Trad 4333 já está garantido.</span>
           </div>
-
-          <div class="welcome-step-item">
-            <div class="welcome-step-icon">2️⃣</div>
-            <div class="welcome-step-content">
-              <strong>Escolha os seus outros 5 votos</strong>
-              <span>Complete na ordem da urna: Deputado Estadual, 2 Senadores, Governador e Presidente.</span>
-            </div>
+          <div class="direct-step-pill">
+            <span class="step-num">2</span>
+            <span class="step-text"><strong>Toque no cargo</strong> e selecione seus outros candidatos por nome ou número.</span>
           </div>
-
-          <div class="welcome-step-item">
-            <div class="welcome-step-icon">3️⃣</div>
-            <div class="welcome-step-content">
-              <strong>Gere seu Santinho e envie no WhatsApp</strong>
-              <span>Santinho profissional com a foto de Marquinhos Trad e sua lista completa de votos.</span>
-            </div>
+          <div class="direct-step-pill">
+            <span class="step-num">3</span>
+            <span class="step-text"><strong>Salve a imagem</strong> na sua galeria e leve anotado para a urna!</span>
           </div>
         </div>
 
-        <button class="btn-welcome-start" id="btn-welcome-start" title="Montar santinho agora">
-          <span>MONTAR SANTINHO AGORA</span>
+        <button class="btn-welcome-start" id="btn-welcome-start" title="Começar agora">
+          <span>COMEÇAR MINHA COLINHA</span>
           <span class="btn-arrow">➔</span>
         </button>
 
         <div class="welcome-security-note">
-          🔒 100% gratuito, sem cadastro e não armazena dados pessoais.
+          🔒 Sem cadastro, 100% gratuito e direto no seu celular.
         </div>
       </div>
     </section>
@@ -202,7 +219,7 @@
     <canvas id="canvas-export" style="display:none;" width="768" height="1122"></canvas>
   </main>
 
-  <!-- Modal da Animação: Colinha Saindo da Urna (Impressão Real com Fotos) -->
+  <!-- Modal da Animação: Colinha Saindo da Urna (Modelo Final Idêntico) -->
   <div class="print-modal-overlay" id="print-modal-overlay" style="display: none;" role="dialog" aria-modal="true">
     <div class="print-modal-content">
       <!-- Urna Dispensadora no Topo -->
@@ -211,30 +228,15 @@
         <div class="urna-slot-cut"></div>
       </div>
 
-      <!-- Fita de Cédula de Papel Real Deslizando com as FOTOS reais -->
-      <div class="paper-slip-viewport">
-        <div class="paper-slip-roll" id="paper-slip-roll">
-          <div class="slip-header">
-            <img src="logo_oficial.png" alt="Logo Minha Colinha" class="slip-logo-img">
-            <span class="slip-badge">JUSTIÇA ELEITORAL</span>
-            <div class="slip-subtitle">COMPROVANTE DE VOTAÇÃO</div>
-          </div>
-          <div class="slip-dashed-divider"></div>
-          
-          <div class="slip-candidatos-list" id="slip-candidatos-list">
-            <!-- Gerado dinamicamente com os 6 cargos e fotos reais -->
-          </div>
-
-          <div class="slip-dashed-divider"></div>
-          <div class="slip-footer">
-            <span>ELEIÇÕES 2026 · VOTO CONFIRMADO</span>
-          </div>
-          <div class="slip-serrated-edge"></div>
+      <!-- Viewport da Colinha Oficial Idêntica Deslizando da Urna -->
+      <div class="paper-slip-viewport paper-card-viewport">
+        <div class="paper-slip-roll paper-card-roll" id="paper-slip-roll">
+          <!-- Injetado dinamicamente com o EXATO modelo final de colinha gerado -->
         </div>
       </div>
 
       <div class="print-status-text" id="print-status-text">
-        <span class="print-spinner"></span> Imprimindo sua colinha...
+        <span class="print-spinner"></span> Urna emitindo seu santinho oficial...
       </div>
     </div>
   </div>

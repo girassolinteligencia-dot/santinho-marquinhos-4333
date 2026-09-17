@@ -1,12 +1,19 @@
-const CACHE_NAME = 'minha-colinha-v12';
+const CACHE_NAME = 'minha-colinha-v15';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './app.js',
   './manifest.json',
-  './logo_oficial.png',
+  './marquinhos_hero.webp',
+  './marquinhos_hero.png',
+  './marquinhos_boneco.png',
+  './marquinhos_logo_oficial.png',
+  './marquinhos_foto_hd.jpg',
+  './marquinhos_painel_verde.jpg',
+  './og-image.jpg',
   './urna_dispenser_crop.png',
+  './favicon.svg',
   './favicon.ico',
   './favicon.png',
   './apple-touch-icon.png',

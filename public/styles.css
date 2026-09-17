@@ -87,25 +87,47 @@ body {
   gap: 4px;
 }
 
-.brand-icon {
-  width: 220px;
-  max-width: 82vw;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 6px 16px rgba(20, 83, 45, 0.16));
+.brand-com-boneco {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.brand-hero-badge-img {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  min-height: 72px;
+  border-radius: 18px;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 6px 18px rgba(20, 83, 45, 0.28), 0 2px 6px rgba(0, 0, 0, 0.15);
+  border: 2px solid #facc15;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  border-radius: 12px;
+  flex-shrink: 0;
 }
 
-.brand-icon-marquinhos {
-  background: linear-gradient(135deg, #15803d 0%, #0f3d21 100%);
-  padding: 10px 18px 8px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(15, 61, 33, 0.22);
+.brand-hero-badge-img:hover {
+  transform: scale(1.06) rotate(-2deg);
 }
 
-.brand-icon:hover {
-  transform: scale(1.04) translateY(-2px);
+.brand-title-destaque {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 950;
+  color: #14532d;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.brand-text-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 2px;
 }
 
 .btn-rever-link {
@@ -132,13 +154,13 @@ body {
 
 .brand-sub {
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 900;
   color: #a16207;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   background: #fef9c3;
-  padding: 3px 14px;
+  padding: 3px 12px;
   border-radius: 20px;
   border: 1px solid #fef08a;
 }
@@ -242,62 +264,82 @@ body {
   margin-bottom: 8px;
 }
 
-.welcome-desc {
-  font-size: 14px;
-  color: #55665b;
-  line-height: 1.45;
-  margin-bottom: 18px;
+.welcome-mascot-hero {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
 }
 
-.welcome-steps-list {
+.welcome-hero-badge-img {
+  width: 130px;
+  height: 130px;
+  border-radius: 28px;
+  object-fit: cover;
+  border: 3px solid #facc15;
+  box-shadow: 0 10px 28px rgba(20, 83, 45, 0.35), 0 3px 8px rgba(0, 0, 0, 0.15);
+  animation: floatMascot 3s ease-in-out infinite alternate;
+}
+
+@keyframes floatMascot {
+  from { transform: translateY(0); }
+  to { transform: translateY(-6px); }
+}
+
+.welcome-desc-direta {
+  font-size: 14.5px;
+  color: #334155;
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.welcome-direct-steps {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   text-align: left;
   margin-bottom: 22px;
 }
 
-.welcome-step-item {
+.direct-step-pill {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  background: #faf8f5;
-  border: 1.5px solid #ded7cb;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
   border-radius: 12px;
-  padding: 12px 14px;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  padding: 10px 14px;
+  transition: all 0.2s ease;
 }
 
-.welcome-step-item:hover {
+.direct-step-pill:hover {
   border-color: #10b981;
-  transform: translateY(-1px);
+  background: #f0fdf4;
+  transform: translateX(3px);
 }
 
-.welcome-step-icon {
-  font-size: 22px;
-  line-height: 1;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.welcome-step-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.welcome-step-content strong {
+.step-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #14532d;
+  color: #fef08a;
   font-family: var(--font-display);
-  font-size: 14.5px;
-  font-weight: 800;
-  color: #14532d;
-  line-height: 1.25;
+  font-size: 14px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.welcome-step-content span {
-  font-size: 12.5px;
-  color: #64748b;
+.step-text {
+  font-size: 13.5px;
+  color: #1e293b;
   line-height: 1.35;
+}
+
+.step-text strong {
+  color: #14532d;
 }
 
 .btn-welcome-start {
@@ -2246,7 +2288,7 @@ body.modal-selecao-aberto {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 420px;
+  max-width: 620px;
 }
 
 .urna-dispenser-box {
@@ -2255,23 +2297,26 @@ body.modal-selecao-aberto {
   display: flex;
   flex-direction: column;
   align-items: center;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
+  width: 100%;
 }
 
 .urna-dispenser-img {
-  width: 190px;
+  width: 240px;
+  max-width: 70vw;
   height: auto;
   aspect-ratio: 364 / 163;
   object-fit: contain;
 }
 
 .urna-slot-cut {
-  width: 170px;
-  height: 6px;
+  width: 100%;
+  max-width: 580px;
+  height: 8px;
   background: #091b13;
-  border-radius: 3px;
-  margin-top: -3px;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  margin-top: -4px;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(255, 255, 255, 0.15);
 }
 
 .paper-slip-viewport {
@@ -2284,6 +2329,18 @@ body.modal-selecao-aberto {
   filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.28));
 }
 
+/* Viewport ampliado para acomodar com perfeição a colinha oficial saindo da urna */
+.paper-card-viewport {
+  width: 100%;
+  max-width: 580px;
+  max-height: 520px;
+  overflow: hidden;
+  position: relative;
+  margin-top: -4px;
+  z-index: 5;
+  filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.45));
+}
+
 .paper-slip-roll {
   background: #faf8f4;
   background-image: radial-gradient(#ebe5d8 1px, transparent 1px);
@@ -2293,6 +2350,19 @@ body.modal-selecao-aberto {
   padding: 16px 18px 20px;
   transform: translateY(-100%);
   animation: rollOutPaper 4.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Card idêntico ao modelo final deslizando para fora da urna */
+.paper-card-roll {
+  background: transparent;
+  border: none;
+  padding: 0;
+  transform: translateY(-100%);
+  animation: rollOutPaper 3.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.paper-card-roll .colinha-mockup-card-container {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 @keyframes rollOutPaper {
@@ -2770,7 +2840,7 @@ body {
   min-height: 250px;
   overflow: hidden;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: center;
   position: relative;
   z-index: 2;
@@ -2783,6 +2853,14 @@ body {
   object-fit: cover;
   object-position: 25% 15%;
   display: block;
+}
+
+.colinha-mockup-photo.colinha-mockup-boneco {
+  object-fit: contain;
+  padding: 8px 6px 0;
+  width: 100%;
+  height: 100%;
+  max-height: 280px;
 }
 
 .colinha-mockup-logo-wrap {
@@ -2852,26 +2930,26 @@ body {
   display: flex;
   align-items: center;
   background: #f0f6fc;
-  border-radius: 9px;
+  border-radius: 10px;
   overflow: hidden;
-  height: 58px;
+  height: 64px;
 }
 
 .colinha-mockup-badge {
-  width: 32px;
+  width: 34px;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 900;
   flex-shrink: 0;
 }
 
 .colinha-mockup-info {
   flex: 1;
-  padding: 0 10px 0 8px;
+  padding: 0 10px 0 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -2879,27 +2957,17 @@ body {
   overflow: hidden;
 }
 
-.colinha-mockup-cargo {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 800;
-  color: #475569;
-  line-height: 1.15;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  white-space: normal;
-}
-
+/* NOME DO CANDIDATO EM DESTAQUE MÁXIMO */
 .colinha-mockup-cand-name {
   font-family: var(--font-display);
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 900;
-  line-height: 1.12;
+  line-height: 1.1;
   color: #0c2c62;
-  word-break: normal;
-  overflow-wrap: break-word;
-  hyphens: auto;
-  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
 }
 
 .colinha-mockup-cand-name.filled {
@@ -2910,36 +2978,57 @@ body {
   color: #94a3b8;
   font-style: italic;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 14px;
 }
 
+/* CARGO DISCRETO E DE APOIO */
+.colinha-mockup-cargo {
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #64748b;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* NÚMEROS BEM MAIORES */
 .colinha-mockup-boxes {
   display: flex;
-  gap: 2px;
-  padding-right: 6px;
+  gap: 3px;
+  padding-right: 8px;
   flex-shrink: 0;
   margin-left: auto;
 }
 
 .colinha-mockup-digit-box {
-  width: 18px;
-  height: 30px;
+  width: 24px;
+  height: 40px;
   background: #ffffff;
-  border: 1.5px solid #0c2c62;
-  border-radius: 4px;
+  border: 2px solid #0c2c62;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 900;
+  font-size: 24px;
+  font-weight: 950;
   color: #000000;
   line-height: 1;
+  box-shadow: 0 2px 4px rgba(12, 44, 98, 0.08);
 }
 
 .colinha-mockup-digit-box.has-digit {
   color: #000000;
   background: #ffffff;
+}
+
+.colinha-mockup-photo.colinha-mockup-boneco {
+  object-fit: contain;
+  padding: 10px 4px 4px;
 }
 
 /* Rodapé */
@@ -2974,34 +3063,34 @@ body {
     font-size: 40px;
   }
   .colinha-mockup-row {
-    height: 58px;
+    height: 60px;
   }
   .colinha-mockup-badge {
-    width: 26px;
-    font-size: 17px;
+    width: 28px;
+    font-size: 19px;
   }
   .colinha-mockup-info {
     padding: 0 6px;
   }
-  .colinha-mockup-cargo {
-    font-size: 9.5px;
-    line-height: 1.15;
-  }
   .colinha-mockup-cand-name {
-    font-size: 13.5px;
-    line-height: 1.12;
+    font-size: 14.5px;
+    line-height: 1.1;
   }
   .colinha-mockup-cand-name.empty {
-    font-size: 11.5px;
+    font-size: 12px;
+  }
+  .colinha-mockup-cargo {
+    font-size: 9px;
+    line-height: 1.1;
   }
   .colinha-mockup-digit-box {
-    width: 15.5px;
-    height: 28px;
-    font-size: 14.5px;
+    width: 20px;
+    height: 35px;
+    font-size: 20px;
   }
   .colinha-mockup-boxes {
-    gap: 1.5px;
-    padding-right: 3px;
+    gap: 2px;
+    padding-right: 4px;
   }
 }
 

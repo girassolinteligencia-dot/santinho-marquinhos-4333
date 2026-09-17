@@ -138,10 +138,8 @@
       const rowColor = ROW_COLORS[i];
 
       let cargoTitle = cfg.cargo.toUpperCase();
-      if (cfg.id === "depFed") cargoTitle = "DEPUTADO<br>FEDERAL";
-      else if (cfg.id === "depEst") cargoTitle = "DEPUTADO<br>ESTADUAL";
-      else if (cfg.id === "sen1") cargoTitle = "SENADOR –<br>1ª VAGA";
-      else if (cfg.id === "sen2") cargoTitle = "SENADOR –<br>2ª VAGA";
+      if (cfg.id === "sen1") cargoTitle = "SENADOR (1ª VAGA)";
+      else if (cfg.id === "sen2") cargoTitle = "SENADOR (2ª VAGA)";
 
       let candNome = cand && cand.urna ? cand.urna.toUpperCase() : (cand && cand.nome ? cand.nome.toUpperCase() : "");
 
@@ -155,8 +153,8 @@
         <div class="colinha-mockup-row">
           <div class="colinha-mockup-badge" style="background:${rowColor.bg};color:${rowColor.text};">${i + 1}</div>
           <div class="colinha-mockup-info">
-            <div class="colinha-mockup-cargo">${cargoTitle}</div>
             <div class="colinha-mockup-cand-name ${candNome ? 'filled' : 'empty'}">${candNome || 'A DEFINIR'}</div>
+            <div class="colinha-mockup-cargo">${cargoTitle}</div>
           </div>
           <div class="colinha-mockup-boxes">${boxesHtml}</div>
         </div>
@@ -167,7 +165,7 @@
       <div class="colinha-mockup-card-container">
         <div class="colinha-mockup-left">
           <div class="colinha-mockup-photo-wrap">
-            <img src="marquinhos_painel_verde.jpg" alt="Marquinhos Trad" class="colinha-mockup-photo" onerror="this.src='marquinhos_recorte.jpg'">
+            <img src="marquinhos_boneco.png" alt="Marquinhos Trad 4333" class="colinha-mockup-photo colinha-mockup-boneco" onerror="this.src='marquinhos_painel_verde.jpg'">
           </div>
           <div class="colinha-mockup-logo-wrap">
             <img src="marquinhos_logo_oficial.png" alt="Marquinhos Trad Deputado Federal" class="colinha-mockup-logo">
@@ -207,46 +205,26 @@
     }
   }
 
-  // ---------- Animação Especial: Colinha Saindo da Urna (Impressão Real com Fotos) ----------
+  // ---------- Animação Especial: Colinha Saindo da Urna (Modelo Final Oficial Idêntico) ----------
   function dispararAnimacaoImpressaoUrna() {
     const overlay = document.getElementById("print-modal-overlay");
-    const listaSlip = document.getElementById("slip-candidatos-list");
     const paperRoll = document.getElementById("paper-slip-roll");
     const statusText = document.getElementById("print-status-text");
     const conclusaoSection = document.getElementById("conclusao-section");
     const funilViewport = document.getElementById("funil-viewport");
 
-    if (!overlay || !listaSlip) return;
+    if (!overlay || !paperRoll) return;
 
-    // Monta o comprovante contínuo com os 6 candidatos e SUAS FOTOS REAIS
-    listaSlip.innerHTML = CARGOS_CONFIG.map(cfg => {
-      const cand = colinhaState[cfg.id];
-      if (!cand) return "";
-      const nome = cand.urna.length > 15 ? cand.urna.slice(0, 14) + "…" : cand.urna;
-      const isMarquinhos = cfg.id === "depFed";
-      const fotoSrc = isMarquinhos ? "marquinhos_foto_hd.jpg" : (cand.foto_url || (cand.sq ? `fotos_tse/${cand.sq}.webp` : ""));
+    // Injeta O MESMO modelo exato da colinha final (com o boneco, caixas gigantes e nomes destacados)
+    paperRoll.innerHTML = gerarCardBolsoHtml();
 
-      return `
-        <div class="slip-item-row">
-          ${fotoSrc ? `<img src="${fotoSrc}" class="slip-item-photo" alt="${cand.urna}" onerror="this.style.display='none'">` : ''}
-          <div class="slip-item-info">
-            <span class="slip-item-cargo">${cfg.ordemVoto} ${cfg.cargo}</span>
-            <span class="slip-item-name">${nome}</span>
-          </div>
-          <span class="slip-item-nr">${cand.nr}</span>
-        </div>
-      `;
-    }).join("");
-
-    // Reinicia animação de saída de papel
-    if (paperRoll) {
-      paperRoll.style.animation = "none";
-      void paperRoll.offsetWidth;
-      paperRoll.style.animation = "rollOutPaper 4.2s cubic-bezier(0.16, 1, 0.3, 1) forwards";
-    }
+    // Reinicia animação de saída contínua do santinho oficial para fora da urna
+    paperRoll.style.animation = "none";
+    void paperRoll.offsetWidth;
+    paperRoll.style.animation = "rollOutPaper 3.8s cubic-bezier(0.16, 1, 0.3, 1) forwards";
 
     if (statusText) {
-      statusText.innerHTML = `<span class="print-spinner"></span> Urna imprimindo seu santinho oficial...`;
+      statusText.innerHTML = `<span class="print-spinner"></span> Urna emitindo sua colinha oficial...`;
     }
 
     overlay.style.display = "flex";
@@ -834,33 +812,34 @@
     ctx.bezierCurveTo(140, 260, 320, 400, 510, 320);
     ctx.stroke();
 
-    // 3. FOTO DE MARQUINHOS TRAD (Preenchendo toda a lateral superior e média)
+    // 3. BONECO MARQUINHOS TRAD COM O NÚMERO NA PLACA (Em destaque no painel esquerdo)
+    const fotoBoneco = await carregarImagemAsync("marquinhos_boneco.png");
     const fotoPainel = await carregarImagemAsync("marquinhos_painel_verde.jpg");
-    const fotoRecorte = await carregarImagemAsync("marquinhos_recorte.jpg");
-    const fotoFallback = await carregarImagemAsync("marquinhos_foto_hd.jpg");
 
-    if (fotoPainel) {
-      // Recorta a face e ombro a partir da imagem quadrada (1024x1024) com foco em Marquinhos
+    if (fotoBoneco) {
+      const bW = panelW - 40;
+      const bH = (fotoBoneco.height * bW) / fotoBoneco.width;
+      const bX = 20;
+      const bY = 40;
+      ctx.drawImage(fotoBoneco, bX, bY, bW, bH);
+    } else if (fotoPainel) {
       ctx.drawImage(fotoPainel, 0, 0, 750, 950, 0, 0, panelW, 830);
-    } else if (fotoRecorte || fotoFallback) {
-      const fImg = fotoRecorte || fotoFallback;
-      ctx.drawImage(fImg, -20, 10, panelW + 40, 780);
     }
 
-    // Degradê suave na transição entre a foto e o rodapé verde onde fica a logo
-    const fadeGrad = ctx.createLinearGradient(0, 680, 0, 830);
+    // Degradê na parte inferior do painel esquerdo para a logo de apoio
+    const fadeGrad = ctx.createLinearGradient(0, 750, 0, 870);
     fadeGrad.addColorStop(0, "rgba(7, 40, 21, 0)");
     fadeGrad.addColorStop(1, "#072815");
     ctx.fillStyle = fadeGrad;
-    ctx.fillRect(0, 680, panelW, 150);
+    ctx.fillRect(0, 750, panelW, 120);
 
-    // 4. LOGOMARCA OFICIAL MARQUINHOS TRAD 4333 (Sobre fundo verde escuro)
+    // 4. LOGOMARCA OFICIAL MARQUINHOS TRAD 4333 (No rodapé do painel)
     const logoOficial = await carregarImagemAsync("marquinhos_logo_oficial.png");
     if (logoOficial) {
-      const lW = 420;
-      const lH = 360;
+      const lW = 400;
+      const lH = 310;
       const lX = (panelW - lW) / 2;
-      const lY = 825;
+      const lY = 855;
       ctx.drawImage(logoOficial, lX, lY, lW, lH);
     }
 
@@ -892,7 +871,7 @@
     ctx.fillStyle = "#eab308";
     ctx.fillText("6", rightX + 325, anoY);
 
-    // 6. AS 6 LINHAS DA COLINHA (Com Cargo, Nome do Candidato Escolhido e Caixas de Dígitos)
+    // 6. AS 6 LINHAS DA COLINHA COM NOME EM DESTAQUE E NÚMEROS BEM MAIORES
     const ROW_COLORS = [
       { bg: "#15803d", text: "#ffffff" }, // 1: Verde
       { bg: "#0284c7", text: "#ffffff" }, // 2: Azul
@@ -903,7 +882,7 @@
     ];
 
     const rowStartY = 315;
-    const rowH = 112;
+    const rowH = 114;
     const rowGap = 16;
 
     for (let i = 0; i < CARGOS_CONFIG.length; i++) {
@@ -912,13 +891,13 @@
       const y = rowStartY + i * (rowH + rowGap);
       const rowColor = ROW_COLORS[i];
 
-      // Fundo azul bem clarinho/gelo do container da linha
+      // Fundo azul suave
       ctx.fillStyle = "#f0f6fc";
       ctx.beginPath();
       ctx.roundRect(rightX, y, rightW, rowH, 14);
       ctx.fill();
 
-      // Badge com o número da ordem (1 a 6)
+      // Badge de ordem (1 a 6)
       const badgeW = 68;
       const badgeH = rowH;
       ctx.fillStyle = rowColor.bg;
@@ -928,53 +907,51 @@
 
       ctx.textAlign = "center";
       ctx.fillStyle = rowColor.text;
-      ctx.font = '900 48px "Outfit", sans-serif';
-      ctx.fillText(String(i + 1), rightX + badgeW / 2, y + 74);
+      ctx.font = '900 50px "Outfit", sans-serif';
+      ctx.fillText(String(i + 1), rightX + badgeW / 2, y + 76);
 
-      // Informações: Cargo e Nome do Candidato
-      const infoX = rightX + badgeW + 16;
+      // Posição inicial das informações de texto
+      const infoX = rightX + badgeW + 18;
 
-      // Nome do Cargo (texto ampliado e nítido)
-      let cargoStr = cfg.cargo.toUpperCase();
-      if (cfg.id === "sen1") cargoStr = "SENADOR (1ª VAGA)";
-      if (cfg.id === "sen2") cargoStr = "SENADOR (2ª VAGA)";
-
-      ctx.textAlign = "left";
-      ctx.fillStyle = "#334155";
-      ctx.font = '800 22px "Outfit", sans-serif';
-      ctx.fillText(cargoStr, infoX, y + 36);
-
-      // Caixas de Dígitos de Voto (Brancas com borda fina preta/azul e dígitos pretos grandes)
+      // Caixas de Dígitos de Voto (BEM MAIORES E DESTACADAS)
       const numDigitos = cfg.digitos;
-      const boxW = 48;
-      const boxH = 74;
-      const boxGap = 6;
+      const boxW = 54;
+      const boxH = 88;
+      const boxGap = 8;
       const totalBoxesW = numDigitos * boxW + (numDigitos - 1) * boxGap;
       const startBoxX = rightX + rightW - totalBoxesW - 14;
       const boxY = y + (rowH - boxH) / 2;
 
-      // Nome do Candidato Escolhido (MUITO MAIOR E EM MÁXIMO DESTAQUE)
+      // 1. NOME DO CANDIDATO ESCOLHIDO (MAIOR E NO TOPO DA LINHA)
       let candNome = cand && cand.urna ? cand.urna.toUpperCase() : (cand && cand.nome ? cand.nome.toUpperCase() : "");
 
+      ctx.textAlign = "left";
       if (candNome) {
         ctx.fillStyle = "#0c2c62";
-        // Espaço horizontal máximo disponível para o nome
-        const maxTextW = startBoxX - infoX - 12;
-        let fontSize = 34;
+        const maxTextW = startBoxX - infoX - 14;
+        let fontSize = 38;
         ctx.font = `900 ${fontSize}px "Outfit", sans-serif`;
-        // Reduz a fonte progressivamente se o nome for extremamente longo para não suprimir nenhuma letra
-        while (ctx.measureText(candNome).width > maxTextW && fontSize > 18) {
+        while (ctx.measureText(candNome).width > maxTextW && fontSize > 20) {
           fontSize -= 1.5;
           ctx.font = `900 ${fontSize}px "Outfit", sans-serif`;
         }
-        ctx.fillText(candNome, infoX, y + 84);
+        ctx.fillText(candNome, infoX, y + 50);
       } else {
         ctx.fillStyle = "#94a3b8";
-        ctx.font = 'italic 700 24px "Outfit", sans-serif';
-        ctx.fillText("A DEFINIR", infoX, y + 82);
+        ctx.font = 'italic 700 28px "Outfit", sans-serif';
+        ctx.fillText("A DEFINIR", infoX, y + 50);
       }
 
-      // Dígitos reais preenchidos
+      // 2. NOME DO CARGO (DISCRETO, DE APOIO, ABAIXO DO NOME)
+      let cargoStr = cfg.cargo.toUpperCase();
+      if (cfg.id === "sen1") cargoStr = "SENADOR (1ª VAGA)";
+      if (cfg.id === "sen2") cargoStr = "SENADOR (2ª VAGA)";
+
+      ctx.fillStyle = "#64748b";
+      ctx.font = '700 20px "Outfit", sans-serif';
+      ctx.fillText(cargoStr, infoX, y + 88);
+
+      // Dígitos reais preenchidos (GRANDES E NÍTIDOS)
       const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
 
       for (let d = 0; d < numDigitos; d++) {
@@ -983,21 +960,21 @@
         // Fundo Branco da Caixinha
         ctx.fillStyle = "#ffffff";
         ctx.beginPath();
-        ctx.roundRect(bX, boxY, boxW, boxH, 8);
+        ctx.roundRect(bX, boxY, boxW, boxH, 10);
         ctx.fill();
 
-        // Borda Fina
+        // Borda Nítida
         ctx.strokeStyle = "#0c2c62";
-        ctx.lineWidth = 2.2;
+        ctx.lineWidth = 2.6;
         ctx.stroke();
 
-        // Dígito
+        // Dígito Gigante
         const digitoChar = digitsArr[d];
         if (digitoChar !== undefined) {
           ctx.textAlign = "center";
           ctx.fillStyle = "#000000";
-          ctx.font = '900 48px "Outfit", sans-serif';
-          ctx.fillText(digitoChar, bX + boxW / 2, boxY + 54);
+          ctx.font = '900 58px "Outfit", sans-serif';
+          ctx.fillText(digitoChar, bX + boxW / 2, boxY + 66);
         }
       }
     }
@@ -1035,57 +1012,92 @@
     return canvas;
   }
 
-  // ---------- Download da Imagem ----------
+  // ---------- Salvar Imagem na Galeria / Fototeca do Celular ----------
   async function baixarImagemGaleria() {
     showToast("Gerando santinho oficial em alta resolução...");
     const canvas = await desenharColinhaCanvas();
     if (!canvas) return;
 
-    canvas.toBlob((blob) => {
+    canvas.toBlob(async (blob) => {
       if (!blob) return;
+      const nomeArquivo = "colinha_marquinhos_trad_4333.jpg";
+      const file = new File([blob], nomeArquivo, { type: "image/jpeg" });
+
+      // Nos smartphones modernos (iOS Safari e Android Chrome), navigator.share com arquivos
+      // abre o painel nativo do sistema onde a PRIMEIRA opção é "Salvar Imagem" (adiciona direto na Galeria/Fotos/Fototeca)
+      // ao invés de baixar como arquivo no navegador de downloads!
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: "Colinha Marquinhos Trad 4333"
+          });
+          showToast("✅ Imagem pronta na sua Galeria!");
+          return;
+        } catch (err) {
+          // Se o usuário cancelou o painel de compartilhamento, apenas ignora
+          if (err.name === "AbortError") return;
+        }
+      }
+
+      // Fallback tradicional para computadores ou navegadores que não possuem Web Share de arquivo
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "minha_colinha_marquinhos_4333.jpg";
+      a.download = nomeArquivo;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(url), 4000);
-      showToast("✅ Colinha oficial salva na sua Galeria!");
+      showToast("✅ Colinha baixada! Abra para salvar na galeria.");
     }, "image/jpeg", 0.96);
   }
 
-  // ---------- Compartilhamento no WhatsApp com Engajamento ----------
+  // ---------- Compartilhamento no WhatsApp com Engajamento Oficial ----------
   async function compartilharColinha() {
     const canvas = await desenharColinhaCanvas();
     if (!canvas) return;
 
+    // Resumo legível dos votos definidos pelo eleitor
+    const listaCandidatos = [];
+    CARGOS_CONFIG.forEach(c => {
+      const cand = colinhaState[c.id];
+      if (cand) {
+        listaCandidatos.push(`🔹 *${c.cargo}:* ${cand.urna} — *${cand.nr}*`);
+      }
+    });
+
+    const resumoVotos = listaCandidatos.length > 0 ? "\n" + listaCandidatos.join("\n") + "\n" : "";
+
     const textoEngajamento = 
-      "🗳️ Vem com a Gente! Minha colinha para Deputado Federal é Marquinhos Trad 4333! Confira minha colinha oficial 2026 e monte a sua também:";
+      `🗳️ *VEM COM A GENTE · ELEIÇÕES 2026*\n\n` +
+      `Para Deputado Federal meu voto é *MARQUINHOS TRAD 4333*! 💚💛\n` +
+      resumoVotos +
+      `\n📲 Monte sua colinha oficial também e leve para a urna sem erro:\n${window.location.href}`;
 
     canvas.toBlob(async (blob) => {
       if (!blob) return;
-      const file = new File([blob], "minha_colinha_marquinhos_4333.jpg", { type: "image/jpeg" });
+      const file = new File([blob], "colinha_marquinhos_trad_4333.jpg", { type: "image/jpeg" });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
           await navigator.share({
             files: [file],
-            title: "Minha Colinha 2026 — Marquinhos Trad 4333",
+            title: "Vem com a Gente — Marquinhos Trad 4333",
             text: textoEngajamento
           });
-          showToast("Compartilhado com sucesso!");
+          showToast("✅ Compartilhado com sucesso!");
           return;
         } catch (err) {
           if (err.name !== "AbortError") console.log("Fallback share:", err);
         }
       }
 
-      // Fallback: Baixa a imagem e abre o WhatsApp com o texto
+      // Fallback: Baixa a imagem para a galeria e abre o WhatsApp com a mensagem formatada
       baixarImagemGaleria();
-      const zapUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textoEngajamento + "\n" + window.location.href)}`;
+      const zapUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textoEngajamento)}`;
       window.open(zapUrl, "_blank");
-      showToast("Colinha salva! Anexe a foto no WhatsApp.");
+      showToast("📸 Colinha salva! Envie a foto no WhatsApp.");
     }, "image/jpeg", 0.96);
   }
 
