@@ -165,7 +165,7 @@
       <div class="colinha-mockup-card-container">
         <div class="colinha-mockup-left">
           <div class="colinha-mockup-photo-wrap">
-            <img src="marquinhos_boneco.png" alt="Marquinhos Trad 4333" class="colinha-mockup-photo colinha-mockup-boneco" onerror="this.src='marquinhos_painel_verde.jpg'">
+            <img src="marquinhos_painel_verde.jpg" alt="Marquinhos Trad" class="colinha-mockup-photo" onerror="this.src='marquinhos_recorte.jpg'">
           </div>
           <div class="colinha-mockup-logo-wrap">
             <img src="marquinhos_logo_oficial.png" alt="Marquinhos Trad Deputado Federal" class="colinha-mockup-logo">
@@ -812,34 +812,33 @@
     ctx.bezierCurveTo(140, 260, 320, 400, 510, 320);
     ctx.stroke();
 
-    // 3. BONECO MARQUINHOS TRAD COM O NÚMERO NA PLACA (Em destaque no painel esquerdo)
-    const fotoBoneco = await carregarImagemAsync("marquinhos_boneco.png");
+    // 3. FOTO DE MARQUINHOS TRAD (Preenchendo toda a lateral superior e média)
     const fotoPainel = await carregarImagemAsync("marquinhos_painel_verde.jpg");
+    const fotoRecorte = await carregarImagemAsync("marquinhos_recorte.jpg");
+    const fotoFallback = await carregarImagemAsync("marquinhos_foto_hd.jpg");
 
-    if (fotoBoneco) {
-      const bW = panelW - 40;
-      const bH = (fotoBoneco.height * bW) / fotoBoneco.width;
-      const bX = 20;
-      const bY = 40;
-      ctx.drawImage(fotoBoneco, bX, bY, bW, bH);
-    } else if (fotoPainel) {
+    if (fotoPainel) {
+      // Recorta a face e ombro a partir da imagem quadrada (1024x1024) com foco em Marquinhos
       ctx.drawImage(fotoPainel, 0, 0, 750, 950, 0, 0, panelW, 830);
+    } else if (fotoRecorte || fotoFallback) {
+      const fImg = fotoRecorte || fotoFallback;
+      ctx.drawImage(fImg, -20, 10, panelW + 40, 780);
     }
 
-    // Degradê na parte inferior do painel esquerdo para a logo de apoio
-    const fadeGrad = ctx.createLinearGradient(0, 750, 0, 870);
+    // Degradê suave na transição entre a foto e o rodapé verde onde fica a logo
+    const fadeGrad = ctx.createLinearGradient(0, 680, 0, 830);
     fadeGrad.addColorStop(0, "rgba(7, 40, 21, 0)");
     fadeGrad.addColorStop(1, "#072815");
     ctx.fillStyle = fadeGrad;
-    ctx.fillRect(0, 750, panelW, 120);
+    ctx.fillRect(0, 680, panelW, 150);
 
-    // 4. LOGOMARCA OFICIAL MARQUINHOS TRAD 4333 (No rodapé do painel)
+    // 4. LOGOMARCA OFICIAL MARQUINHOS TRAD 4333 (Sobre fundo verde escuro)
     const logoOficial = await carregarImagemAsync("marquinhos_logo_oficial.png");
     if (logoOficial) {
-      const lW = 400;
-      const lH = 310;
+      const lW = 420;
+      const lH = 360;
       const lX = (panelW - lW) / 2;
-      const lY = 855;
+      const lY = 825;
       ctx.drawImage(logoOficial, lX, lY, lW, lH);
     }
 
