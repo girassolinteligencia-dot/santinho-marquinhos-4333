@@ -14,8 +14,8 @@
     { id: "pres", cargo: "Presidente", ordemVoto: "6º VOTO", titulo: "6º VOTO - PRESIDENTE", digitos: 2 }
   ];
 
-  // Candidato Oficial Pré-definido: Marquinhos Trad 4333 - Deputado Federal
-  const CANDIDATO_MARQUINHOS_4333 = {
+  // Candidato Oficial Pré-definido: Marquinhos Trad 4333 - Deputado Federal (Imutável contra adulteração)
+  const CANDIDATO_MARQUINHOS_4333 = Object.freeze({
     sq: "120002537466",
     nr: "4333",
     urna: "Marquinhos Trad",
@@ -24,13 +24,23 @@
     foto_url: "marquinhos_foto_hd.jpg",
     situacao: "Deferido",
     situacao_julgamento: "Deferido"
-  };
+  });
 
   let CANDIDATOS = [];
   let colinhaState = carregarColinha();
   let slotAtivo = null;
 
-  // ---------- Utilitários ----------
+  // ---------- Utilitários de Segurança e Formatação ----------
+  function escapeHtml(str) {
+    if (!str) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   function normalizar(txt) {
     if (!txt) return "";
     return String(txt)
@@ -693,7 +703,9 @@
     // Renderiza lista vertical densa (exibe várias opções na viewport)
     listaEl.innerHTML = cands.map(c => {
       const fotoSrc = c.foto_url || (c.sq ? `fotos_tse/${c.sq}.webp` : "");
-      const sigla = c.partido_sigla || "";
+      const safeUrna = escapeHtml(c.urna);
+      const safeSigla = escapeHtml(c.partido_sigla || "");
+      const safeNr = escapeHtml(c.nr);
       const isSelected = colinhaState[cfg.id] && String(colinhaState[cfg.id].sq) === String(c.sq);
 
       return `
@@ -702,20 +714,20 @@
              role="option" 
              aria-selected="${isSelected ? 'true' : 'false'}"
              tabindex="0"
-             title="Selecionar ${c.urna} (${c.nr})">
+             title="Selecionar ${safeUrna} (${safeNr})">
           ${fotoSrc ? `
-            <img src="${fotoSrc}" class="cand-compact-photo" alt="${c.urna}" loading="lazy" onerror="this.outerHTML='<div class=\\'cand-compact-photo-placeholder\\'>👤</div>'">
+            <img src="${fotoSrc}" class="cand-compact-photo" alt="${safeUrna}" loading="lazy" onerror="this.outerHTML='<div class=\\'cand-compact-photo-placeholder\\'>👤</div>'">
           ` : `
             <div class="cand-compact-photo-placeholder">👤</div>
           `}
           <div class="cand-compact-info">
             <div class="cand-compact-nome">
-              <span>${c.urna}</span>
+              <span>${safeUrna}</span>
               ${isSelected ? `<span class="cand-compact-selected-badge">✓ SELECIONADO</span>` : ''}
             </div>
-            <div class="cand-compact-partido">${sigla}</div>
+            <div class="cand-compact-partido">${safeSigla}</div>
           </div>
-          <div class="cand-compact-numero">${c.nr}</div>
+          <div class="cand-compact-numero">${safeNr}</div>
         </div>
       `;
     }).join("");
@@ -1185,9 +1197,12 @@
     const btnWelcomeStart = document.getElementById("btn-welcome-start");
     if (btnWelcomeStart) {
       btnWelcomeStart.addEventListener("click", () => {
-        const nomeDigitado = inputEleitorNome ? inputEleitorNome.value.trim() : "";
+        let nomeDigitado = inputEleitorNome ? inputEleitorNome.value.trim() : "";
 
-        // Condição: primeiro nome é necessário para avançar (sem expor a palavra 'obrigatório')
+        // Sanitização de segurança: remove caracteres de controle e tags html
+        nomeDigitado = nomeDigitado.replace(/[<>{}[\]\/\\]/g, "").slice(0, 30).trim();
+
+        // Condição: primeiro nome é necessário para avançar
         if (!nomeDigitado) {
           if (boxInputNome) {
             boxInputNome.classList.remove("shake-input");
@@ -1202,8 +1217,8 @@
           return;
         }
 
-        // Salva apenas o primeiro nome sem artigos
-        const primeiroNome = nomeDigitado.split(" ")[0].trim();
+        // Extrai apenas o primeiro nome e sanitiza com escapeHtml
+        const primeiroNome = escapeHtml(nomeDigitado.split(" ")[0].trim());
         localStorage.setItem("santinho_eleitor_nome", primeiroNome);
         if (avisoNome) avisoNome.style.display = "none";
 

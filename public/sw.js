@@ -1,48 +1,58 @@
-const CACHE_NAME = 'minha-colinha-v22';
-const ASSETS = [
+/**
+ * MINHA COLINHA 2026 — Service Worker Resiliente de Alta Performance
+ * Estratégia Híbrida: Network-First para navegação (evita necessidade de F5 no Cloudflare)
+ * e Cache-First para assets estáticos e fotos.
+ */
+
+const CACHE_NAME = 'minha-colinha-v23';
+
+// Pré-cache vital enxuto: apenas o núcleo da aplicação (instalação imediata sem travar)
+const CORE_ASSETS = [
   './',
   './index.html',
   './styles.css',
   './app.js',
   './manifest.json',
-  './marquinhos_painel_lateral.webp',
-  './marquinhos_painel_lateral.jpg',
-  './welcome_marquinhos_hero.webp',
-  './welcome_marquinhos_hero.png',
-  './colinha_bottom_ribbon.png',
-  './ms_map_watermark.png',
-  './marquinhos_colinha_foto.webp',
-  './marquinhos_colinha_foto.jpg',
-  './marquinhos_hero.webp',
-  './marquinhos_hero.png',
-  './marquinhos_boneco.png',
-  './marquinhos_logo_oficial.png',
-  './marquinhos_foto_hd.jpg',
-  './marquinhos_painel_verde.jpg',
-  './og-image.jpg',
-  './urna_dispenser_crop.png',
   './favicon.svg',
-  './favicon.ico',
   './favicon.png',
+  './favicon.ico',
   './apple-touch-icon.png',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
+  './marquinhos_hero.png',
+  './marquinhos_painel_verde.jpg',
+  './marquinhos_foto_hd.jpg',
+  './colinha_bottom_ribbon.png',
+  './urna_dispenser_crop.png',
   './data/candidatos.json'
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+// Instalação do Service Worker com cache tolerante a falhas (não engasga a primeira visita)
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(async (cache) => {
+      // Adiciona arquivos individualmente para que uma falha isolada não trave a ativação
+      await Promise.allSettled(
+        CORE_ASSETS.map((url) =>
+          fetch(url, { cache: 'no-cache' })
+            .then((res) => {
+              if (res.ok) return cache.put(url, res);
+            })
+            .catch(() => {})
+        )
+      );
+    })
   );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
+// Ativação e limpeza de versões legadas de cache
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((k) => {
-          if (k !== CACHE_NAME) return caches.delete(k);
+          if (k !== CACHE_NAME) {
+            return caches.delete(k);
+          }
         })
       );
     })
@@ -50,19 +60,70 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((res) => {
-      return res || fetch(e.request).then((fetchRes) => {
-        // Cache dinâmico de fotos webp
-        if (e.request.url.includes('/fotos_tse/')) {
-          return caches.open(CACHE_NAME).then((cache) => {
-            cache.put(e.request, fetchRes.clone());
-            return fetchRes;
-          });
-        }
-        return fetchRes;
-      });
-    }).catch(() => caches.match('./index.html'))
+// Estratégia inteligente de Fetch
+self.addEventListener('fetch', (event) => {
+  const request = event.request;
+  const url = new URL(request.url);
+
+  // Apenas métodos GET são interceptados
+  if (request.method !== 'GET') return;
+
+  // Ignora extensões de navegador ou esquemas não-http
+  if (!url.protocol.startsWith('http')) return;
+
+  // 1. NAVEGAÇÃO HTML (index.html / root): NETWORK-FIRST
+  // Garante que o usuário sempre veja a versão mais atual de primeira, sem precisar de F5
+  if (request.mode === 'navigate' || request.destination === 'document' || url.pathname.endsWith('.html') || url.pathname === '/') {
+    event.respondWith(
+      fetch(request)
+        .then((networkRes) => {
+          if (networkRes && networkRes.ok) {
+            const resClone = networkRes.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, resClone));
+          }
+          return networkRes;
+        })
+        .catch(async () => {
+          // Fallback offline se a rede falhar
+          const cachedRes = await caches.match(request);
+          if (cachedRes) return cachedRes;
+          return caches.match('./index.html');
+        })
+    );
+    return;
+  }
+
+  // 2. FOTOS TSE E ASSETS DE MÍDIA: CACHE-FIRST com runtime caching
+  if (url.pathname.includes('/fotos_tse/') || url.pathname.match(/\.(png|jpg|jpeg|webp|svg|ico)$/i)) {
+    event.respondWith(
+      caches.match(request).then((cachedRes) => {
+        if (cachedRes) return cachedRes;
+        return fetch(request).then((networkRes) => {
+          if (networkRes && networkRes.ok) {
+            const resClone = networkRes.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, resClone));
+          }
+          return networkRes;
+        }).catch(() => null);
+      })
+    );
+    return;
+  }
+
+  // 3. DEMAIS ASSETS (CSS, JS, JSON): STALE-WHILE-REVALIDATE
+  event.respondWith(
+    caches.match(request).then((cachedRes) => {
+      const fetchPromise = fetch(request)
+        .then((networkRes) => {
+          if (networkRes && networkRes.ok) {
+            const resClone = networkRes.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, resClone));
+          }
+          return networkRes;
+        })
+        .catch(() => cachedRes);
+
+      return cachedRes || fetchPromise;
+    })
   );
 });
