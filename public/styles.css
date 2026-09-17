@@ -2956,12 +2956,11 @@ body {
 
 /* Lado Esquerdo - Painel Verde Oficial de Campanha */
 .colinha-mockup-left {
-  width: 32%;
+  width: 33%;
   background: linear-gradient(180deg, #15803d 0%, #14532d 55%, #072815 100%);
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 0;
   border-right: 2px solid #0f3d21;
   overflow: hidden;
@@ -2985,21 +2984,21 @@ body {
 .colinha-mockup-photo-wrap {
   width: 100%;
   flex: 1;
-  min-height: 250px;
+  min-height: 310px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 2;
-  background: #0f3d21;
+  background: #072815;
 }
 
 .colinha-mockup-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 25% 15%;
+  object-position: center 3%;
   display: block;
 }
 
@@ -3013,21 +3012,21 @@ body {
 
 .colinha-mockup-logo-wrap {
   width: 100%;
-  padding: 8px 8px 12px;
+  padding: 6px 6px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 3;
-  background: linear-gradient(180deg, #0f3d21 0%, #072815 100%);
-  border-top: 1px solid rgba(22, 163, 74, 0.3);
+  background: linear-gradient(180deg, rgba(7, 40, 21, 0.95) 0%, #072815 100%);
+  margin-top: -12px;
 }
 
 .colinha-mockup-logo {
-  width: 95%;
+  width: 98%;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
 }
 
 /* Lado Direito */

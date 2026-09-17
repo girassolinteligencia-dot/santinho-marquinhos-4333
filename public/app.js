@@ -812,33 +812,31 @@
     ctx.bezierCurveTo(140, 260, 320, 400, 510, 320);
     ctx.stroke();
 
-    // 3. FOTO DE MARQUINHOS TRAD (Com evidência no rosto, sorriso e punho erguido)
+    // 3. FOTO DE MARQUINHOS TRAD (Em close-up, alta aproximação do rosto e sem espaços vazios)
     const fotoOficialNova = await carregarImagemAsync("marquinhos_colinha_foto.jpg");
     const fotoPainel = await carregarImagemAsync("marquinhos_painel_verde.jpg");
 
     if (fotoOficialNova) {
-      // Proporção ideal mantendo enquadramento do rosto destacado no topo
-      const fW = panelW;
-      const fH = (fotoOficialNova.height * fW) / fotoOficialNova.width;
-      ctx.drawImage(fotoOficialNova, 0, 0, fW, Math.min(fH, 830));
+      // Preenche todo o painel superior até conectar perfeitamente com a logo, sem qualquer espaço vazio
+      ctx.drawImage(fotoOficialNova, 0, 0, panelW, 835);
     } else if (fotoPainel) {
-      ctx.drawImage(fotoPainel, 0, 0, 750, 950, 0, 0, panelW, 830);
+      ctx.drawImage(fotoPainel, 0, 0, 750, 950, 0, 0, panelW, 835);
     }
 
-    // Degradê suave na transição entre a foto e o rodapé verde onde fica a logo
-    const fadeGrad = ctx.createLinearGradient(0, 680, 0, 830);
+    // Degradê suave na transição entre a foto e o rodapé onde fica a logo
+    const fadeGrad = ctx.createLinearGradient(0, 720, 0, 835);
     fadeGrad.addColorStop(0, "rgba(7, 40, 21, 0)");
     fadeGrad.addColorStop(1, "#072815");
     ctx.fillStyle = fadeGrad;
-    ctx.fillRect(0, 680, panelW, 150);
+    ctx.fillRect(0, 720, panelW, 115);
 
-    // 4. LOGOMARCA OFICIAL MARQUINHOS TRAD 4333 (Sobre fundo verde escuro)
+    // 4. LOGOMARCA OFICIAL MARQUINHOS TRAD 4333 (Preenchendo a base sem lacunas)
     const logoOficial = await carregarImagemAsync("marquinhos_logo_oficial.png");
     if (logoOficial) {
-      const lW = 420;
-      const lH = 360;
+      const lW = 440;
+      const lH = 370;
       const lX = (panelW - lW) / 2;
-      const lY = 825;
+      const lY = 815;
       ctx.drawImage(logoOficial, lX, lY, lW, lH);
     }
 
