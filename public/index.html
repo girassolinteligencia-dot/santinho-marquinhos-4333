@@ -74,26 +74,64 @@
   </header>
 
   <main class="container-vitrine">
-    <!-- TELA DE BOAS-VINDAS TEMÁTICA (ONBOARDING DESCOMPLICADO) -->
+    <!-- TELA DE BOAS-VINDAS TEMÁTICA (ONBOARDING COM MARQUINHOS EM EVIDÊNCIA) -->
     <section class="welcome-card-wrap" id="welcome-section" style="display: none;" aria-label="Boas-vindas ao Vem com a Gente">
       <div class="welcome-card">
-        <div class="welcome-badge">ELEIÇÕES 2026 · VEM COM A GENTE</div>
-        <h1 class="welcome-title">Monte sua Colinha em 3 Passos</h1>
-        <p class="welcome-desc-direta">Seu 1º voto já é <strong>Marquinhos Trad 4333</strong>. Agora escolha os outros 5:</p>
+        
+        <!-- Bloco de Destaque: Marquinhos Trad Ator Principal -->
+        <div class="welcome-candidate-hero">
+          <div class="candidate-hero-avatar-ring">
+            <picture>
+              <source srcset="marquinhos_colinha_foto.webp" type="image/webp">
+              <img src="marquinhos_colinha_foto.jpg" alt="Marquinhos Trad Deputado Federal 4333" class="candidate-hero-avatar-img">
+            </picture>
+            <div class="candidate-hero-mini-badge">4333</div>
+          </div>
+          <div class="candidate-hero-info">
+            <span class="candidate-hero-tag">DEPUTADO FEDERAL · MS</span>
+            <h1 class="candidate-hero-name">MARQUINHOS TRAD</h1>
+            <span class="candidate-hero-slogan">★ VEM COM A GENTE · 4333</span>
+          </div>
+        </div>
+
+        <!-- Banner de Orientação Limpo e Direto -->
+        <div class="welcome-instrucao-banner">
+          <p class="welcome-instrucao-titulo">Monte sua Colinha Oficial para a Urna</p>
+          <p class="welcome-instrucao-sub">Seu 1º voto já é <strong>Marquinhos Trad 4333</strong>. Complete os outros 5:</p>
+        </div>
 
         <div class="welcome-direct-steps">
           <div class="direct-step-pill">
             <span class="step-num">1</span>
-            <span class="step-text"><strong>Deputado Federal:</strong> Marquinhos Trad 4333 já está garantido.</span>
+            <span class="step-text"><strong>Deputado Federal:</strong> Marquinhos 4333 já está garantido.</span>
           </div>
           <div class="direct-step-pill">
             <span class="step-num">2</span>
-            <span class="step-text"><strong>Toque no cargo</strong> e selecione seus outros candidatos por nome ou número.</span>
+            <span class="step-text"><strong>Toque no cargo</strong> e escolha seus outros 5 candidatos.</span>
           </div>
           <div class="direct-step-pill">
             <span class="step-num">3</span>
             <span class="step-text"><strong>Salve a imagem</strong> na sua galeria e leve anotado para a urna!</span>
           </div>
+        </div>
+
+        <!-- Campo de Personalização: Primeiro Nome -->
+        <div class="welcome-input-nome-wrap">
+          <label for="input-eleitor-nome" class="welcome-input-nome-label">
+            <span class="label-icon">✍️</span> Digite seu primeiro nome para personalizar seu santinho:
+          </label>
+          <div class="welcome-input-nome-box" id="box-input-nome">
+            <input 
+              type="text" 
+              id="input-eleitor-nome" 
+              class="input-eleitor-nome" 
+              placeholder="Ex: Paulo, Maria, João..."
+              maxlength="20"
+              autocomplete="given-name"
+              enterkeyhint="go"
+            >
+          </div>
+          <span class="welcome-input-aviso" id="msg-aviso-nome" style="display:none;">Por favor, informe seu primeiro nome para começar.</span>
         </div>
 
         <button class="btn-welcome-start" id="btn-welcome-start" title="Começar agora">
@@ -102,7 +140,7 @@
         </button>
 
         <div class="welcome-security-note">
-          🔒 Sem cadastro, 100% gratuito e direto no seu celular.
+          🔒 100% gratuito, sem cadastro e direto no seu celular.
         </div>
       </div>
     </section>

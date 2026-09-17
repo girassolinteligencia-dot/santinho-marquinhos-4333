@@ -69,16 +69,9 @@
       gov: null,
       pres: null
     };
+    // Reinicia sempre na tela de orientação a cada novo acesso
     try {
-      const salvo = localStorage.getItem("santinho_marquinhos_4333_v1");
-      if (salvo) {
-        const parsed = JSON.parse(salvo);
-        return {
-          ...base,
-          ...parsed,
-          depFed: CANDIDATO_MARQUINHOS_4333 // Fixado sempre com Marquinhos Trad 4333
-        };
-      }
+      localStorage.removeItem("santinho_marquinhos_boas_vindas_vista");
     } catch (e) {}
     return base;
   }
@@ -161,11 +154,20 @@
       `;
     }).join("");
 
+    const rawNome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
+    const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
+
+    const tituloLinha1 = eleitorNome ? `${eleitorNome} VOTA ASSIM` : "VEM COM A GENTE";
+    const tituloLinha2 = eleitorNome ? "VEM COM A GENTE!" : "ELEIÇÕES 2026";
+
     return `
       <div class="colinha-mockup-card-container">
         <div class="colinha-mockup-left">
           <div class="colinha-mockup-photo-wrap">
-            <img src="marquinhos_painel_verde.jpg" alt="Marquinhos Trad" class="colinha-mockup-photo" onerror="this.src='marquinhos_recorte.jpg'">
+            <picture>
+              <source srcset="marquinhos_colinha_foto.webp" type="image/webp">
+              <img src="marquinhos_colinha_foto.jpg" alt="Marquinhos Trad Deputado Federal" class="colinha-mockup-photo">
+            </picture>
           </div>
           <div class="colinha-mockup-logo-wrap">
             <img src="marquinhos_logo_oficial.png" alt="Marquinhos Trad Deputado Federal" class="colinha-mockup-logo">
@@ -174,10 +176,8 @@
 
         <div class="colinha-mockup-right">
           <div class="colinha-mockup-header">
-            <div class="colinha-mockup-title">MINHA COLINHA</div>
-            <div class="colinha-mockup-ano">
-              <span class="ano-blue">20</span><span class="ano-green">2</span><span class="ano-yellow">6</span>
-            </div>
+            <div class="colinha-mockup-slogan-topo">${tituloLinha1}</div>
+            <div class="colinha-mockup-slogan-main">${tituloLinha2}</div>
           </div>
 
           <div class="colinha-mockup-rows-list">
@@ -292,8 +292,7 @@
             if (nicho) nicho.style.display = "none";
           }
           if (appHeader) {
-            const stepper = appHeader.querySelector(".stepper-funil");
-            if (stepper) stepper.style.display = "none";
+            appHeader.style.display = "none"; // Evita redundância de logo no topo durante o onboarding
           }
         } else {
           if (welcomeSection) welcomeSection.style.display = "none";
@@ -303,6 +302,7 @@
             if (nicho) nicho.style.display = "block";
           }
           if (appHeader) {
+            appHeader.style.display = "block";
             const stepper = appHeader.querySelector(".stepper-funil");
             if (stepper) stepper.style.display = "flex";
           }
@@ -812,17 +812,17 @@
     ctx.bezierCurveTo(140, 260, 320, 400, 510, 320);
     ctx.stroke();
 
-    // 3. FOTO DE MARQUINHOS TRAD (Preenchendo toda a lateral superior e média)
+    // 3. FOTO DE MARQUINHOS TRAD (Com evidência no rosto, sorriso e punho erguido)
+    const fotoOficialNova = await carregarImagemAsync("marquinhos_colinha_foto.jpg");
     const fotoPainel = await carregarImagemAsync("marquinhos_painel_verde.jpg");
-    const fotoRecorte = await carregarImagemAsync("marquinhos_recorte.jpg");
-    const fotoFallback = await carregarImagemAsync("marquinhos_foto_hd.jpg");
 
-    if (fotoPainel) {
-      // Recorta a face e ombro a partir da imagem quadrada (1024x1024) com foco em Marquinhos
+    if (fotoOficialNova) {
+      // Proporção ideal mantendo enquadramento do rosto destacado no topo
+      const fW = panelW;
+      const fH = (fotoOficialNova.height * fW) / fotoOficialNova.width;
+      ctx.drawImage(fotoOficialNova, 0, 0, fW, Math.min(fH, 830));
+    } else if (fotoPainel) {
       ctx.drawImage(fotoPainel, 0, 0, 750, 950, 0, 0, panelW, 830);
-    } else if (fotoRecorte || fotoFallback) {
-      const fImg = fotoRecorte || fotoFallback;
-      ctx.drawImage(fImg, -20, 10, panelW + 40, 780);
     }
 
     // Degradê suave na transição entre a foto e o rodapé verde onde fica a logo
@@ -844,31 +844,47 @@
 
     ctx.restore(); // Fecha o clip do painel lateral esquerdo
 
-    // 5. TÍTULO SUPERIOR DIREITO: "MINHA COLINHA" + "2026"
+    // 5. TÍTULO SUPERIOR DIREITO: "VEM COM A GENTE" ou "[NOME] VOTA ASSIM" (SEM ARTIGO 'O'/'A')
+    const rawNome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
+    const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
+
     const rightX = 525;
     const rightW = W - rightX - 35;
 
-    // "MINHA COLINHA"
     ctx.textAlign = "left";
-    ctx.fillStyle = "#09381e";
-    ctx.font = '900 68px "Outfit", sans-serif';
-    ctx.fillText("MINHA COLINHA", rightX, 130);
 
-    // "2026" GIGANTE
-    const anoY = 270;
-    ctx.font = '900 148px "Outfit", sans-serif';
-    
-    // "20" em Azul Escuro
-    ctx.fillStyle = "#0c2c62";
-    ctx.fillText("20", rightX, anoY);
-    
-    // "2" em Verde
-    ctx.fillStyle = "#15803d";
-    ctx.fillText("2", rightX + 215, anoY);
+    if (eleitorNome) {
+      // Linha 1: "PAULO VOTA ASSIM" (sem artigo)
+      ctx.fillStyle = "#0c2c62";
+      ctx.font = '900 58px "Outfit", sans-serif';
+      ctx.fillText(`${eleitorNome} VOTA ASSIM`, rightX, 130);
 
-    // "6" em Amarelo Ouro
-    ctx.fillStyle = "#eab308";
-    ctx.fillText("6", rightX + 325, anoY);
+      // Linha 2: "VEM COM A GENTE!"
+      ctx.fillStyle = "#15803d";
+      ctx.font = '900 74px "Outfit", sans-serif';
+      ctx.fillText("VEM COM A GENTE!", rightX, 235);
+    } else {
+      // Linha 1: "VEM COM A GENTE"
+      ctx.fillStyle = "#09381e";
+      ctx.font = '900 68px "Outfit", sans-serif';
+      ctx.fillText("VEM COM A GENTE", rightX, 130);
+
+      // "2026" GIGANTE
+      const anoY = 270;
+      ctx.font = '900 148px "Outfit", sans-serif';
+      
+      // "20" em Azul Escuro
+      ctx.fillStyle = "#0c2c62";
+      ctx.fillText("20", rightX, anoY);
+      
+      // "2" em Verde
+      ctx.fillStyle = "#15803d";
+      ctx.fillText("2", rightX + 215, anoY);
+
+      // "6" em Amarelo Ouro
+      ctx.fillStyle = "#eab308";
+      ctx.fillText("6", rightX + 325, anoY);
+    }
 
     // 6. AS 6 LINHAS DA COLINHA COM NOME EM DESTAQUE E NÚMEROS BEM MAIORES
     const ROW_COLORS = [
@@ -1068,8 +1084,15 @@
 
     const resumoVotos = listaCandidatos.length > 0 ? "\n" + listaCandidatos.join("\n") + "\n" : "";
 
+    const rawNome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
+    const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
+
+    const tituloEngajamento = eleitorNome
+      ? `${eleitorNome} VOTA ASSIM, VEM COM A GENTE!`
+      : "VEM COM A GENTE · ELEIÇÕES 2026";
+
     const textoEngajamento = 
-      `🗳️ *VEM COM A GENTE · ELEIÇÕES 2026*\n\n` +
+      `🗳️ *${tituloEngajamento}*\n\n` +
       `Para Deputado Federal meu voto é *MARQUINHOS TRAD 4333*! 💚💛\n` +
       resumoVotos +
       `\n📲 Monte sua colinha oficial também e leve para a urna sem erro:\n${window.location.href}`;
@@ -1145,14 +1168,59 @@
       });
     }
 
+    // Preenchimento prévio do nome se já salvo
+    const inputEleitorNome = document.getElementById("input-eleitor-nome");
+    const boxInputNome = document.getElementById("box-input-nome");
+    const avisoNome = document.getElementById("msg-aviso-nome");
+    const savedNome = localStorage.getItem("santinho_eleitor_nome");
+    if (inputEleitorNome && savedNome) {
+      inputEleitorNome.value = savedNome;
+    }
+
     // Botão Começar a Preencher na Tela de Boas-Vindas
     const btnWelcomeStart = document.getElementById("btn-welcome-start");
     if (btnWelcomeStart) {
       btnWelcomeStart.addEventListener("click", () => {
+        const nomeDigitado = inputEleitorNome ? inputEleitorNome.value.trim() : "";
+
+        // Condição: primeiro nome é necessário para avançar (sem expor a palavra 'obrigatório')
+        if (!nomeDigitado) {
+          if (boxInputNome) {
+            boxInputNome.classList.remove("shake-input");
+            void boxInputNome.offsetWidth;
+            boxInputNome.classList.add("shake-input");
+          }
+          if (avisoNome) {
+            avisoNome.textContent = "Digite seu primeiro nome para personalizar sua colinha.";
+            avisoNome.style.display = "block";
+          }
+          if (inputEleitorNome) inputEleitorNome.focus();
+          return;
+        }
+
+        // Salva apenas o primeiro nome sem artigos
+        const primeiroNome = nomeDigitado.split(" ")[0].trim();
+        localStorage.setItem("santinho_eleitor_nome", primeiroNome);
+        if (avisoNome) avisoNome.style.display = "none";
+
         localStorage.setItem("santinho_marquinhos_boas_vindas_vista", "true");
         etapaAtual = 1; // Inicia no 2º voto (Deputado Estadual)
         atualizarProgresso();
         window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    if (inputEleitorNome) {
+      inputEleitorNome.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          if (btnWelcomeStart) btnWelcomeStart.click();
+        }
+      });
+      inputEleitorNome.addEventListener("input", () => {
+        if (avisoNome && inputEleitorNome.value.trim()) {
+          avisoNome.style.display = "none";
+        }
       });
     }
 
