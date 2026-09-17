@@ -158,32 +158,36 @@
     const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
 
     const tituloLinha1 = eleitorNome ? `${eleitorNome} VOTA ASSIM` : "VEM COM A GENTE";
-    const tituloLinha2 = eleitorNome ? "VEM COM A GENTE!" : "ELEIÇÕES 2026";
 
     return `
       <div class="colinha-mockup-card-container">
+        <!-- Lado Esquerdo Oficial (Fiel à Imagem de Referência 2) -->
         <div class="colinha-mockup-left">
-          <div class="colinha-mockup-photo-wrap">
-            <picture>
-              <source srcset="marquinhos_colinha_foto.webp" type="image/webp">
-              <img src="marquinhos_colinha_foto.jpg" alt="Marquinhos Trad Deputado Federal" class="colinha-mockup-photo">
-            </picture>
-          </div>
-          <div class="colinha-mockup-logo-wrap">
-            <img src="marquinhos_logo_oficial.png" alt="Marquinhos Trad Deputado Federal" class="colinha-mockup-logo">
-          </div>
+          <picture>
+            <source srcset="marquinhos_painel_lateral.webp" type="image/webp">
+            <img src="marquinhos_painel_lateral.jpg" alt="Marquinhos Trad Deputado Federal 4333" class="colinha-painel-lateral-img">
+          </picture>
         </div>
 
+        <!-- Lado Direito: Cédula com os 6 Votos (Fiel à Imagem de Referência 2) -->
         <div class="colinha-mockup-right">
+          <!-- Cabeçalho com Nome e Cores Cívicas -->
           <div class="colinha-mockup-header">
             <div class="colinha-mockup-slogan-topo">${tituloLinha1}</div>
-            <div class="colinha-mockup-slogan-main">${tituloLinha2}</div>
+            <div class="colinha-header-color-bar">
+              <span class="bar-g"></span>
+              <span class="bar-y"></span>
+              <span class="bar-b"></span>
+            </div>
+            <div class="colinha-mockup-slogan-main">VEM COM A GENTE</div>
           </div>
 
+          <!-- As 6 Linhas com caixas numéricas -->
           <div class="colinha-mockup-rows-list">
             ${rowsHtml}
           </div>
 
+          <!-- Rodapé Cívico com Marcas Oficiais -->
           <div class="colinha-mockup-footer">
             <span class="footer-txt-left">ELEIÇÕES 2026</span>
             <div class="footer-stripes">
@@ -192,6 +196,11 @@
               <span class="stripe-blue"></span>
             </div>
             <span class="footer-txt-right">DEMOCRACIA SEMPRE</span>
+          </div>
+
+          <!-- Fita decorativa inferior curva -->
+          <div class="colinha-ribbon-decor">
+            <img src="colinha_bottom_ribbon.png" alt="" class="colinha-ribbon-img">
           </div>
         </div>
       </div>
@@ -760,143 +769,105 @@
     if (!canvas) return null;
     const ctx = canvas.getContext("2d");
 
-    // Proporção Exata Quadrada 1:1 de Alta Resolução: 1200 x 1200 px (fiel ao modelo de referência)
-    const W = 1200;
-    const H = 1200;
+    // Proporção Exata 2:3 de Alta Resolução: 1000 x 1500 px (Fiel à Imagem de Referência 2)
+    const W = 1000;
+    const H = 1500;
     canvas.width = W;
     canvas.height = H;
 
-    // 1. Fundo Geral Branco Puro com Borda Suave Arredondada
+    // 1. Fundo Geral Branco Puro com cantos suavemente arredondados
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.roundRect(0, 0, W, H, 28);
+    ctx.roundRect(0, 0, W, H, 24);
     ctx.fill();
 
-    // 2. PAINEL LATERAL ESQUERDO VERDE OFICIAL (Preenche de cima a baixo sem espaços vazios)
-    const panelW = 490;
+    // 2. PAINEL LATERAL ESQUERDO OFICIAL (Exatamente 41% da largura = 410px)
+    const panelW = 410;
 
     ctx.save();
-    // Cria máscara arredondada para o canto esquerdo da colinha
+    // Máscara com cantos arredondados na esquerda
     ctx.beginPath();
-    ctx.roundRect(0, 0, panelW, H, [28, 0, 0, 28]);
+    ctx.roundRect(0, 0, panelW, H, [24, 0, 0, 24]);
     ctx.clip();
 
-    // Fundo Verde Degradê Oficial Marquinhos Trad (Verde Bandeira -> Verde Escuro Profundo)
-    const greenGrad = ctx.createLinearGradient(0, 0, 0, H);
-    greenGrad.addColorStop(0, "#15803d");
-    greenGrad.addColorStop(0.55, "#14532d");
-    greenGrad.addColorStop(1, "#072815");
-    ctx.fillStyle = greenGrad;
-    ctx.fillRect(0, 0, panelW, H);
+    // Carrega a arte lateral oficial extraída da referência
+    const painelOficial = (await carregarImagemAsync("marquinhos_painel_lateral.webp")) ||
+                          (await carregarImagemAsync("marquinhos_painel_lateral.jpg"));
 
-    // Ondas e Curvas Amarelas e Verdes Dinâmicas de Fundo (como na identidade de campanha)
-    ctx.strokeStyle = "rgba(234, 179, 8, 0.45)";
-    ctx.lineWidth = 14;
-    ctx.beginPath();
-    ctx.moveTo(-40, 200);
-    ctx.bezierCurveTo(160, 100, 360, 280, 520, 180);
-    ctx.stroke();
+    if (painelOficial) {
+      // Preenche todo o painel esquerdo sem folgas ou distorções
+      ctx.drawImage(painelOficial, 0, 0, panelW, H);
+    } else {
+      // Fallback em degradê verde se imagem falhar
+      const greenGrad = ctx.createLinearGradient(0, 0, 0, H);
+      greenGrad.addColorStop(0, "#15803d");
+      greenGrad.addColorStop(0.55, "#14532d");
+      greenGrad.addColorStop(1, "#072815");
+      ctx.fillStyle = greenGrad;
+      ctx.fillRect(0, 0, panelW, H);
 
-    ctx.strokeStyle = "rgba(234, 179, 8, 0.35)";
-    ctx.lineWidth = 18;
-    ctx.beginPath();
-    ctx.moveTo(-50, 480);
-    ctx.bezierCurveTo(180, 420, 320, 580, 530, 460);
-    ctx.stroke();
-
-    // Faixa curva verde claro
-    ctx.strokeStyle = "rgba(74, 222, 128, 0.25)";
-    ctx.lineWidth = 10;
-    ctx.beginPath();
-    ctx.moveTo(-30, 340);
-    ctx.bezierCurveTo(140, 260, 320, 400, 510, 320);
-    ctx.stroke();
-
-    // 3. FOTO DE MARQUINHOS TRAD (Em close-up, alta aproximação do rosto e sem espaços vazios)
-    const fotoOficialNova = await carregarImagemAsync("marquinhos_colinha_foto.jpg");
-    const fotoPainel = await carregarImagemAsync("marquinhos_painel_verde.jpg");
-
-    if (fotoOficialNova) {
-      // Preenche todo o painel superior até conectar perfeitamente com a logo, sem qualquer espaço vazio
-      ctx.drawImage(fotoOficialNova, 0, 0, panelW, 835);
-    } else if (fotoPainel) {
-      ctx.drawImage(fotoPainel, 0, 0, 750, 950, 0, 0, panelW, 835);
+      const fotoOficialNova = await carregarImagemAsync("marquinhos_colinha_foto.jpg");
+      if (fotoOficialNova) {
+        ctx.drawImage(fotoOficialNova, 0, 0, panelW, 920);
+      }
+      const logoOficial = await carregarImagemAsync("marquinhos_logo_oficial.png");
+      if (logoOficial) {
+        ctx.drawImage(logoOficial, 20, 930, panelW - 40, 420);
+      }
     }
-
-    // Degradê suave na transição entre a foto e o rodapé onde fica a logo
-    const fadeGrad = ctx.createLinearGradient(0, 720, 0, 835);
-    fadeGrad.addColorStop(0, "rgba(7, 40, 21, 0)");
-    fadeGrad.addColorStop(1, "#072815");
-    ctx.fillStyle = fadeGrad;
-    ctx.fillRect(0, 720, panelW, 115);
-
-    // 4. LOGOMARCA OFICIAL MARQUINHOS TRAD 4333 (Preenchendo a base sem lacunas)
-    const logoOficial = await carregarImagemAsync("marquinhos_logo_oficial.png");
-    if (logoOficial) {
-      const lW = 440;
-      const lH = 370;
-      const lX = (panelW - lW) / 2;
-      const lY = 815;
-      ctx.drawImage(logoOficial, lX, lY, lW, lH);
-    }
-
     ctx.restore(); // Fecha o clip do painel lateral esquerdo
 
-    // 5. TÍTULO SUPERIOR DIREITO: "VEM COM A GENTE" ou "[NOME] VOTA ASSIM" (SEM ARTIGO 'O'/'A')
+    // 3. PAINEL DIREITO: CÉDULA COM OS 6 VOTOS (FIEL À IMAGEM 2)
+    const rightX = 435;
+    const rightW = 535;
+    const centerRightX = panelW + (W - panelW) / 2; // ~705px
+
+    // 3.1 Cabeçalho: [NOME] VOTA ASSIM (sem artigo 'o'/'a') e VEM COM A GENTE
     const rawNome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
     const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
 
-    const rightX = 525;
-    const rightW = W - rightX - 35;
+    const tituloLinha1 = eleitorNome ? `${eleitorNome} VOTA ASSIM` : "VEM COM A GENTE";
 
-    ctx.textAlign = "left";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
-    if (eleitorNome) {
-      // Linha 1: "PAULO VOTA ASSIM" (sem artigo)
-      ctx.fillStyle = "#0c2c62";
-      ctx.font = '900 58px "Outfit", sans-serif';
-      ctx.fillText(`${eleitorNome} VOTA ASSIM`, rightX, 130);
+    // Linha 1: "PAULO VOTA ASSIM" ou "VEM COM A GENTE"
+    ctx.fillStyle = "#0c2c62";
+    ctx.font = '900 42px "Outfit", sans-serif';
+    ctx.fillText(tituloLinha1, centerRightX, 108);
 
-      // Linha 2: "VEM COM A GENTE!"
-      ctx.fillStyle = "#15803d";
-      ctx.font = '900 74px "Outfit", sans-serif';
-      ctx.fillText("VEM COM A GENTE!", rightX, 235);
-    } else {
-      // Linha 1: "VEM COM A GENTE"
-      ctx.fillStyle = "#09381e";
-      ctx.font = '900 68px "Outfit", sans-serif';
-      ctx.fillText("VEM COM A GENTE", rightX, 130);
+    // Barra de cores cívicas centralizada abaixo do título
+    const barW = 210;
+    const barH = 5;
+    const barX = centerRightX - barW / 2;
+    const barY = 138;
+    const segW = barW / 3;
 
-      // "2026" GIGANTE
-      const anoY = 270;
-      ctx.font = '900 148px "Outfit", sans-serif';
-      
-      // "20" em Azul Escuro
-      ctx.fillStyle = "#0c2c62";
-      ctx.fillText("20", rightX, anoY);
-      
-      // "2" em Verde
-      ctx.fillStyle = "#15803d";
-      ctx.fillText("2", rightX + 215, anoY);
+    ctx.fillStyle = "#15803d"; // Verde
+    ctx.fillRect(barX, barY, segW, barH);
+    ctx.fillStyle = "#eab308"; // Amarelo
+    ctx.fillRect(barX + segW, barY, segW, barH);
+    ctx.fillStyle = "#0284c7"; // Azul
+    ctx.fillRect(barX + segW * 2, barY, segW, barH);
 
-      // "6" em Amarelo Ouro
-      ctx.fillStyle = "#eab308";
-      ctx.fillText("6", rightX + 325, anoY);
-    }
+    // Linha 2: "VEM COM A GENTE" (Verde Destaque)
+    ctx.fillStyle = "#15803d";
+    ctx.font = '900 44px "Outfit", sans-serif';
+    ctx.fillText("VEM COM A GENTE", centerRightX, 186);
 
-    // 6. AS 6 LINHAS DA COLINHA COM NOME EM DESTAQUE E NÚMEROS BEM MAIORES
+    // 3.2 As 6 Linhas de Votação com Badges Coloridas e Caixas Numéricas
     const ROW_COLORS = [
-      { bg: "#15803d", text: "#ffffff" }, // 1: Verde
-      { bg: "#0284c7", text: "#ffffff" }, // 2: Azul
-      { bg: "#eab308", text: "#ffffff" }, // 3: Amarelo
-      { bg: "#15803d", text: "#ffffff" }, // 4: Verde
-      { bg: "#0284c7", text: "#ffffff" }, // 5: Azul
-      { bg: "#eab308", text: "#ffffff" }  // 6: Amarelo
+      { bg: "#15803d", text: "#ffffff" }, // 1: Verde (Marquinhos Trad)
+      { bg: "#0284c7", text: "#ffffff" }, // 2: Azul/Ciano (Estadual)
+      { bg: "#eab308", text: "#ffffff" }, // 3: Amarelo Ouro (Senador 1)
+      { bg: "#15803d", text: "#ffffff" }, // 4: Verde (Senador 2)
+      { bg: "#0284c7", text: "#ffffff" }, // 5: Azul/Ciano (Governador)
+      { bg: "#eab308", text: "#ffffff" }  // 6: Amarelo Ouro (Presidente)
     ];
 
-    const rowStartY = 315;
-    const rowH = 114;
-    const rowGap = 16;
+    const rowStartY = 245;
+    const rowH = 126;
+    const rowGap = 26;
 
     for (let i = 0; i < CARGOS_CONFIG.length; i++) {
       const cfg = CARGOS_CONFIG[i];
@@ -904,67 +875,67 @@
       const y = rowStartY + i * (rowH + rowGap);
       const rowColor = ROW_COLORS[i];
 
-      // Fundo azul suave
-      ctx.fillStyle = "#f0f6fc";
-      ctx.beginPath();
-      ctx.roundRect(rightX, y, rightW, rowH, 14);
-      ctx.fill();
+      // Badge com Número da Ordem (1 a 6)
+      const badgeW = 54;
+      const badgeH = 92;
+      const badgeX = rightX;
+      const badgeY = y + (rowH - badgeH) / 2;
 
-      // Badge de ordem (1 a 6)
-      const badgeW = 68;
-      const badgeH = rowH;
       ctx.fillStyle = rowColor.bg;
       ctx.beginPath();
-      ctx.roundRect(rightX, y, badgeW, badgeH, [14, 0, 0, 14]);
+      ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 8);
       ctx.fill();
 
       ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
       ctx.fillStyle = rowColor.text;
-      ctx.font = '900 50px "Outfit", sans-serif';
-      ctx.fillText(String(i + 1), rightX + badgeW / 2, y + 76);
+      ctx.font = '900 44px "Outfit", sans-serif';
+      ctx.fillText(String(i + 1), badgeX + badgeW / 2, badgeY + badgeH / 2);
 
-      // Posição inicial das informações de texto
+      // Informações: Nome do Candidato e Cargo
       const infoX = rightX + badgeW + 18;
 
-      // Caixas de Dígitos de Voto (BEM MAIORES E DESTACADAS)
+      // Caixas de Dígitos de Voto (à direita)
       const numDigitos = cfg.digitos;
-      const boxW = 54;
-      const boxH = 88;
-      const boxGap = 8;
+      const boxW = 46;
+      const boxH = 84;
+      const boxGap = 7;
       const totalBoxesW = numDigitos * boxW + (numDigitos - 1) * boxGap;
-      const startBoxX = rightX + rightW - totalBoxesW - 14;
+      const startBoxX = rightX + rightW - totalBoxesW;
       const boxY = y + (rowH - boxH) / 2;
 
-      // 1. NOME DO CANDIDATO ESCOLHIDO (MAIOR E NO TOPO DA LINHA)
+      // 1. Nome do Candidato
       let candNome = cand && cand.urna ? cand.urna.toUpperCase() : (cand && cand.nome ? cand.nome.toUpperCase() : "");
 
       ctx.textAlign = "left";
+      ctx.textBaseline = "alphabetic";
+
       if (candNome) {
         ctx.fillStyle = "#0c2c62";
-        const maxTextW = startBoxX - infoX - 14;
-        let fontSize = 38;
+        const maxTextW = startBoxX - infoX - 12;
+        let fontSize = 28;
         ctx.font = `900 ${fontSize}px "Outfit", sans-serif`;
-        while (ctx.measureText(candNome).width > maxTextW && fontSize > 20) {
+        while (ctx.measureText(candNome).width > maxTextW && fontSize > 16) {
           fontSize -= 1.5;
           ctx.font = `900 ${fontSize}px "Outfit", sans-serif`;
         }
-        ctx.fillText(candNome, infoX, y + 50);
+        ctx.fillText(candNome, infoX, y + 54);
       } else {
         ctx.fillStyle = "#94a3b8";
-        ctx.font = 'italic 700 28px "Outfit", sans-serif';
-        ctx.fillText("A DEFINIR", infoX, y + 50);
+        ctx.font = 'italic 700 24px "Outfit", sans-serif';
+        ctx.fillText("A DEFINIR", infoX, y + 54);
       }
 
-      // 2. NOME DO CARGO (DISCRETO, DE APOIO, ABAIXO DO NOME)
+      // 2. Cargo
       let cargoStr = cfg.cargo.toUpperCase();
       if (cfg.id === "sen1") cargoStr = "SENADOR (1ª VAGA)";
       if (cfg.id === "sen2") cargoStr = "SENADOR (2ª VAGA)";
 
       ctx.fillStyle = "#64748b";
-      ctx.font = '700 20px "Outfit", sans-serif';
+      ctx.font = '700 17px "Outfit", sans-serif';
       ctx.fillText(cargoStr, infoX, y + 88);
 
-      // Dígitos reais preenchidos (GRANDES E NÍTIDOS)
+      // 3. Caixas de Dígitos Individuais com borda escura e preenchimento
       const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
 
       for (let d = 0; d < numDigitos; d++) {
@@ -973,54 +944,70 @@
         // Fundo Branco da Caixinha
         ctx.fillStyle = "#ffffff";
         ctx.beginPath();
-        ctx.roundRect(bX, boxY, boxW, boxH, 10);
+        ctx.roundRect(bX, boxY, boxW, boxH, 8);
         ctx.fill();
 
         // Borda Nítida
         ctx.strokeStyle = "#0c2c62";
-        ctx.lineWidth = 2.6;
+        ctx.lineWidth = 2.4;
         ctx.stroke();
 
-        // Dígito Gigante
+        // Dígito
         const digitoChar = digitsArr[d];
         if (digitoChar !== undefined) {
           ctx.textAlign = "center";
-          ctx.fillStyle = "#000000";
-          ctx.font = '900 58px "Outfit", sans-serif';
-          ctx.fillText(digitoChar, bX + boxW / 2, boxY + 66);
+          ctx.textBaseline = "middle";
+          ctx.fillStyle = "#0c2c62";
+          ctx.font = '900 50px "Outfit", sans-serif';
+          ctx.fillText(digitoChar, bX + boxW / 2, boxY + boxH / 2 + 1);
         }
       }
     }
 
-    // 7. LINHA INFERIOR DISCRETA DE RODAPÉ (COMO NO MODELO)
-    const footerY = 1110;
-    ctx.strokeStyle = "#cbd5e1";
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(rightX, footerY);
-    ctx.lineTo(rightX + rightW, footerY);
-    ctx.stroke();
+    // 4. MARCA D'ÁGUA DO MAPA DE MATO GROSSO DO SUL NO FUNDO INFERIOR DIREITO
+    const msWatermark = await carregarImagemAsync("ms_map_watermark.png");
+    if (msWatermark) {
+      ctx.save();
+      ctx.globalAlpha = 0.85;
+      ctx.drawImage(msWatermark, W - 260, 1140, 230, 150);
+      ctx.restore();
+    }
 
-    // Texto: ELEIÇÕES 2026 + Tracinhos coloridos + DEMOCRACIA SEMPRE
+    // 5. RODAPÉ CÍVICO: ELEIÇÕES 2026 + Tracinhos + DEMOCRACIA SEMPRE
+    const footerY = 1200;
+    ctx.textBaseline = "middle";
+
     ctx.textAlign = "left";
     ctx.fillStyle = "#0c2c62";
-    ctx.font = '800 16px "Outfit", sans-serif';
-    ctx.fillText("ELEIÇÕES 2026", rightX, footerY + 36);
+    ctx.font = '800 17px "Outfit", sans-serif';
+    ctx.fillText("ELEIÇÕES 2026", rightX, footerY);
 
-    // Tracinho Verde
+    // Tracinhos Coloridos
+    const stripeW = 38;
+    const stripeH = 6;
+    const stripeStartX = rightX + 160;
     ctx.fillStyle = "#15803d";
-    ctx.fillRect(rightX + 160, footerY + 24, 45, 10);
-    // Tracinho Amarelo
+    ctx.fillRect(stripeStartX, footerY - 3, stripeW, stripeH);
     ctx.fillStyle = "#eab308";
-    ctx.fillRect(rightX + 210, footerY + 24, 45, 10);
-    // Tracinho Azul
+    ctx.fillRect(stripeStartX + stripeW + 6, footerY - 3, stripeW, stripeH);
     ctx.fillStyle = "#0284c7";
-    ctx.fillRect(rightX + 260, footerY + 24, 45, 10);
+    ctx.fillRect(stripeStartX + (stripeW + 6) * 2, footerY - 3, stripeW, stripeH);
 
     ctx.textAlign = "right";
     ctx.fillStyle = "#0c2c62";
-    ctx.font = '800 16px "Outfit", sans-serif';
-    ctx.fillText("DEMOCRACIA SEMPRE", rightX + rightW, footerY + 36);
+    ctx.font = '800 17px "Outfit", sans-serif';
+    ctx.fillText("DEMOCRACIA SEMPRE", rightX + rightW, footerY);
+
+    // 6. FITA CURVA CÍVICA INFERIOR DIREITA
+    const ribbonImg = await carregarImagemAsync("colinha_bottom_ribbon.png");
+    if (ribbonImg) {
+      ctx.save();
+      // Desenha a fita decorativa curva exatamente como na imagem 2
+      const ribW = W - panelW;
+      const ribH = 170;
+      ctx.drawImage(ribbonImg, panelW, H - ribH, ribW, ribH);
+      ctx.restore();
+    }
 
     return canvas;
   }

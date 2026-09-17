@@ -74,74 +74,93 @@
   </header>
 
   <main class="container-vitrine">
-    <!-- TELA DE BOAS-VINDAS TEMÁTICA (ONBOARDING COM MARQUINHOS EM EVIDÊNCIA) -->
-    <section class="welcome-card-wrap" id="welcome-section" style="display: none;" aria-label="Boas-vindas ao Vem com a Gente">
-      <div class="welcome-card">
+    <!-- TELA DE BOAS-VINDAS TEMÁTICA (REDESIGN OFICIAL 2026 — FIEL À REFERÊNCIA) -->
+    <section class="welcome-screen-wrap" id="welcome-section" style="display: none;" aria-label="Boas-vindas ao Vem com a Gente">
+      <div class="welcome-screen-container">
         
-        <!-- Bloco de Destaque: Marquinhos Trad Ator Principal -->
-        <div class="welcome-candidate-hero">
-          <div class="candidate-hero-avatar-ring">
+        <!-- Topo da Tela: Mato Grosso do Sul (Esq) e Eleições 2026 (Dir) -->
+        <div class="welcome-ref-topbar">
+          <div class="welcome-ref-ms">
+            <span class="ms-label-small">MATO<br>GROSSO<br>DO SUL</span>
+          </div>
+          <div class="welcome-ref-eleicoes">
+            <span class="eleicoes-ref-txt">ELEIÇÕES</span>
+            <span class="eleicoes-ref-ano">2026</span>
+            <div class="eleicoes-ref-bars">
+              <span class="bar-g"></span>
+              <span class="bar-y"></span>
+              <span class="bar-b"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloco de Destaque: Avatar Dourado com Marquinhos e Badge 4333 -->
+        <div class="welcome-ref-hero">
+          <div class="welcome-ref-avatar-box">
             <picture>
-              <source srcset="marquinhos_colinha_foto.webp" type="image/webp">
-              <img src="marquinhos_colinha_foto.jpg" alt="Marquinhos Trad Deputado Federal 4333" class="candidate-hero-avatar-img">
+              <source srcset="welcome_marquinhos_hero.webp" type="image/webp">
+              <img src="welcome_marquinhos_hero.png" alt="Marquinhos Trad 4333" class="welcome-ref-avatar-img">
             </picture>
-            <div class="candidate-hero-mini-badge">4333</div>
-          </div>
-          <div class="candidate-hero-info">
-            <span class="candidate-hero-tag">DEPUTADO FEDERAL · MS</span>
-            <h1 class="candidate-hero-name">MARQUINHOS TRAD</h1>
-            <span class="candidate-hero-slogan">★ VEM COM A GENTE · 4333</span>
           </div>
         </div>
 
-        <!-- Banner de Orientação Limpo e Direto -->
-        <div class="welcome-instrucao-banner">
-          <p class="welcome-instrucao-titulo">Monte sua Colinha Oficial para a Urna</p>
-          <p class="welcome-instrucao-sub">Seu 1º voto já é <strong>Marquinhos Trad 4333</strong>. Complete os outros 5:</p>
+        <!-- Títulos Oficiais do Candidato -->
+        <div class="welcome-ref-titles">
+          <div class="welcome-ref-cargo">DEPUTADO FEDERAL • MS</div>
+          <h1 class="welcome-ref-name">
+            <span class="name-part-white">MARQUINHOS</span>
+            <span class="name-part-green">TRAD</span>
+          </h1>
+          <div class="welcome-ref-slogan">V E M &nbsp; C O M &nbsp; A &nbsp; G E N T E</div>
         </div>
 
-        <div class="welcome-direct-steps">
-          <div class="direct-step-pill">
-            <span class="step-num">1</span>
-            <span class="step-text"><strong>Deputado Federal:</strong> Marquinhos 4333 já está garantido.</span>
+        <!-- Caixa dos 3 Passos (Pills Arredondadas Translúcidas) -->
+        <div class="welcome-ref-steps-box">
+          <div class="welcome-ref-step-item">
+            <span class="ref-step-badge">1</span>
+            <span class="ref-step-text">Seu primeiro voto já é <strong>Marquinhos 4333</strong></span>
           </div>
-          <div class="direct-step-pill">
-            <span class="step-num">2</span>
-            <span class="step-text"><strong>Toque no cargo</strong> e escolha seus outros 5 candidatos.</span>
+          <div class="welcome-ref-step-item">
+            <span class="ref-step-badge">2</span>
+            <span class="ref-step-text">Escolha seus outros 5 candidatos</span>
           </div>
-          <div class="direct-step-pill">
-            <span class="step-num">3</span>
-            <span class="step-text"><strong>Salve a imagem</strong> na sua galeria e leve anotado para a urna!</span>
+          <div class="welcome-ref-step-item">
+            <span class="ref-step-badge">3</span>
+            <span class="ref-step-text">Baixe sua colinha e leve para a urna</span>
           </div>
         </div>
 
-        <!-- Campo de Personalização: Primeiro Nome -->
-        <div class="welcome-input-nome-wrap">
-          <label for="input-eleitor-nome" class="welcome-input-nome-label">
-            <span class="label-icon">✍️</span> Digite seu primeiro nome para personalizar seu santinho:
-          </label>
-          <div class="welcome-input-nome-box" id="box-input-nome">
+        <!-- Campo: Seu Primeiro Nome -->
+        <div class="welcome-ref-input-group">
+          <label for="input-eleitor-nome" class="welcome-ref-input-label">SEU PRIMEIRO NOME</label>
+          <div class="welcome-ref-input-box" id="box-input-nome">
+            <span class="ref-input-user-icon">👤</span>
             <input 
               type="text" 
               id="input-eleitor-nome" 
-              class="input-eleitor-nome" 
-              placeholder="Ex: Paulo, Maria, João..."
+              class="ref-input-field" 
+              placeholder="PAULO, MARIA..."
               maxlength="20"
               autocomplete="given-name"
               enterkeyhint="go"
             >
           </div>
-          <span class="welcome-input-aviso" id="msg-aviso-nome" style="display:none;">Por favor, informe seu primeiro nome para começar.</span>
+          <span class="welcome-input-aviso" id="msg-aviso-nome" style="display:none;">Digite seu primeiro nome para começar.</span>
         </div>
 
-        <button class="btn-welcome-start" id="btn-welcome-start" title="Começar agora">
+        <!-- Botão Radiante Dourado -->
+        <button class="btn-ref-start-gold" id="btn-welcome-start" title="Começar minha colinha">
           <span>COMEÇAR MINHA COLINHA</span>
-          <span class="btn-arrow">➔</span>
+          <span class="btn-arrow-right">➔</span>
         </button>
 
-        <div class="welcome-security-note">
-          🔒 100% gratuito, sem cadastro e direto no seu celular.
+        <!-- Faixa Cívica Decorativa no Rodapé -->
+        <div class="welcome-ref-bottom-stripes">
+          <span class="stripe-g"></span>
+          <span class="stripe-y"></span>
+          <span class="stripe-b"></span>
         </div>
+
       </div>
     </section>
     <!-- LAYOUT ADAPTATIVO: No Desktop (Lado a Lado / Split View) | No Mobile (Fluxo Vertical Ergonômico) -->

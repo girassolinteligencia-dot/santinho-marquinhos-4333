@@ -1,10 +1,16 @@
-const CACHE_NAME = 'minha-colinha-v19';
+const CACHE_NAME = 'minha-colinha-v20';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './app.js',
   './manifest.json',
+  './marquinhos_painel_lateral.webp',
+  './marquinhos_painel_lateral.jpg',
+  './welcome_marquinhos_hero.webp',
+  './welcome_marquinhos_hero.png',
+  './colinha_bottom_ribbon.png',
+  './ms_map_watermark.png',
   './marquinhos_colinha_foto.webp',
   './marquinhos_colinha_foto.jpg',
   './marquinhos_hero.webp',
