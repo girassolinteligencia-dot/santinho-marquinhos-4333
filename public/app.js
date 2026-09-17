@@ -320,6 +320,15 @@
     }
   }
 
+  const STEP_COLORS = [
+    { bg: "#15803d", text: "#ffffff", border: "#4ade80", glow: "rgba(34, 197, 94, 0.65)" }, // 1: Verde (Marquinhos Trad)
+    { bg: "#0284c7", text: "#ffffff", border: "#38bdf8", glow: "rgba(2, 132, 199, 0.65)" }, // 2: Azul (Deputado Estadual)
+    { bg: "#eab308", text: "#000000", border: "#fef08a", glow: "rgba(234, 179, 8, 0.65)" }, // 3: Amarelo (Senador 1)
+    { bg: "#15803d", text: "#ffffff", border: "#4ade80", glow: "rgba(34, 197, 94, 0.65)" }, // 4: Verde (Senador 2)
+    { bg: "#0284c7", text: "#ffffff", border: "#38bdf8", glow: "rgba(2, 132, 199, 0.65)" }, // 5: Azul (Governador)
+    { bg: "#eab308", text: "#000000", border: "#fef08a", glow: "rgba(234, 179, 8, 0.65)" }  // 6: Amarelo (Presidente)
+  ];
+
   function renderizarStepperFunil() {
     const stepper = document.getElementById("stepper-funil");
     if (!stepper) return;
@@ -329,11 +338,20 @@
       const ativo = idx === etapaAtual;
       const isLast = idx === CARGOS_CONFIG.length - 1;
       const isFixado = idx === 0; // 1º Voto (Deputado Federal) é fixado
+      const col = STEP_COLORS[idx] || STEP_COLORS[0];
+
+      let dynamicStyle = "";
+      if (ativo) {
+        dynamicStyle = `background:${col.bg};color:${col.text};border-color:${col.border};box-shadow:0 0 16px ${col.glow};transform:scale(1.18);`;
+      } else if (preenchido) {
+        dynamicStyle = `background:${col.bg};color:${col.text};border-color:${col.border};`;
+      }
 
       return `
         <div class="step-node-item">
           <div class="step-circle ${ativo ? 'ativo' : ''} ${preenchido ? 'concluido' : ''} ${isFixado ? 'fixado-bloqueado' : ''}" 
                data-step="${idx}" 
+               style="${dynamicStyle}"
                title="${isFixado ? '1º VOTO: Marquinhos Trad 4333 (Oficial)' : `${cfg.ordemVoto}: ${cfg.cargo}`}" 
                aria-label="${isFixado ? 'Marquinhos Trad 4333 (Fixado)' : `Ir para ${cfg.cargo}`}">
             ${isFixado ? '⭐' : (preenchido ? '✓' : (idx + 1))}
