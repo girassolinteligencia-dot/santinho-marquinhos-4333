@@ -1,0 +1,22 @@
+{
+  "name": "Minha Colinha 2026",
+  "short_name": "Minha Colinha",
+  "description": "Monte sua colinha para as Eleições 2026 de forma fácil, rápida e com números gigantes.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#091b15",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
