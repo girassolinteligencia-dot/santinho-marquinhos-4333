@@ -1076,29 +1076,30 @@
     const canvas = await desenharColinhaCanvas();
     if (!canvas) return;
 
-    // Resumo legível dos votos definidos pelo eleitor
+    // Resumo limpo e elegante dos votos definidos pelo eleitor
     const listaCandidatos = [];
     CARGOS_CONFIG.forEach(c => {
       const cand = colinhaState[c.id];
       if (cand) {
-        listaCandidatos.push(`🔹 *${c.cargo}:* ${cand.urna} — *${cand.nr}*`);
+        listaCandidatos.push(`• *${c.cargo}:* ${cand.urna} (${cand.nr})`);
       }
     });
 
-    const resumoVotos = listaCandidatos.length > 0 ? "\n" + listaCandidatos.join("\n") + "\n" : "";
+    const resumoVotos = listaCandidatos.length > 0 ? "\n📋 *Minha Colinha Completa:*\n" + listaCandidatos.join("\n") + "\n" : "";
 
     const rawNome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
     const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
 
     const tituloEngajamento = eleitorNome
-      ? `${eleitorNome} VOTA ASSIM, VEM COM A GENTE!`
-      : "VEM COM A GENTE · ELEIÇÕES 2026";
+      ? `COLINHA ELEITORAL 2026 DE ${eleitorNome}`
+      : "COLINHA ELEITORAL 2026";
 
     const textoEngajamento = 
       `🗳️ *${tituloEngajamento}*\n\n` +
-      `Para Deputado Federal meu voto é *MARQUINHOS TRAD 4333*! 💚💛\n` +
+      `Já organizei meus votos para a urna! 🗳️\n` +
+      `Meu Deputado Federal é *MARQUINHOS TRAD 4333* 💚💛\n` +
       resumoVotos +
-      `\n📲 Monte sua colinha oficial também e leve para a urna sem erro:\n${window.location.href}`;
+      `\n👉 *Monte a sua também e leve para a urna sem erro:*\n${window.location.href}`;
 
     canvas.toBlob(async (blob) => {
       if (!blob) return;

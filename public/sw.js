@@ -1,4 +1,4 @@
-const CACHE_NAME = 'minha-colinha-v21';
+const CACHE_NAME = 'minha-colinha-v22';
 const ASSETS = [
   './',
   './index.html',
