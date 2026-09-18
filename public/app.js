@@ -79,9 +79,10 @@
       gov: null,
       pres: null
     };
-    // Reinicia sempre na tela de orientação a cada novo acesso
+    // Reinicia sempre na tela de orientação com campos em branco a cada novo acesso
     try {
       localStorage.removeItem("santinho_marquinhos_boas_vindas_vista");
+      localStorage.removeItem("santinho_eleitor_nome");
     } catch (e) {}
     return base;
   }
@@ -1184,13 +1185,12 @@
       });
     }
 
-    // Preenchimento prévio do nome se já salvo
+    // Campo de nome do eleitor: Sempre inicia limpo para cada pessoa montar sua própria colinha
     const inputEleitorNome = document.getElementById("input-eleitor-nome");
     const boxInputNome = document.getElementById("box-input-nome");
     const avisoNome = document.getElementById("msg-aviso-nome");
-    const savedNome = localStorage.getItem("santinho_eleitor_nome");
-    if (inputEleitorNome && savedNome) {
-      inputEleitorNome.value = savedNome;
+    if (inputEleitorNome) {
+      inputEleitorNome.value = "";
     }
 
     // Botão Começar a Preencher na Tela de Boas-Vindas
