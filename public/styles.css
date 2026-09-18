@@ -3205,6 +3205,52 @@ body {
   text-transform: uppercase;
 }
 
+/* Identidade Oficial Personalizada "Vem com a Gente" para o Nome do Eleitor */
+.colinha-mockup-personalizado-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 2px;
+}
+
+.colinha-nome-brush-box {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.colinha-nome-brush {
+  font-family: 'Caveat Brush', cursive, var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: 0.5px;
+  transform: rotate(-3.5deg);
+  display: inline-block;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 55%, #15803d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 4px rgba(21, 128, 61, 0.25));
+}
+
+.colinha-brush-underline {
+  width: 96%;
+  height: 8px;
+  margin-top: -3px;
+  transform: rotate(-3deg);
+}
+
+.colinha-vota-assim-sub {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 900;
+  color: #0c2c62;
+  letter-spacing: -0.3px;
+  text-transform: uppercase;
+}
+
 .colinha-header-color-bar {
   display: flex;
   gap: 3px;
@@ -3279,7 +3325,37 @@ body {
   text-align: left;
 }
 
-/* NOME DO CANDIDATO */
+/* LINHA ESPECIAL DE DESTAQUE: MARQUINHOS TRAD */
+.colinha-row-marquinhos-destaque {
+  border-color: #15803d;
+  background: #f0fdf4;
+  box-shadow: 0 2px 6px rgba(21, 128, 61, 0.12);
+}
+
+.colinha-nome-marquinhos-duas-linhas {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.96;
+  gap: 1px;
+}
+
+.colinha-nome-marquinhos-duas-linhas .mq-l1 {
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 950;
+  color: #0c2c62;
+  letter-spacing: -0.2px;
+}
+
+.colinha-nome-marquinhos-duas-linhas .mq-l2 {
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 950;
+  color: #15803d;
+  letter-spacing: 0.4px;
+}
+
+/* NOME DO CANDIDATO PADRÃO */
 .colinha-mockup-cand-name {
   font-family: var(--font-display);
   font-size: 14.5px;

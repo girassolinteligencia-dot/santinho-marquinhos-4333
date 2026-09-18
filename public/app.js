@@ -153,11 +153,26 @@
         boxesHtml += `<span class="colinha-mockup-digit-box ${val ? 'has-digit' : ''}">${val}</span>`;
       }
 
+      // Destaque visual especial de liderança para Marquinhos Trad (1º Voto - Deputado Federal)
+      let nameInnerHtml = "";
+      let rowExtraClass = "";
+      if (cfg.id === "depFed") {
+        rowExtraClass = "colinha-row-marquinhos-destaque";
+        nameInnerHtml = `
+          <div class="colinha-nome-marquinhos-duas-linhas">
+            <span class="mq-l1">MARQUINHOS</span>
+            <span class="mq-l2">TRAD</span>
+          </div>
+        `;
+      } else {
+        nameInnerHtml = `<div class="colinha-mockup-cand-name ${candNome ? 'filled' : 'empty'}">${candNome || 'A DEFINIR'}</div>`;
+      }
+
       return `
-        <div class="colinha-mockup-row">
+        <div class="colinha-mockup-row ${rowExtraClass}">
           <div class="colinha-mockup-badge" style="background:${rowColor.bg};color:${rowColor.text};">${i + 1}</div>
           <div class="colinha-mockup-info">
-            <div class="colinha-mockup-cand-name ${candNome ? 'filled' : 'empty'}">${candNome || 'A DEFINIR'}</div>
+            ${nameInnerHtml}
             <div class="colinha-mockup-cargo">${cargoTitle}</div>
           </div>
           <div class="colinha-mockup-boxes">${boxesHtml}</div>
@@ -165,10 +180,29 @@
       `;
     }).join("");
 
-    const rawNome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
-    const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
-
-    const tituloLinha1 = eleitorNome ? `${eleitorNome} VOTA ASSIM` : "VEM COM A GENTE";
+    let headerSloganHtml = "";
+    if (eleitorNome) {
+      headerSloganHtml = `
+        <div class="colinha-mockup-personalizado-wrap">
+          <div class="colinha-nome-brush-box">
+            <span class="colinha-nome-brush">${eleitorNome}</span>
+            <svg class="colinha-brush-underline" viewBox="0 0 140 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 14C32 4 108 4 136 10" stroke="url(#brushGrad)" stroke-width="4.5" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="brushGrad" x1="0" y1="0" x2="140" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#22c55e"/>
+                  <stop offset="0.6" stop-color="#16a34a"/>
+                  <stop offset="1" stop-color="#15803d"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <span class="colinha-vota-assim-sub">VOTA ASSIM</span>
+        </div>
+      `;
+    } else {
+      headerSloganHtml = `<div class="colinha-mockup-slogan-topo">VEM COM A GENTE</div>`;
+    }
 
     return `
       <div class="colinha-mockup-card-container">
@@ -184,7 +218,7 @@
         <div class="colinha-mockup-right">
           <!-- Cabeçalho com Nome e Cores Cívicas -->
           <div class="colinha-mockup-header">
-            <div class="colinha-mockup-slogan-topo">${tituloLinha1}</div>
+            ${headerSloganHtml}
             <div class="colinha-header-color-bar">
               <span class="bar-g"></span>
               <span class="bar-y"></span>
@@ -907,19 +941,49 @@
     const rightW = 535;
     const centerRightX = panelW + (W - panelW) / 2; // ~705px
 
-    // 3.1 Cabeçalho: [NOME] VOTA ASSIM (sem artigo 'o'/'a') e VEM COM A GENTE
+    // 3.1 Cabeçalho Personalizado Oficial
     const rawNome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
     const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
-
-    const tituloLinha1 = eleitorNome ? `${eleitorNome} VOTA ASSIM` : "VEM COM A GENTE";
 
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
-    // Linha 1: "PAULO VOTA ASSIM" ou "VEM COM A GENTE"
-    ctx.fillStyle = "#0c2c62";
-    ctx.font = '900 42px "Outfit", sans-serif';
-    ctx.fillText(tituloLinha1, centerRightX, 108);
+    if (eleitorNome) {
+      // Nome em Brush Verde Dinâmico
+      ctx.save();
+      ctx.translate(centerRightX - 60, 92);
+      ctx.rotate(-0.06); // ~ -3.5 graus de inclinação orgânica
+
+      const nomeGrad = ctx.createLinearGradient(0, -25, 0, 25);
+      nomeGrad.addColorStop(0, "#22c55e");
+      nomeGrad.addColorStop(0.55, "#16a34a");
+      nomeGrad.addColorStop(1, "#15803d");
+
+      ctx.fillStyle = nomeGrad;
+      ctx.font = '800 48px "Caveat Brush", "Outfit", cursive, sans-serif';
+      ctx.fillText(eleitorNome, 0, 0);
+
+      // Traço gestual curvo abaixo do nome
+      ctx.beginPath();
+      ctx.moveTo(-60, 22);
+      ctx.quadraticCurveTo(0, 14, 60, 20);
+      ctx.strokeStyle = nomeGrad;
+      ctx.lineWidth = 5;
+      ctx.lineCap = "round";
+      ctx.stroke();
+
+      ctx.restore();
+
+      // "VOTA ASSIM" em azul marinho cívico ao lado/abaixo
+      ctx.fillStyle = "#0c2c62";
+      ctx.font = '900 30px "Outfit", sans-serif';
+      ctx.fillText("VOTA ASSIM", centerRightX + (eleitorNome.length > 6 ? 100 : 80), 96);
+    } else {
+      // Linha 1 padrão: "VEM COM A GENTE"
+      ctx.fillStyle = "#0c2c62";
+      ctx.font = '900 42px "Outfit", sans-serif';
+      ctx.fillText("VEM COM A GENTE", centerRightX, 108);
+    }
 
     // Barra de cores cívicas centralizada abaixo do título
     const barW = 210;
@@ -995,7 +1059,15 @@
       ctx.textAlign = "left";
       ctx.textBaseline = "alphabetic";
 
-      if (candNome) {
+      if (i === 0 && cfg.id === "depFed") {
+        // Destaque Especial Oficial de Marquinhos Trad em Duas Linhas no Canvas HD
+        ctx.fillStyle = "#0c2c62";
+        ctx.font = '950 31px "Outfit", sans-serif';
+        ctx.fillText("MARQUINHOS", infoX, y + 44);
+
+        ctx.font = '950 31px "Outfit", sans-serif';
+        ctx.fillText("TRAD", infoX, y + 74);
+      } else if (candNome) {
         ctx.fillStyle = "#0c2c62";
         const maxTextW = startBoxX - infoX - 12;
         let fontSize = 28;
@@ -1013,12 +1085,13 @@
 
       // 2. Cargo
       let cargoStr = cfg.cargo.toUpperCase();
-      if (cfg.id === "sen1") cargoStr = "SENADOR (1ª VAGA)";
-      if (cfg.id === "sen2") cargoStr = "SENADOR (2ª VAGA)";
+      if (cfg.id === "depFed") cargoStr = "DEPUTADO FEDERAL";
+      else if (cfg.id === "sen1") cargoStr = "SENADOR (1ª VAGA)";
+      else if (cfg.id === "sen2") cargoStr = "SENADOR (2ª VAGA)";
 
-      ctx.fillStyle = "#64748b";
-      ctx.font = '700 17px "Outfit", sans-serif';
-      ctx.fillText(cargoStr, infoX, y + 88);
+      ctx.fillStyle = i === 0 ? "#15803d" : "#64748b";
+      ctx.font = i === 0 ? '800 17px "Outfit", sans-serif' : '700 17px "Outfit", sans-serif';
+      ctx.fillText(cargoStr, infoX, i === 0 ? y + 99 : y + 88);
 
       // 3. Caixas de Dígitos Individuais com borda escura e preenchimento
       const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
