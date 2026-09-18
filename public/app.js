@@ -127,6 +127,9 @@
 
   // ---------- Cédula Física de Bolso Realista (Espelho do Modelo Oficial) ----------
   function gerarCardBolsoHtml() {
+    const rawNome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
+    const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
+
     const ROW_COLORS = [
       { bg: "#15803d", text: "#ffffff" },
       { bg: "#0284c7", text: "#ffffff" },
