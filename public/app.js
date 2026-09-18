@@ -598,12 +598,13 @@
   let letraAtivaFiltro = ""; // Letra selecionada no índice alfabético (vazio = todos)
 
   function renderizarBarraAlfabeto(candsDoCargo) {
+    const containerEl = document.getElementById("modal-alfabeto-container");
     const barEl = document.getElementById("modal-alfabeto-bar");
     if (!barEl) return;
 
     // Se tiver poucos candidatos (ex: Presidente/Governador com < 12 candidatos), oculta para não poluir
     if (candsDoCargo.length < 12) {
-      barEl.style.display = "none";
+      if (containerEl) containerEl.style.display = "none";
       barEl.innerHTML = "";
       return;
     }
@@ -635,17 +636,70 @@
     });
 
     barEl.innerHTML = botoesHtml;
-    barEl.style.display = "flex";
+    if (containerEl) containerEl.style.display = "block";
+
+    // Função para centralizar suavemente uma letra no trilho
+    const centralizarItem = (el) => {
+      if (!el || !barEl) return;
+      const elCenter = el.offsetLeft + el.offsetWidth / 2;
+      const barCenter = barEl.clientWidth / 2;
+      barEl.scrollTo({
+        left: elCenter - barCenter,
+        behavior: "smooth"
+      });
+    };
+
+    // Atualiza estado visual e filtra
+    const selecionarLetra = (btn, animarScroll = true) => {
+      letraAtivaFiltro = btn.dataset.letra || "";
+      barEl.querySelectorAll(".btn-alfabeto-pille").forEach(b => b.classList.remove("ativo"));
+      btn.classList.add("ativo");
+
+      if (animarScroll) {
+        centralizarItem(btn);
+      }
+
+      const inputBusca = document.getElementById("modal-input-busca");
+      const buscaTermo = inputBusca ? inputBusca.value.trim() : "";
+      renderListaCandidatosModal(buscaTermo);
+    };
+
+    // Centraliza o item inicialmente ativo
+    const itemAtivo = barEl.querySelector(".btn-alfabeto-pille.ativo");
+    if (itemAtivo) {
+      setTimeout(() => centralizarItem(itemAtivo), 80);
+    }
 
     // Eventos de clique nas letras
     barEl.querySelectorAll(".btn-alfabeto-pille").forEach(btn => {
       btn.addEventListener("click", () => {
-        letraAtivaFiltro = btn.dataset.letra || "";
-        const inputBusca = document.getElementById("modal-input-busca");
-        const buscaTermo = inputBusca ? inputBusca.value.trim() : "";
-        renderListaCandidatosModal(buscaTermo);
+        selecionarLetra(btn, true);
       });
     });
+
+    // Detecção magnética do item mais próximo do centro durante o scroll livre
+    let scrollTimeout;
+    barEl.onscroll = () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const barCenter = barEl.scrollLeft + barEl.clientWidth / 2;
+        let itemMaisProximo = null;
+        let menorDist = Infinity;
+
+        barEl.querySelectorAll(".btn-alfabeto-pille").forEach(btn => {
+          const btnCenter = btn.offsetLeft + btn.offsetWidth / 2;
+          const dist = Math.abs(barCenter - btnCenter);
+          if (dist < menorDist) {
+            menorDist = dist;
+            itemMaisProximo = btn;
+          }
+        });
+
+        if (itemMaisProximo && !itemMaisProximo.classList.contains("ativo")) {
+          selecionarLetra(itemMaisProximo, false);
+        }
+      }, 140);
+    };
   }
 
   // 5. RESULTADOS: LISTA COMPACTA E DENSA

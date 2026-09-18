@@ -1340,14 +1340,26 @@ body.modal-selecao-aberto {
   color: #0f172a;
 }
 
-/* 3.2.1 ÍNDICE ALFABÉTICO COMPACTO (A-Z) */
+/* 3.2.1 DIAL HÁPTICO / ENGRENAGEM DE ROLAGEM ALFABÉTICA (A-Z) */
+.modal-alfabeto-wheel-container {
+  position: relative;
+  width: 100%;
+  padding: 10px 0 6px;
+  overflow: hidden;
+  /* Efeito de Fade Lateral / Cilindro 3D nas duas pontas */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.85) 16%, #000000 32%, #000000 68%, rgba(0,0,0,0.85) 84%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.85) 16%, #000000 32%, #000000 68%, rgba(0,0,0,0.85) 84%, transparent 100%);
+}
+
 .modal-alfabeto-bar {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 14px;
   overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  padding: 10px 2px 2px;
+  padding: 8px calc(50% - 24px); /* Centraliza o primeiro e o último item com folga */
   scrollbar-width: none;
 }
 
@@ -1356,42 +1368,60 @@ body.modal-selecao-aberto {
 }
 
 .btn-alfabeto-pille {
-  min-width: 36px;
-  height: 36px;
-  padding: 0 10px;
-  border-radius: 18px;
+  scroll-snap-align: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   background: #f1f5f9;
   border: 1.5px solid #cbd5e1;
-  color: #334155;
+  color: #64748b;
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  flex-shrink: 0;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.45;
+  transform: scale(0.84);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.22s ease, 
+              background-color 0.2s ease, 
+              box-shadow 0.2s ease,
+              border-color 0.2s ease;
   user-select: none;
 }
 
+/* Item "TODOS" em formato oval adaptável */
+.btn-alfabeto-pille[data-letra=""] {
+  flex: 0 0 68px;
+  width: 68px;
+  border-radius: 22px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
 .btn-alfabeto-pille:hover {
-  background: #ecfdf5;
+  opacity: 0.8;
+  transform: scale(0.96);
   border-color: #15803d;
   color: #15803d;
-  transform: translateY(-1px);
 }
 
 .btn-alfabeto-pille:active {
-  transform: scale(0.95);
+  transform: scale(0.92);
 }
 
+/* LETRA EM EVIDÊNCIA ABSOLUTA (NO CENTRO DA ENGRENAGEM) */
 .btn-alfabeto-pille.ativo {
+  opacity: 1;
   background: #15803d;
-  border-color: #166534;
+  border: 2.5px solid #facc15;
   color: #fef08a;
-  box-shadow: 0 2px 8px rgba(21, 128, 61, 0.32);
-  transform: scale(1.06);
+  box-shadow: 0 0 18px rgba(21, 128, 61, 0.5), 0 4px 12px rgba(0, 0, 0, 0.25);
+  transform: scale(1.28);
+  z-index: 5;
 }
 
 /* 3.3 LISTA DE RESULTADOS GENEROSA E ROLÁVEL */
