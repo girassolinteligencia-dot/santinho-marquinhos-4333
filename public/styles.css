@@ -1344,11 +1344,36 @@ body.modal-selecao-aberto {
 .modal-alfabeto-wheel-container {
   position: relative;
   width: 100%;
-  padding: 10px 0 6px;
+  padding: 8px 0 6px;
   overflow: hidden;
-  /* Efeito de Fade Lateral / Cilindro 3D nas duas pontas */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.85) 16%, #000000 32%, #000000 68%, rgba(0,0,0,0.85) 84%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.85) 16%, #000000 32%, #000000 68%, rgba(0,0,0,0.85) 84%, transparent 100%);
+}
+
+/* Dica textual discreta acima da engrenagem */
+.modal-alfabeto-dica {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  user-select: none;
+  opacity: 0.85;
+}
+
+.modal-alfabeto-dica .dica-arrow {
+  font-size: 14px;
+  color: #15803d;
+  animation: pulseArrow 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes pulseArrow {
+  from { opacity: 0.45; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1.15); }
 }
 
 .modal-alfabeto-bar {
@@ -1361,6 +1386,9 @@ body.modal-selecao-aberto {
   -webkit-overflow-scrolling: touch;
   padding: 8px calc(50% - 24px); /* Centraliza o primeiro e o último item com folga */
   scrollbar-width: none;
+  /* Efeito de Fade Lateral / Cilindro 3D aplicado diretamente no trilho rolante */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.85) 16%, #000000 32%, #000000 68%, rgba(0,0,0,0.85) 84%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.85) 16%, #000000 32%, #000000 68%, rgba(0,0,0,0.85) 84%, transparent 100%);
 }
 
 .modal-alfabeto-bar::-webkit-scrollbar {
