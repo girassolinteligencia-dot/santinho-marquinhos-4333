@@ -42,34 +42,16 @@
 </head>
 <body data-fundo="claro">
 
-  <!-- Topo Centralizado com Novo Ícone Oficial Marquinhos Trad 4333 -->
+  <!-- Topo: Botão Centralizado para Reiniciar do Zero e Stepper de Votação -->
   <header class="app-header">
-    <div class="header-content">
-      <div class="brand brand-com-boneco">
-        <picture>
-          <source srcset="marquinhos_hero.webp" type="image/webp">
-          <img src="marquinhos_hero.png" alt="Marquinhos Trad Deputado Federal 4333" class="brand-hero-badge-img">
-        </picture>
-        <div class="brand-text-group">
-          <span class="brand-title-destaque">MARQUINHOS TRAD</span>
-          <span class="brand-sub">VEM COM A GENTE · ELEIÇÕES 2026</span>
-        </div>
-      </div>
-      <div class="header-actions">
-        <button id="btn-ajuda" class="btn-header-icon" title="Como funciona o aplicativo" aria-label="Ver instruções de uso">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-        </button>
-        <button id="btn-limpar" class="btn-header-icon btn-reset-icon" title="Reiniciar votos e recomeçar" aria-label="Reiniciar votos">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-            <path d="M3 3v5h5"/>
-          </svg>
-        </button>
-      </div>
+    <div class="header-content header-content-clean">
+      <button id="btn-limpar" class="btn-reset-central" title="Reiniciar do zero a colinha" aria-label="Reiniciar do zero a colinha">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
+        </svg>
+        <span>REINICIAR DO ZERO</span>
+      </button>
     </div>
 
     <!-- Stepper Discreto de Conexão -->
@@ -103,8 +85,8 @@
         <div class="welcome-ref-hero">
           <div class="welcome-ref-avatar-box">
             <picture>
-              <source srcset="welcome_marquinhos_hero.webp?v=25" type="image/webp">
-              <img src="welcome_marquinhos_hero.png?v=25" alt="Marquinhos Trad 4333" class="welcome-ref-avatar-img">
+              <source srcset="welcome_marquinhos_hero.webp?v=31" type="image/webp">
+              <img src="welcome_marquinhos_hero.png?v=31" alt="Marquinhos Trad 4333" class="welcome-ref-avatar-img">
             </picture>
           </div>
         </div>
@@ -348,6 +330,6 @@
   <!-- Toast Notificação Acessível -->
   <div class="toast" id="toast" role="status" aria-live="polite" style="display: none;"></div>
 
-  <script src="app.js?v=30"></script>
+  <script src="app.js?v=31"></script>
 </body>
 </html>

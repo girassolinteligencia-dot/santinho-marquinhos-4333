@@ -67,17 +67,14 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Header Centralizado com Acabamento Dark Glassmorphism Cívico */
+/* Header Centralizado Discreto */
 .app-header {
   max-width: 540px;
-  margin: 0 auto 12px;
-  background: rgba(4, 28, 15, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(74, 222, 128, 0.25);
-  border-radius: var(--radius-lg);
-  padding: 12px 18px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.38), 0 0 20px rgba(34, 197, 94, 0.08);
+  margin: 0 auto 10px;
+  background: transparent;
+  border: none;
+  padding: 4px 10px;
+  box-shadow: none;
   transition: all 0.3s ease;
 }
 
@@ -89,56 +86,44 @@ body {
   justify-content: center;
 }
 
-.brand {
+.header-content-clean {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  text-align: center;
-  gap: 4px;
+  width: 100%;
+  padding: 4px 0;
 }
 
-.brand-com-boneco {
-  flex-direction: row;
+.btn-reset-central {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-}
-
-.brand-hero-badge-img {
-  width: 72px;
-  height: 72px;
-  min-width: 72px;
-  min-height: 72px;
-  border-radius: 18px;
-  object-fit: cover;
-  display: block;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), 0 0 12px rgba(250, 204, 21, 0.3);
-  border: 2px solid #facc15;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  flex-shrink: 0;
-}
-
-.brand-hero-badge-img:hover {
-  transform: scale(1.06) rotate(-2deg);
-}
-
-.brand-title-destaque {
+  gap: 8px;
+  background: rgba(220, 38, 38, 0.14);
+  border: 1.5px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
   font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 950;
-  color: #ffffff;
-  letter-spacing: 0.5px;
-  line-height: 1.1;
-  text-transform: uppercase;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  font-size: 13px;
+  font-weight: 850;
+  letter-spacing: 0.8px;
+  padding: 8px 20px;
+  border-radius: 24px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(6px);
 }
 
-.brand-text-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 4px;
+.btn-reset-central:hover {
+  background: rgba(239, 68, 68, 0.26);
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.25);
+}
+
+.btn-reset-central:active {
+  transform: translateY(1px) scale(0.98);
 }
 
 .btn-rever-link {
@@ -3205,46 +3190,27 @@ body {
   text-transform: uppercase;
 }
 
-/* Identidade Oficial Personalizada "Vem com a Gente" para o Nome do Eleitor */
+/* Identidade Oficial Personalizada para o Nome do Eleitor */
 .colinha-mockup-personalizado-wrap {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 2px;
-}
-
-.colinha-nome-brush-box {
-  position: relative;
-  display: inline-flex;
-  flex-direction: column;
   align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 4px;
 }
 
-.colinha-nome-brush {
-  font-family: 'Caveat Brush', cursive, var(--font-display);
-  font-size: 32px;
-  font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: 0.5px;
-  transform: rotate(-3.5deg);
-  display: inline-block;
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 55%, #15803d 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 4px rgba(21, 128, 61, 0.25));
-}
-
-.colinha-brush-underline {
-  width: 96%;
-  height: 8px;
-  margin-top: -3px;
-  transform: rotate(-3deg);
+.colinha-nome-destaque {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 900;
+  color: #15803d;
+  letter-spacing: -0.3px;
+  text-transform: uppercase;
 }
 
 .colinha-vota-assim-sub {
   font-family: var(--font-display);
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 900;
   color: #0c2c62;
   letter-spacing: -0.3px;
@@ -3255,7 +3221,7 @@ body {
   display: flex;
   gap: 3px;
   width: 100%;
-  margin: 3px 0 5px;
+  margin: 4px 0 8px;
 }
 
 .colinha-header-color-bar span {
@@ -3266,16 +3232,6 @@ body {
 .colinha-header-color-bar .bar-g { flex: 2; background: #15803d; }
 .colinha-header-color-bar .bar-y { flex: 1.2; background: #eab308; }
 .colinha-header-color-bar .bar-b { flex: 1.2; background: #0284c7; }
-
-.colinha-mockup-slogan-main {
-  font-family: var(--font-display);
-  font-size: 23px;
-  font-weight: 900;
-  color: #15803d;
-  line-height: 1;
-  letter-spacing: -0.6px;
-  text-transform: uppercase;
-}
 
 /* Grade de Linhas com Caixas Numéricas */
 .colinha-mockup-rows-list {
@@ -3430,21 +3386,6 @@ body {
   color: #0c2c62;
   position: relative;
   z-index: 2;
-}
-
-.colinha-ribbon-decor {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 140px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.colinha-ribbon-img {
-  width: 100%;
-  height: auto;
-  display: block;
 }
 
 /* Rodapé */

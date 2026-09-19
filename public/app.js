@@ -187,19 +187,7 @@
     if (eleitorNome) {
       headerSloganHtml = `
         <div class="colinha-mockup-personalizado-wrap">
-          <div class="colinha-nome-brush-box">
-            <span class="colinha-nome-brush">${eleitorNome}</span>
-            <svg class="colinha-brush-underline" viewBox="0 0 140 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 14C32 4 108 4 136 10" stroke="url(#brushGrad)" stroke-width="4.5" stroke-linecap="round"/>
-              <defs>
-                <linearGradient id="brushGrad" x1="0" y1="0" x2="140" y2="0" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#22c55e"/>
-                  <stop offset="0.6" stop-color="#16a34a"/>
-                  <stop offset="1" stop-color="#15803d"/>
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
+          <span class="colinha-nome-destaque">${eleitorNome}</span>
           <span class="colinha-vota-assim-sub">VOTA ASSIM</span>
         </div>
       `;
@@ -227,7 +215,6 @@
               <span class="bar-y"></span>
               <span class="bar-b"></span>
             </div>
-            <div class="colinha-mockup-slogan-main">VEM COM A GENTE</div>
           </div>
 
           <!-- As 6 Linhas com caixas numéricas -->
@@ -244,11 +231,6 @@
               <span class="stripe-blue"></span>
             </div>
             <span class="footer-txt-right">DEMOCRACIA SEMPRE</span>
-          </div>
-
-          <!-- Fita decorativa inferior curva -->
-          <div class="colinha-ribbon-decor">
-            <img src="colinha_bottom_ribbon.png" alt="" class="colinha-ribbon-img">
           </div>
         </div>
       </div>
@@ -948,51 +930,30 @@
     const rawNome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
     const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
 
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
     if (eleitorNome) {
-      // Nome em Brush Verde Dinâmico
+      // Nome do eleitor em destaque verde escuro/esmeralda cívico
       ctx.save();
-      ctx.translate(centerRightX - 60, 92);
-      ctx.rotate(-0.06); // ~ -3.5 graus de inclinação orgânica
-
-      const nomeGrad = ctx.createLinearGradient(0, -25, 0, 25);
-      nomeGrad.addColorStop(0, "#22c55e");
-      nomeGrad.addColorStop(0.55, "#16a34a");
-      nomeGrad.addColorStop(1, "#15803d");
-
-      ctx.fillStyle = nomeGrad;
-      ctx.font = '800 48px "Caveat Brush", "Outfit", cursive, sans-serif';
-      ctx.fillText(eleitorNome, 0, 0);
-
-      // Traço gestual curvo abaixo do nome
-      ctx.beginPath();
-      ctx.moveTo(-60, 22);
-      ctx.quadraticCurveTo(0, 14, 60, 20);
-      ctx.strokeStyle = nomeGrad;
-      ctx.lineWidth = 5;
-      ctx.lineCap = "round";
-      ctx.stroke();
-
+      ctx.textAlign = "center";
+      const nomeCompletoTexto = `${eleitorNome} VOTA ASSIM`;
+      ctx.fillStyle = "#15803d";
+      ctx.font = '900 40px "Outfit", sans-serif';
+      ctx.fillText(nomeCompletoTexto, centerRightX, 115);
       ctx.restore();
-
-      // "VOTA ASSIM" em azul marinho cívico ao lado/abaixo
-      ctx.fillStyle = "#0c2c62";
-      ctx.font = '900 30px "Outfit", sans-serif';
-      ctx.fillText("VOTA ASSIM", centerRightX + (eleitorNome.length > 6 ? 100 : 80), 96);
     } else {
-      // Linha 1 padrão: "VEM COM A GENTE"
+      // Slogan oficial quando não há nome
+      ctx.save();
+      ctx.textAlign = "center";
       ctx.fillStyle = "#0c2c62";
       ctx.font = '900 42px "Outfit", sans-serif';
-      ctx.fillText("VEM COM A GENTE", centerRightX, 108);
+      ctx.fillText("VEM COM A GENTE", centerRightX, 115);
+      ctx.restore();
     }
 
     // Barra de cores cívicas centralizada abaixo do título
-    const barW = 210;
-    const barH = 5;
+    const barW = 240;
+    const barH = 6;
     const barX = centerRightX - barW / 2;
-    const barY = 138;
+    const barY = 155;
     const segW = barW / 3;
 
     ctx.fillStyle = "#15803d"; // Verde
@@ -1001,11 +962,6 @@
     ctx.fillRect(barX + segW, barY, segW, barH);
     ctx.fillStyle = "#0284c7"; // Azul
     ctx.fillRect(barX + segW * 2, barY, segW, barH);
-
-    // Linha 2: "VEM COM A GENTE" (Verde Destaque)
-    ctx.fillStyle = "#15803d";
-    ctx.font = '900 44px "Outfit", sans-serif';
-    ctx.fillText("VEM COM A GENTE", centerRightX, 186);
 
     // 3.2 As 6 Linhas de Votação com Badges Coloridas e Caixas Numéricas
     const ROW_COLORS = [
@@ -1017,9 +973,9 @@
       { bg: "#eab308", text: "#ffffff" }  // 6: Amarelo Ouro (Presidente)
     ];
 
-    const rowStartY = 245;
-    const rowH = 126;
-    const rowGap = 26;
+    const rowStartY = 210;
+    const rowH = 130;
+    const rowGap = 28;
 
     for (let i = 0; i < CARGOS_CONFIG.length; i++) {
       const cfg = CARGOS_CONFIG[i];
@@ -1041,110 +997,82 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillStyle = rowColor.text;
-      ctx.font = '900 44px "Outfit", sans-serif';
-      ctx.fillText(String(i + 1), badgeX + badgeW / 2, badgeY + badgeH / 2);
+      ctx.font = '900 42px "Outfit", sans-serif';
+      ctx.fillText(String(i + 1), badgeX + badgeW / 2, badgeY + badgeH / 2 + 1);
 
-      // Informações: Nome do Candidato e Cargo
-      const infoX = rightX + badgeW + 18;
+      // Caixa das Informações do Candidato
+      const infoX = badgeX + badgeW + 16;
+      const candNome = cand && cand.urna ? cand.urna.toUpperCase() : "";
 
-      // Caixas de Dígitos de Voto (à direita)
-      const numDigitos = cfg.digitos;
-      const boxW = 46;
-      const boxH = 84;
-      const boxGap = 7;
-      const totalBoxesW = numDigitos * boxW + (numDigitos - 1) * boxGap;
-      const startBoxX = rightX + rightW - totalBoxesW;
+      if (cfg.id === "depFed") {
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        ctx.fillStyle = "#15803d";
+        ctx.font = '950 36px "Outfit", sans-serif';
+        ctx.fillText("MARQUINHOS TRAD", infoX, y + 26);
+
+        ctx.fillStyle = "#15803d";
+        ctx.font = '800 20px "Outfit", sans-serif';
+        ctx.fillText("DEPUTADO FEDERAL", infoX, y + 74);
+      } else {
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+
+        ctx.fillStyle = candNome ? "#0c2c62" : "#94a3b8";
+        ctx.font = '900 32px "Outfit", sans-serif';
+        const displayNome = candNome || "A DEFINIR";
+        ctx.fillText(displayNome, infoX, y + 28);
+
+        let cargoTitle = cfg.cargo.toUpperCase();
+        if (cfg.id === "sen1") cargoTitle = "SENADOR (1ª VAGA)";
+        else if (cfg.id === "sen2") cargoTitle = "SENADOR (2ª VAGA)";
+
+        ctx.fillStyle = "#64748b";
+        ctx.font = '800 19px "Outfit", sans-serif';
+        ctx.fillText(cargoTitle, infoX, y + 74);
+      }
+
+      // Caixas de Dígitos Brancas
+      const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
+      const boxW = 52;
+      const boxH = 88;
+      const boxGap = 8;
+      const totalBoxesW = cfg.digitos * boxW + (cfg.digitos - 1) * boxGap;
+      const boxesStartX = rightX + rightW - totalBoxesW;
       const boxY = y + (rowH - boxH) / 2;
 
-      // 1. Nome do Candidato
-      let candNome = cand && cand.urna ? cand.urna.toUpperCase() : (cand && cand.nome ? cand.nome.toUpperCase() : "");
+      for (let d = 0; d < cfg.digitos; d++) {
+        const bx = boxesStartX + d * (boxW + boxGap);
+        const val = digitsArr[d] !== undefined ? digitsArr[d] : "";
 
-      ctx.textAlign = "left";
-      ctx.textBaseline = "alphabetic";
-
-      if (i === 0 && cfg.id === "depFed") {
-        // Destaque Especial Oficial de Marquinhos Trad em Duas Linhas no Canvas HD
-        ctx.fillStyle = "#0c2c62";
-        ctx.font = '950 31px "Outfit", sans-serif';
-        ctx.fillText("MARQUINHOS", infoX, y + 44);
-
-        ctx.font = '950 31px "Outfit", sans-serif';
-        ctx.fillText("TRAD", infoX, y + 74);
-      } else if (candNome) {
-        ctx.fillStyle = "#0c2c62";
-        const maxTextW = startBoxX - infoX - 12;
-        let fontSize = 28;
-        ctx.font = `900 ${fontSize}px "Outfit", sans-serif`;
-        while (ctx.measureText(candNome).width > maxTextW && fontSize > 16) {
-          fontSize -= 1.5;
-          ctx.font = `900 ${fontSize}px "Outfit", sans-serif`;
-        }
-        ctx.fillText(candNome, infoX, y + 54);
-      } else {
-        ctx.fillStyle = "#94a3b8";
-        ctx.font = 'italic 700 24px "Outfit", sans-serif';
-        ctx.fillText("A DEFINIR", infoX, y + 54);
-      }
-
-      // 2. Cargo
-      let cargoStr = cfg.cargo.toUpperCase();
-      if (cfg.id === "depFed") cargoStr = "DEPUTADO FEDERAL";
-      else if (cfg.id === "sen1") cargoStr = "SENADOR (1ª VAGA)";
-      else if (cfg.id === "sen2") cargoStr = "SENADOR (2ª VAGA)";
-
-      ctx.fillStyle = i === 0 ? "#15803d" : "#64748b";
-      ctx.font = i === 0 ? '800 17px "Outfit", sans-serif' : '700 17px "Outfit", sans-serif';
-      ctx.fillText(cargoStr, infoX, i === 0 ? y + 99 : y + 88);
-
-      // 3. Caixas de Dígitos Individuais com borda escura e preenchimento
-      const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
-
-      for (let d = 0; d < numDigitos; d++) {
-        const bX = startBoxX + d * (boxW + boxGap);
-
-        // Fundo Branco da Caixinha
         ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "#0f172a";
+        ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.roundRect(bX, boxY, boxW, boxH, 8);
+        ctx.roundRect(bx, boxY, boxW, boxH, 8);
         ctx.fill();
-
-        // Borda Nítida
-        ctx.strokeStyle = "#0c2c62";
-        ctx.lineWidth = 2.4;
         ctx.stroke();
 
-        // Dígito
-        const digitoChar = digitsArr[d];
-        if (digitoChar !== undefined) {
+        if (val) {
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillStyle = "#0c2c62";
-          ctx.font = '900 50px "Outfit", sans-serif';
-          ctx.fillText(digitoChar, bX + boxW / 2, boxY + boxH / 2 + 1);
+          ctx.fillStyle = "#000000";
+          ctx.font = '950 48px "Outfit", sans-serif';
+          ctx.fillText(val, bx + boxW / 2, boxY + boxH / 2 + 2);
         }
       }
     }
 
-    // 4. MARCA D'ÁGUA DO MAPA DE MATO GROSSO DO SUL NO FUNDO INFERIOR DIREITO
-    const msWatermark = await carregarImagemAsync("ms_map_watermark.png");
-    if (msWatermark) {
-      ctx.save();
-      ctx.globalAlpha = 0.85;
-      ctx.drawImage(msWatermark, W - 260, 1140, 230, 150);
-      ctx.restore();
-    }
-
-    // 5. RODAPÉ CÍVICO: ELEIÇÕES 2026 + Tracinhos + DEMOCRACIA SEMPRE
-    const footerY = 1200;
-    ctx.textBaseline = "middle";
-
+    // 4. RODAPÉ CÍVICO ELEIÇÕES 2026 COM LINHAS CÍVICAS
+    const footerY = H - 75;
     ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
     ctx.fillStyle = "#0c2c62";
-    ctx.font = '800 17px "Outfit", sans-serif';
+    ctx.font = '800 20px "Outfit", sans-serif';
     ctx.fillText("ELEIÇÕES 2026", rightX, footerY);
 
-    // Tracinhos Coloridos
-    const stripeW = 38;
+    // Listras Cívicas do Rodapé
+    const stripeW = 16;
     const stripeH = 6;
     const stripeStartX = rightX + 160;
     ctx.fillStyle = "#15803d";
@@ -1156,19 +1084,8 @@
 
     ctx.textAlign = "right";
     ctx.fillStyle = "#0c2c62";
-    ctx.font = '800 17px "Outfit", sans-serif';
+    ctx.font = '800 20px "Outfit", sans-serif';
     ctx.fillText("DEMOCRACIA SEMPRE", rightX + rightW, footerY);
-
-    // 6. FITA CURVA CÍVICA INFERIOR DIREITA
-    const ribbonImg = await carregarImagemAsync("colinha_bottom_ribbon.png");
-    if (ribbonImg) {
-      ctx.save();
-      // Desenha a fita decorativa curva exatamente como na imagem 2
-      const ribW = W - panelW;
-      const ribH = 170;
-      ctx.drawImage(ribbonImg, panelW, H - ribH, ribW, ribH);
-      ctx.restore();
-    }
 
     return canvas;
   }
