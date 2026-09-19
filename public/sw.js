@@ -4,7 +4,7 @@
  * e Cache-First para assets estáticos e fotos.
  */
 
-const CACHE_NAME = 'minha-colinha-v31';
+const CACHE_NAME = 'minha-colinha-v32';
 
 // Pré-cache vital enxuto: apenas o núcleo da aplicação (instalação imediata sem travar)
 const CORE_ASSETS = [

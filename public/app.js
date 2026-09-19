@@ -69,6 +69,32 @@
     }, duracao);
   }
 
+  let eleitorNomeGlobal = "";
+  try {
+    eleitorNomeGlobal = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
+  } catch (e) {}
+
+  function getEleitorNome() {
+    let nome = eleitorNomeGlobal;
+    if (!nome) {
+      try {
+        nome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
+      } catch (e) {}
+    }
+    return nome ? nome.split(" ")[0].toUpperCase() : "";
+  }
+
+  function setEleitorNome(novoNome) {
+    eleitorNomeGlobal = (novoNome || "").trim();
+    try {
+      if (eleitorNomeGlobal) {
+        localStorage.setItem("santinho_eleitor_nome", eleitorNomeGlobal);
+      } else {
+        localStorage.removeItem("santinho_eleitor_nome");
+      }
+    } catch (e) {}
+  }
+
   // ---------- Persistência Local (Offline / LGPD) ----------
   function carregarColinha() {
     let base = {
@@ -79,10 +105,15 @@
       gov: null,
       pres: null
     };
-    // Reinicia sempre na tela de orientação com campos em branco a cada novo acesso
+    // Recupera dados salvos se existirem
     try {
-      localStorage.removeItem("santinho_marquinhos_boas_vindas_vista");
-      localStorage.removeItem("santinho_eleitor_nome");
+      const salvo = localStorage.getItem("santinho_marquinhos_4333_v1");
+      if (salvo) {
+        const parsed = JSON.parse(salvo);
+        if (parsed && typeof parsed === "object") {
+          base = Object.assign(base, parsed);
+        }
+      }
     } catch (e) {}
     return base;
   }
@@ -127,8 +158,7 @@
 
   // ---------- Cédula Física de Bolso Realista (Espelho do Modelo Oficial) ----------
   function gerarCardBolsoHtml() {
-    const rawNome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
-    const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
+    const eleitorNome = getEleitorNome();
 
     const ROW_COLORS = [
       { bg: "#15803d", text: "#ffffff" },
@@ -927,8 +957,7 @@
     const centerRightX = panelW + (W - panelW) / 2; // ~705px
 
     // 3.1 Cabeçalho Personalizado Oficial
-    const rawNome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
-    const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
+    const eleitorNome = getEleitorNome();
 
     if (eleitorNome) {
       // Nome do eleitor em destaque verde escuro/esmeralda cívico
@@ -1147,8 +1176,7 @@
 
     const resumoVotos = listaCandidatos.length > 0 ? "\n📋 *Minha Colinha Completa:*\n" + listaCandidatos.join("\n") + "\n" : "";
 
-    const rawNome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
-    const eleitorNome = rawNome ? rawNome.split(" ")[0].toUpperCase() : "";
+    const eleitorNome = getEleitorNome();
 
     const tituloEngajamento = eleitorNome
       ? `COLINHA ELEITORAL 2026 DE ${eleitorNome}`
@@ -1232,12 +1260,12 @@
       });
     }
 
-    // Campo de nome do eleitor: Sempre inicia limpo para cada pessoa montar sua própria colinha
+    // Campo de nome do eleitor: Recupera nome se já informado ou inicia pronto para preencher
     const inputEleitorNome = document.getElementById("input-eleitor-nome");
     const boxInputNome = document.getElementById("box-input-nome");
     const avisoNome = document.getElementById("msg-aviso-nome");
     if (inputEleitorNome) {
-      inputEleitorNome.value = "";
+      inputEleitorNome.value = getEleitorNome();
     }
 
     // Botão Começar a Preencher na Tela de Boas-Vindas
@@ -1264,9 +1292,9 @@
           return;
         }
 
-        // Extrai apenas o primeiro nome e sanitiza com escapeHtml
+        // Extrai apenas o primeiro nome e sanitiza
         const primeiroNome = escapeHtml(nomeDigitado.split(" ")[0].trim());
-        localStorage.setItem("santinho_eleitor_nome", primeiroNome);
+        setEleitorNome(primeiroNome);
         if (avisoNome) avisoNome.style.display = "none";
 
         localStorage.setItem("santinho_marquinhos_boas_vindas_vista", "true");
