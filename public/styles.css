@@ -339,7 +339,24 @@ body {
   display: block;
 }
 
-/* Tipografia Oficial do Candidato (Idêntica à Imagem 1) */
+/* Logomarca Oficial e Números do Candidato */
+.welcome-ref-logo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 4px 0 10px;
+  width: 100%;
+}
+
+.welcome-ref-logo-img {
+  width: 100%;
+  max-width: 270px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.45));
+}
+
 .welcome-ref-titles {
   display: flex;
   flex-direction: column;
@@ -389,7 +406,7 @@ body {
   font-weight: 800;
   color: rgba(255, 255, 255, 0.9);
   letter-spacing: 4px;
-  margin-top: 6px;
+  margin-top: 8px;
   text-transform: uppercase;
 }
 
