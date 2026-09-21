@@ -293,14 +293,14 @@
     paperRoll.style.animation = "rollOutPaper 3.8s cubic-bezier(0.16, 1, 0.3, 1) forwards";
 
     if (statusText) {
-      statusText.innerHTML = `<span class="print-spinner"></span> Urna emitindo sua colinha oficial...`;
+      statusText.innerHTML = `<span class="print-spinner"></span> Sua colinha está saindo da urna...`;
     }
 
     overlay.style.display = "flex";
 
     setTimeout(() => {
       if (statusText) {
-        statusText.innerHTML = `✅ Santinho impresso com sucesso!`;
+        statusText.innerHTML = `✅ Sua colinha está pronta!`;
       }
     }, 3800);
 
@@ -312,7 +312,7 @@
         conclusaoSection.style.display = "block";
         conclusaoSection.scrollIntoView({ behavior: "smooth", block: "start" });
       }
-      showToast("🎉 Santinho oficial 100% pronto!");
+      showToast("🎉 Sua colinha oficial está pronta!");
     }, 5200);
   }
 
@@ -427,7 +427,7 @@
       circle.addEventListener("click", () => {
         const step = parseInt(circle.dataset.step, 10);
         if (step === 0) {
-          showToast("⭐ 1º Voto: Marquinhos Trad 4333 já está definido!");
+          showToast("⭐ O 1º voto já é do Marquinhos 4333! Escolha os outros 5.");
           etapaAtual = 0;
         } else {
           etapaAtual = step;
@@ -453,9 +453,9 @@
       // Cédula Oficial Fixa do Marquinhos Trad 4333 (Não editável pelo eleitor)
       return `
         <div class="cedula-cargo-titulo">${titulo} · OFICIAL</div>
-        <div class="cedula-area-clicavel preenchido cedula-fixada-marquinhos" data-acao-fixado="true" role="region" title="1º Voto Oficial: Marquinhos Trad 4333">
+        <div class="cedula-area-clicavel preenchido cedula-fixada-marquinhos" data-acao-fixado="true" role="region" title="1º Voto: Marquinhos Trad 4333">
           <div class="cedula-info-bloco">
-            <span class="cedula-sublabel" style="color:#15803d;font-weight:900;">★ 1º VOTO CONFIRMADO:</span>
+            <span class="cedula-sublabel" style="color:#15803d;font-weight:900;">★ 1º VOTO:</span>
             <div class="cedula-cand-nome">${cand.urna}</div>
             <span class="cedula-cand-partido">• ${cand.partido_sigla} · VEM COM A GENTE</span>
           </div>
@@ -465,9 +465,9 @@
               <img src="${fotoSrc}" alt="${cand.urna}" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="cedula-numero-bloco">
-              <span class="cedula-numero-label">Número Oficial:</span>
+              <span class="cedula-numero-label">Número:</span>
               <div class="cedula-numero-grande" style="color:#fef08a;background:#0f3d21;padding:2px 8px;border-radius:6px;">${cand.nr}</div>
-              <span class="cedula-status-fixo">✓ Voto Pré-Definido</span>
+              <span class="cedula-status-fixo">✓ Já Confirmado!</span>
             </div>
           </div>
         </div>
@@ -476,9 +476,9 @@
 
     return `
       <div class="cedula-cargo-titulo">${titulo}</div>
-      <div class="cedula-area-clicavel ${isPreenchido ? 'preenchido' : 'vazio'}" data-acao-selecionar="${cfg.id}" role="button" tabindex="0" title="${isPreenchido ? 'Toque para alterar' : 'Toque para escolher'}">
+      <div class="cedula-area-clicavel ${isPreenchido ? 'preenchido' : 'vazio'}" data-acao-selecionar="${cfg.id}" role="button" tabindex="0" title="${isPreenchido ? 'Toque para mudar' : 'Toque para escolher'}">
         <div class="cedula-info-bloco">
-          <span class="cedula-sublabel">${isPreenchido ? 'Candidato:' : 'Candidato ainda não definido'}</span>
+          <span class="cedula-sublabel">${isPreenchido ? 'Candidato escolhido:' : 'Nenhum candidato escolhido ainda'}</span>
           <div class="cedula-cand-nome">${isPreenchido ? cand.urna : `+ Escolher ${cfg.cargo}`}</div>
           ${isPreenchido && cand.partido_sigla ? `<span class="cedula-cand-partido">• ${cand.partido_sigla}</span>` : ''}
         </div>
@@ -490,7 +490,7 @@
           <div class="cedula-numero-bloco">
             <span class="cedula-numero-label">Número:</span>
             <div class="cedula-numero-grande">${isPreenchido ? cand.nr : "----"}</div>
-            <span class="cedula-toque-alterar">${isPreenchido ? 'Toque p/ trocar ↻' : 'Toque p/ preencher'}</span>
+            <span class="cedula-toque-alterar">${isPreenchido ? 'Toque para mudar ↻' : 'Toque para escolher'}</span>
           </div>
         </div>
       </div>
@@ -596,7 +596,7 @@
     const cargoAlvo = cargoId || CARGOS_CONFIG[etapaAtual].id;
     // O 1º voto (Deputado Federal) é fixo e exclusivo de Marquinhos Trad 4333
     if (cargoAlvo === "depFed") {
-      showToast("⭐ 1º Voto oficial: Marquinhos Trad 4333 já está definido!");
+      showToast("⭐ O 1º voto já é do Marquinhos 4333! Escolha os outros 5.");
       etapaAtual = 1; // Leva para o 2º voto
       atualizarProgresso();
       return;
@@ -797,8 +797,8 @@
       listaEl.innerHTML = `
         <div class="modal-busca-estado-vazio">
           <div style="font-size:32px;">🔍</div>
-          <div style="font-size:15px;color:#19261f;font-weight:700;">Nenhum candidato encontrado</div>
-          <div style="font-size:13px;">Tente buscar por outro nome ou número de <strong>${cfg.cargo}</strong>.</div>
+          <div style="font-size:15px;color:#19261f;font-weight:700;">Não achamos esse candidato</div>
+          <div style="font-size:13px;">Confira se o nome ou número de <strong>${cfg.cargo}</strong> estão certinhos.</div>
         </div>
       `;
       return;
@@ -818,7 +818,7 @@
              role="option" 
              aria-selected="${isSelected ? 'true' : 'false'}"
              tabindex="0"
-             title="Selecionar ${safeUrna} (${safeNr})">
+             title="Escolher ${safeUrna} (${safeNr})">
           ${fotoSrc ? `
             <img src="${fotoSrc}" class="cand-compact-photo" alt="${safeUrna}" loading="lazy" onerror="this.outerHTML='<div class=\\'cand-compact-photo-placeholder\\'>👤</div>'">
           ` : `
@@ -827,7 +827,7 @@
           <div class="cand-compact-info">
             <div class="cand-compact-nome">
               <span>${safeUrna}</span>
-              ${isSelected ? `<span class="cand-compact-selected-badge">✓ SELECIONADO</span>` : ''}
+              ${isSelected ? `<span class="cand-compact-selected-badge">✓ ESCOLHIDO</span>` : ''}
             </div>
             <div class="cand-compact-partido">${safeSigla}</div>
           </div>
@@ -864,7 +864,7 @@
               centerEl.classList.add("cedula-animar-troca");
             }
 
-            showToast(`✓ ${escolhido.urna} selecionado com sucesso!`);
+            showToast(`✓ ${escolhido.urna} escolhido com sucesso!`);
 
             // 4. Se ainda não completou os 6 votos, transiciona suavemente para o próximo cargo após 450ms
             if (!vaiCompletar) {
@@ -1158,7 +1158,7 @@
 
   // ---------- Salvar Imagem na Galeria / Fototeca do Celular ----------
   async function baixarImagemGaleria() {
-    showToast("Gerando santinho oficial em alta resolução...");
+    showToast("Preparando sua colinha em alta qualidade...");
     const canvas = await desenharColinhaCanvas();
     if (!canvas) return;
 
@@ -1176,7 +1176,7 @@
             files: [file],
             title: "Colinha Marquinhos Trad 4333"
           });
-          showToast("✅ Imagem pronta na sua Galeria!");
+          showToast("✅ Colinha salva nas fotos do seu celular!");
           return;
         } catch (err) {
           // Se o usuário cancelou o painel de compartilhamento, apenas ignora
@@ -1193,7 +1193,7 @@
       a.click();
       document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(url), 4000);
-      showToast("✅ Colinha baixada! Abra para salvar na galeria.");
+      showToast("✅ Colinha baixada! Abra para salvar nas suas fotos.");
     }, "image/jpeg", 0.96);
   }
 
@@ -1290,7 +1290,7 @@
     const btnLimpar = document.getElementById("btn-limpar");
     if (btnLimpar) {
       btnLimpar.addEventListener("click", () => {
-        if (confirm("Deseja reiniciar a colinha do zero e preencher novamente com um novo nome?")) {
+        if (confirm("Quer apagar essa colinha e começar uma nova com outro nome?")) {
           reiniciarColinhaDoZero();
         }
       });
@@ -1415,7 +1415,7 @@
     const btnReiniciarFinal = document.getElementById("btn-reiniciar-final");
     if (btnReiniciarFinal) {
       btnReiniciarFinal.addEventListener("click", () => {
-        if (confirm("Deseja reiniciar a colinha do zero e preencher novamente com um novo nome?")) {
+        if (confirm("Quer apagar essa colinha e começar uma nova com outro nome?")) {
           reiniciarColinhaDoZero();
         }
       });

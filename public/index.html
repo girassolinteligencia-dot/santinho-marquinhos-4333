@@ -42,15 +42,15 @@
 </head>
 <body data-fundo="claro">
 
-  <!-- Topo: Botão Centralizado para Reiniciar do Zero e Stepper de Votação -->
+  <!-- Topo: Botão Centralizado para Começar de Novo e Stepper de Votação -->
   <header class="app-header">
     <div class="header-content header-content-clean">
-      <button id="btn-limpar" class="btn-reset-central" title="Reiniciar do zero a colinha" aria-label="Reiniciar do zero a colinha">
+      <button id="btn-limpar" class="btn-reset-central" title="Começar de novo a colinha" aria-label="Começar de novo a colinha">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
           <path d="M3 3v5h5"/>
         </svg>
-        <span>REINICIAR DO ZERO</span>
+        <span>COMEÇAR DE NOVO</span>
       </button>
     </div>
 
@@ -113,7 +113,7 @@
           </div>
           <div class="welcome-ref-step-item">
             <span class="ref-step-badge">3</span>
-            <span class="ref-step-text">Baixe sua colinha e leve para a urna</span>
+            <span class="ref-step-text">Guarde sua colinha para o dia da eleição</span>
           </div>
         </div>
 
@@ -166,8 +166,8 @@
         </div>
 
         <!-- Controles de Toque / Setas Sutis nas Laterais do Nicho -->
-        <button class="nicho-nav-arrow arrow-prev" id="btn-vitrine-prev" aria-label="Voltar cédula anterior" title="Voltar cargo">‹</button>
-        <button class="nicho-nav-arrow arrow-next" id="btn-vitrine-next" aria-label="Avançar próxima cédula" title="Próximo cargo">›</button>
+        <button class="nicho-nav-arrow arrow-prev" id="btn-vitrine-prev" aria-label="Voltar cargo anterior" title="Voltar cargo">‹</button>
+        <button class="nicho-nav-arrow arrow-next" id="btn-vitrine-next" aria-label="Avançar próximo cargo" title="Próximo cargo">›</button>
       </section>
     </div>
 
@@ -176,7 +176,7 @@
       <div class="modal-selecao-conteudo">
         <!-- 3. CABEÇALHO FIXO -->
         <header class="modal-selecao-header">
-          <button class="btn-voltar-selecao" id="btn-fechar-selecao" aria-label="Voltar ao cargo">
+          <button class="btn-voltar-selecao" id="btn-fechar-selecao" aria-label="Voltar">
             <span class="btn-voltar-arrow">‹</span>
             <span class="btn-voltar-txt">VOLTAR</span>
           </button>
@@ -194,10 +194,10 @@
               type="text" 
               id="modal-input-busca" 
               class="modal-search-input" 
-              placeholder="Buscar por nome ou número..." 
+              placeholder="Digite o nome ou número do candidato..." 
               autocomplete="off" 
               inputmode="search"
-              aria-label="Buscar candidato por nome ou número">
+              aria-label="Digite o nome ou número do candidato">
             <button class="btn-clear-modal-search" id="btn-clear-modal-search" style="display:none;" aria-label="Limpar busca">&times;</button>
           </div>
 
@@ -205,7 +205,7 @@
           <div class="modal-alfabeto-wheel-container" id="modal-alfabeto-container" style="display: none;">
             <div class="modal-alfabeto-dica">
               <span class="dica-arrow">‹</span>
-              <span>DESLIZE PARA OS LADOS E ESCOLHA A INICIAL</span>
+              <span>ARRASTE PARA VER CANDIDATOS DE A A Z</span>
               <span class="dica-arrow">›</span>
             </div>
             <div class="modal-alfabeto-bar" id="modal-alfabeto-bar" aria-label="Navegar por letra inicial">
@@ -238,22 +238,22 @@
             <span>Compartilhar no WhatsApp</span>
           </button>
 
-          <button class="btn-acao-secundaria btn-acao-salvar-larga" id="btn-download" title="Salvar imagem na galeria do celular">
+          <button class="btn-acao-secundaria btn-acao-salvar-larga" id="btn-download" title="Salvar colinha no celular">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="4" ry="4"/>
               <circle cx="8.5" cy="8.5" r="1.5"/>
               <polyline points="21 15 16 10 5 21"/>
             </svg>
-            <span>Salvar Imagem na Galeria</span>
+            <span>Salvar Colinha no Celular</span>
           </button>
         </div>
 
         <div class="acoes-finais-links">
-          <button id="btn-editar-votos" class="btn-link-discreto" title="Alterar algum candidato">
-            ✏️ Editar Votos
+          <button id="btn-editar-votos" class="btn-link-discreto" title="Mudar algum candidato escolhido">
+            ✏️ Mudar Meus Votos
           </button>
-          <button id="btn-reiniciar-final" class="btn-link-discreto btn-link-danger" title="Limpar tudo e começar de novo">
-            🗑️ Começar do Zero
+          <button id="btn-reiniciar-final" class="btn-link-discreto btn-link-danger" title="Apagar e começar de novo com outro nome">
+            🔄 Começar de Novo
           </button>
         </div>
       </div>
@@ -280,7 +280,7 @@
       </div>
 
       <div class="print-status-text" id="print-status-text">
-        <span class="print-spinner"></span> Urna emitindo seu santinho oficial...
+        <span class="print-spinner"></span> Sua colinha está saindo da urna...
       </div>
     </div>
   </div>
