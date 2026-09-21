@@ -4,7 +4,7 @@
  * e Cache-First para assets estáticos e fotos.
  */
 
-const CACHE_NAME = 'minha-colinha-v37';
+const CACHE_NAME = 'minha-colinha-v38';
 
 // Pré-cache vital enxuto: apenas o núcleo da aplicação (instalação imediata sem travar)
 const CORE_ASSETS = [
@@ -17,7 +17,7 @@ const CORE_ASSETS = [
   './favicon.png',
   './favicon.ico',
   './apple-touch-icon.png',
-  './welcome_marquinhos_clean.webp',
+  './welcome_marquinhos_hero.webp',
   './marquinhos_logo_oficial.webp',
   './marquinhos_logo_oficial.png',
   './marquinhos_painel_lateral.webp',
