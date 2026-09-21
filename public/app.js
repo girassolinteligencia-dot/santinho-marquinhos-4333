@@ -1254,22 +1254,44 @@
 
   // ---------- Inicialização de Eventos ----------
   function initEventos() {
-    // Botão Começar de Novo
+    // Função central para reiniciar a colinha do zero e voltar à tela inicial de boas-vindas
+    function reiniciarColinhaDoZero() {
+      colinhaState = {
+        depFed: CANDIDATO_MARQUINHOS_4333,
+        depEst: null,
+        sen1: null,
+        sen2: null,
+        gov: null,
+        pres: null
+      };
+      setEleitorNome("");
+      try {
+        localStorage.removeItem("santinho_marquinhos_boas_vindas_vista");
+      } catch (e) {}
+
+      if (inputEleitorNome) {
+        inputEleitorNome.value = "";
+      }
+      if (avisoNome) {
+        avisoNome.style.display = "none";
+      }
+
+      etapaAtual = 1;
+      salvarColinha();
+      atualizarProgresso();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      showToast("Reiniciado do zero! Digite seu nome para começar.");
+      setTimeout(() => {
+        if (inputEleitorNome) inputEleitorNome.focus();
+      }, 300);
+    }
+
+    // Botão Começar de Novo (Topo)
     const btnLimpar = document.getElementById("btn-limpar");
     if (btnLimpar) {
       btnLimpar.addEventListener("click", () => {
-        if (confirm("Deseja limpar os outros candidatos (Deputado Estadual a Presidente) e preencher novamente?")) {
-          colinhaState = {
-            depFed: CANDIDATO_MARQUINHOS_4333,
-            depEst: null,
-            sen1: null,
-            sen2: null,
-            gov: null,
-            pres: null
-          };
-          etapaAtual = 1; // Inicia no 2º voto
-          salvarColinha();
-          showToast("Votos reiniciados! Marquinhos Trad 4333 mantido.");
+        if (confirm("Deseja reiniciar a colinha do zero e preencher novamente com um novo nome?")) {
+          reiniciarColinhaDoZero();
         }
       });
     }
@@ -1393,19 +1415,8 @@
     const btnReiniciarFinal = document.getElementById("btn-reiniciar-final");
     if (btnReiniciarFinal) {
       btnReiniciarFinal.addEventListener("click", () => {
-        if (confirm("Deseja apagar os votos (Deputado Estadual a Presidente) e preencher novamente?")) {
-          colinhaState = {
-            depFed: CANDIDATO_MARQUINHOS_4333,
-            depEst: null,
-            sen1: null,
-            sen2: null,
-            gov: null,
-            pres: null
-          };
-          etapaAtual = 1; // Inicia a partir do 2º voto
-          salvarColinha();
-          showToast("Pronto! Preencha a partir do 2º voto.");
-          window.scrollTo({ top: 0, behavior: "smooth" });
+        if (confirm("Deseja reiniciar a colinha do zero e preencher novamente com um novo nome?")) {
+          reiniciarColinhaDoZero();
         }
       });
     }
