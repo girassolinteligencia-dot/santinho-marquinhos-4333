@@ -3422,6 +3422,65 @@ body {
   color: #0c2c62;
 }
 
+/* Subtítulo Cívico da Ordem Oficial no Topo */
+.colinha-mockup-ordem-aviso {
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Card Cívico de Mobilização e Orientação no Rodapé da Colinha */
+.colinha-mockup-tse-card {
+  display: flex;
+  align-items: stretch;
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  border-radius: 8px;
+  margin: 6px 0 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(21, 128, 61, 0.08);
+}
+
+.colinha-tse-stripe {
+  width: 5px;
+  background: #15803d;
+  flex-shrink: 0;
+}
+
+.colinha-tse-content {
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.colinha-tse-title {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 900;
+  color: #15803d;
+  letter-spacing: 0.2px;
+}
+
+.colinha-tse-text {
+  font-size: 8.5px;
+  color: #1e293b;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.colinha-tse-sub {
+  font-size: 8px;
+  color: #0c2c62;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
 /* Responsividade Fina para Telas Pequenas de Celular */
 @media (max-width: 520px) {
   .colinha-mockup-card-container {

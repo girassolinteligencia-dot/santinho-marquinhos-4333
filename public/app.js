@@ -245,11 +245,22 @@
               <span class="bar-y"></span>
               <span class="bar-b"></span>
             </div>
+            <div class="colinha-mockup-ordem-aviso">ORDEM OFICIAL DE VOTAÇÃO NA URNA</div>
           </div>
 
           <!-- As 6 Linhas com caixas numéricas -->
           <div class="colinha-mockup-rows-list">
             ${rowsHtml}
+          </div>
+
+          <!-- Card Cívico de Mobilização e Orientação no Rodapé -->
+          <div class="colinha-mockup-tse-card">
+            <div class="colinha-tse-stripe"></div>
+            <div class="colinha-tse-content">
+              <div class="colinha-tse-title">🗳️ LEVE SUA COLINHA PARA A URNA!</div>
+              <div class="colinha-tse-text">Anotar os números no papel é permitido e recomendado pelo TSE.</div>
+              <div class="colinha-tse-sub">Confira a foto de cada candidato antes de apertar CONFIRMA.</div>
+            </div>
           </div>
 
           <!-- Rodapé Cívico com Marcas Oficiais -->
@@ -957,6 +968,7 @@
     const centerRightX = panelW + (W - panelW) / 2; // ~705px
 
     // 3.1 Cabeçalho Personalizado Oficial
+    // 3.1 Cabeçalho Personalizado Oficial
     const eleitorNome = getEleitorNome();
 
     if (eleitorNome) {
@@ -965,8 +977,8 @@
       ctx.textAlign = "center";
       const nomeCompletoTexto = `${eleitorNome} VOTA ASSIM`;
       ctx.fillStyle = "#15803d";
-      ctx.font = '900 40px "Outfit", sans-serif';
-      ctx.fillText(nomeCompletoTexto, centerRightX, 115);
+      ctx.font = '900 42px "Outfit", sans-serif';
+      ctx.fillText(nomeCompletoTexto, centerRightX, 98);
       ctx.restore();
     } else {
       // Slogan oficial quando não há nome
@@ -974,15 +986,15 @@
       ctx.textAlign = "center";
       ctx.fillStyle = "#0c2c62";
       ctx.font = '900 42px "Outfit", sans-serif';
-      ctx.fillText("VEM COM A GENTE", centerRightX, 115);
+      ctx.fillText("VEM COM A GENTE", centerRightX, 98);
       ctx.restore();
     }
 
     // Barra de cores cívicas centralizada abaixo do título
-    const barW = 240;
+    const barW = 260;
     const barH = 6;
     const barX = centerRightX - barW / 2;
-    const barY = 155;
+    const barY = 132;
     const segW = barW / 3;
 
     ctx.fillStyle = "#15803d"; // Verde
@@ -992,7 +1004,15 @@
     ctx.fillStyle = "#0284c7"; // Azul
     ctx.fillRect(barX + segW * 2, barY, segW, barH);
 
-    // 3.2 As 6 Linhas de Votação com Badges Coloridas e Caixas Numéricas
+    // Subtítulo cívico de orientação no topo
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#64748b";
+    ctx.font = '800 16px "Outfit", sans-serif';
+    ctx.fillText("ORDEM OFICIAL DE VOTAÇÃO NA URNA", centerRightX, 158);
+    ctx.restore();
+
+    // 3.2 As 6 Linhas de Votação Ampliadas com Badges Coloridas e Caixas Numéricas
     const ROW_COLORS = [
       { bg: "#15803d", text: "#ffffff" }, // 1: Verde (Marquinhos Trad)
       { bg: "#0284c7", text: "#ffffff" }, // 2: Azul/Ciano (Estadual)
@@ -1002,9 +1022,9 @@
       { bg: "#eab308", text: "#ffffff" }  // 6: Amarelo Ouro (Presidente)
     ];
 
-    const rowStartY = 210;
-    const rowH = 130;
-    const rowGap = 28;
+    const rowStartY = 192;
+    const rowH = 146;
+    const rowGap = 26;
 
     for (let i = 0; i < CARGOS_CONFIG.length; i++) {
       const cfg = CARGOS_CONFIG[i];
@@ -1013,34 +1033,34 @@
       const rowColor = ROW_COLORS[i];
 
       // Badge com Número da Ordem (1 a 6)
-      const badgeW = 54;
-      const badgeH = 92;
+      const badgeW = 56;
+      const badgeH = 104;
       const badgeX = rightX;
       const badgeY = y + (rowH - badgeH) / 2;
 
       ctx.fillStyle = rowColor.bg;
       ctx.beginPath();
-      ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 8);
+      ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 10);
       ctx.fill();
 
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillStyle = rowColor.text;
-      ctx.font = '900 42px "Outfit", sans-serif';
+      ctx.font = '900 46px "Outfit", sans-serif';
       ctx.fillText(String(i + 1), badgeX + badgeW / 2, badgeY + badgeH / 2 + 1);
 
       // Caixas de Dígitos Brancas (Otimizadas para 5 dígitos e garantia de espaço para o nome)
       const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
-      const boxW = cfg.digitos === 5 ? 46 : 52;
-      const boxH = 88;
+      const boxW = cfg.digitos === 5 ? 48 : 56;
+      const boxH = 98;
       const boxGap = cfg.digitos === 5 ? 6 : 8;
       const totalBoxesW = cfg.digitos * boxW + (cfg.digitos - 1) * boxGap;
       const boxesStartX = rightX + rightW - totalBoxesW;
       const boxY = y + (rowH - boxH) / 2;
 
       // Caixa das Informações do Candidato com Auto-Scaling Inteligente
-      const infoX = badgeX + badgeW + 14;
-      const maxTextW = Math.max(120, boxesStartX - infoX - 12);
+      const infoX = badgeX + badgeW + 16;
+      const maxTextW = Math.max(120, boxesStartX - infoX - 14);
 
       ctx.textAlign = "left";
       ctx.textBaseline = "top";
@@ -1048,7 +1068,7 @@
       if (cfg.id === "depFed") {
         // Auto-scaling para MARQUINHOS TRAD
         const nomeTexto = "MARQUINHOS TRAD";
-        let fontSizeNome = 34;
+        let fontSizeNome = 36;
         ctx.font = `950 ${fontSizeNome}px "Outfit", sans-serif`;
         while (ctx.measureText(nomeTexto).width > maxTextW && fontSizeNome > 18) {
           fontSizeNome -= 1;
@@ -1056,19 +1076,19 @@
         }
 
         ctx.fillStyle = "#15803d";
-        ctx.fillText(nomeTexto, infoX, y + 26);
+        ctx.fillText(nomeTexto, infoX, y + 30);
 
         ctx.fillStyle = "#15803d";
-        ctx.font = '800 20px "Outfit", sans-serif';
-        ctx.fillText("DEPUTADO FEDERAL", infoX, y + 74);
+        ctx.font = '800 22px "Outfit", sans-serif';
+        ctx.fillText("DEPUTADO FEDERAL", infoX, y + 84);
       } else {
         const candNome = cand && cand.urna ? cand.urna.toUpperCase() : "";
         const displayNome = candNome || "A DEFINIR";
 
         ctx.fillStyle = candNome ? "#0c2c62" : "#94a3b8";
 
-        // Auto-scaling inteligente de fonte (de 32px até 16px)
-        let fontSizeNome = 32;
+        // Auto-scaling inteligente de fonte (de 34px até 16px)
+        let fontSizeNome = 34;
         ctx.font = `900 ${fontSizeNome}px "Outfit", sans-serif`;
         let textMetrics = ctx.measureText(displayNome).width;
 
@@ -1085,17 +1105,17 @@
           const l1 = partes.slice(0, meio).join(" ");
           const l2 = partes.slice(meio).join(" ");
 
-          fontSizeNome = 20;
+          fontSizeNome = 22;
           ctx.font = `900 ${fontSizeNome}px "Outfit", sans-serif`;
           while ((ctx.measureText(l1).width > maxTextW || ctx.measureText(l2).width > maxTextW) && fontSizeNome > 13) {
             fontSizeNome -= 1;
             ctx.font = `900 ${fontSizeNome}px "Outfit", sans-serif`;
           }
 
-          ctx.fillText(l1, infoX, y + 16);
-          ctx.fillText(l2, infoX, y + 42);
+          ctx.fillText(l1, infoX, y + 20);
+          ctx.fillText(l2, infoX, y + 48);
         } else {
-          ctx.fillText(displayNome, infoX, y + 28);
+          ctx.fillText(displayNome, infoX, y + 32);
         }
 
         let cargoTitle = cfg.cargo.toUpperCase();
@@ -1103,8 +1123,8 @@
         else if (cfg.id === "sen2") cargoTitle = "SENADOR (2ª VAGA)";
 
         ctx.fillStyle = "#64748b";
-        ctx.font = '800 19px "Outfit", sans-serif';
-        ctx.fillText(cargoTitle, infoX, y + 74);
+        ctx.font = '800 21px "Outfit", sans-serif';
+        ctx.fillText(cargoTitle, infoX, y + 84);
       }
 
       for (let d = 0; d < cfg.digitos; d++) {
@@ -1123,14 +1143,53 @@
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillStyle = "#000000";
-          ctx.font = cfg.digitos === 5 ? '950 44px "Outfit", sans-serif' : '950 48px "Outfit", sans-serif';
+          ctx.font = cfg.digitos === 5 ? '950 48px "Outfit", sans-serif' : '950 54px "Outfit", sans-serif';
           ctx.fillText(val, bx + boxW / 2, boxY + boxH / 2 + 2);
         }
       }
     }
 
+    // 3.3 CARD CÍVICO DE MOBILIZAÇÃO E ORIENTAÇÃO NO RODAPÉ (Aproveitamento Total da Área Útil)
+    const cardY = 1240;
+    const cardH = 145;
+    ctx.save();
+    // Fundo verde translúcido oficial com borda e cantos arredondados
+    ctx.fillStyle = "#f0fdf4";
+    ctx.strokeStyle = "#86efac";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(rightX, cardY, rightW, cardH, 16);
+    ctx.fill();
+    ctx.stroke();
+
+    // Destaque visual: faixa verde lateral no card
+    ctx.fillStyle = "#15803d";
+    ctx.beginPath();
+    ctx.roundRect(rightX, cardY, 8, cardH, [16, 0, 0, 16]);
+    ctx.fill();
+
+    // Textos de Orientação Eleitoral do TSE
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    
+    // Título do Card
+    ctx.fillStyle = "#15803d";
+    ctx.font = '900 24px "Outfit", sans-serif';
+    ctx.fillText("🗳️ LEVE SUA COLINHA PARA A URNA!", rightX + 26, cardY + 22);
+
+    // Mensagem de incentivo e direito do eleitor
+    ctx.fillStyle = "#1e293b";
+    ctx.font = '600 18.5px "Outfit", sans-serif';
+    ctx.fillText("Anotar os números no papel é permitido e recomendado pelo TSE.", rightX + 26, cardY + 60);
+
+    // Slogan de confirmação
+    ctx.fillStyle = "#0c2c62";
+    ctx.font = '800 18px "Outfit", sans-serif';
+    ctx.fillText("Confira a foto de cada candidato antes de apertar CONFIRMA.", rightX + 26, cardY + 95);
+    ctx.restore();
+
     // 4. RODAPÉ CÍVICO ELEIÇÕES 2026 COM LINHAS CÍVICAS
-    const footerY = H - 75;
+    const footerY = H - 65;
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
     ctx.fillStyle = "#0c2c62";
