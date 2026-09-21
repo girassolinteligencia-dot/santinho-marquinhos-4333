@@ -1029,28 +1029,74 @@
       ctx.font = '900 42px "Outfit", sans-serif';
       ctx.fillText(String(i + 1), badgeX + badgeW / 2, badgeY + badgeH / 2 + 1);
 
-      // Caixa das Informações do Candidato
-      const infoX = badgeX + badgeW + 16;
-      const candNome = cand && cand.urna ? cand.urna.toUpperCase() : "";
+      // Caixas de Dígitos Brancas (Otimizadas para 5 dígitos e garantia de espaço para o nome)
+      const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
+      const boxW = cfg.digitos === 5 ? 46 : 52;
+      const boxH = 88;
+      const boxGap = cfg.digitos === 5 ? 6 : 8;
+      const totalBoxesW = cfg.digitos * boxW + (cfg.digitos - 1) * boxGap;
+      const boxesStartX = rightX + rightW - totalBoxesW;
+      const boxY = y + (rowH - boxH) / 2;
+
+      // Caixa das Informações do Candidato com Auto-Scaling Inteligente
+      const infoX = badgeX + badgeW + 14;
+      const maxTextW = Math.max(120, boxesStartX - infoX - 12);
+
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
 
       if (cfg.id === "depFed") {
-        ctx.textAlign = "left";
-        ctx.textBaseline = "top";
+        // Auto-scaling para MARQUINHOS TRAD
+        const nomeTexto = "MARQUINHOS TRAD";
+        let fontSizeNome = 34;
+        ctx.font = `950 ${fontSizeNome}px "Outfit", sans-serif`;
+        while (ctx.measureText(nomeTexto).width > maxTextW && fontSizeNome > 18) {
+          fontSizeNome -= 1;
+          ctx.font = `950 ${fontSizeNome}px "Outfit", sans-serif`;
+        }
+
         ctx.fillStyle = "#15803d";
-        ctx.font = '950 36px "Outfit", sans-serif';
-        ctx.fillText("MARQUINHOS TRAD", infoX, y + 26);
+        ctx.fillText(nomeTexto, infoX, y + 26);
 
         ctx.fillStyle = "#15803d";
         ctx.font = '800 20px "Outfit", sans-serif';
         ctx.fillText("DEPUTADO FEDERAL", infoX, y + 74);
       } else {
-        ctx.textAlign = "left";
-        ctx.textBaseline = "top";
+        const candNome = cand && cand.urna ? cand.urna.toUpperCase() : "";
+        const displayNome = candNome || "A DEFINIR";
 
         ctx.fillStyle = candNome ? "#0c2c62" : "#94a3b8";
-        ctx.font = '900 32px "Outfit", sans-serif';
-        const displayNome = candNome || "A DEFINIR";
-        ctx.fillText(displayNome, infoX, y + 28);
+
+        // Auto-scaling inteligente de fonte (de 32px até 16px)
+        let fontSizeNome = 32;
+        ctx.font = `900 ${fontSizeNome}px "Outfit", sans-serif`;
+        let textMetrics = ctx.measureText(displayNome).width;
+
+        while (textMetrics > maxTextW && fontSizeNome > 17) {
+          fontSizeNome -= 1;
+          ctx.font = `900 ${fontSizeNome}px "Outfit", sans-serif`;
+          textMetrics = ctx.measureText(displayNome).width;
+        }
+
+        // Se ainda assim for muito longo (ex: nomes com mais de 20 caracteres), quebra em 2 linhas
+        if (textMetrics > maxTextW && displayNome.includes(" ")) {
+          const partes = displayNome.split(" ");
+          const meio = Math.ceil(partes.length / 2);
+          const l1 = partes.slice(0, meio).join(" ");
+          const l2 = partes.slice(meio).join(" ");
+
+          fontSizeNome = 20;
+          ctx.font = `900 ${fontSizeNome}px "Outfit", sans-serif`;
+          while ((ctx.measureText(l1).width > maxTextW || ctx.measureText(l2).width > maxTextW) && fontSizeNome > 13) {
+            fontSizeNome -= 1;
+            ctx.font = `900 ${fontSizeNome}px "Outfit", sans-serif`;
+          }
+
+          ctx.fillText(l1, infoX, y + 16);
+          ctx.fillText(l2, infoX, y + 42);
+        } else {
+          ctx.fillText(displayNome, infoX, y + 28);
+        }
 
         let cargoTitle = cfg.cargo.toUpperCase();
         if (cfg.id === "sen1") cargoTitle = "SENADOR (1ª VAGA)";
@@ -1060,15 +1106,6 @@
         ctx.font = '800 19px "Outfit", sans-serif';
         ctx.fillText(cargoTitle, infoX, y + 74);
       }
-
-      // Caixas de Dígitos Brancas
-      const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
-      const boxW = 52;
-      const boxH = 88;
-      const boxGap = 8;
-      const totalBoxesW = cfg.digitos * boxW + (cfg.digitos - 1) * boxGap;
-      const boxesStartX = rightX + rightW - totalBoxesW;
-      const boxY = y + (rowH - boxH) / 2;
 
       for (let d = 0; d < cfg.digitos; d++) {
         const bx = boxesStartX + d * (boxW + boxGap);
@@ -1086,7 +1123,7 @@
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillStyle = "#000000";
-          ctx.font = '950 48px "Outfit", sans-serif';
+          ctx.font = cfg.digitos === 5 ? '950 44px "Outfit", sans-serif' : '950 48px "Outfit", sans-serif';
           ctx.fillText(val, bx + boxW / 2, boxY + boxH / 2 + 2);
         }
       }
