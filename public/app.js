@@ -183,28 +183,6 @@
       if (cfg.id === "sen1") cargoTitle = "SENADOR 1";
       else if (cfg.id === "sen2") cargoTitle = "SENADOR 2";
 
-      let fotoUrl = cand && cand.foto_url ? cand.foto_url : "";
-      let avatarHtml = "";
-      if (cfg.id === "depFed") {
-        avatarHtml = `
-          <div class="colinha-vert-avatar-wrap">
-            <img src="welcome_marquinhos_hero.png" alt="Marquinhos Trad" class="colinha-vert-avatar-img">
-          </div>
-        `;
-      } else if (fotoUrl) {
-        avatarHtml = `
-          <div class="colinha-vert-avatar-wrap">
-            <img src="${fotoUrl}" alt="${cargoTitle}" class="colinha-vert-avatar-img" onerror="this.style.display='none'">
-          </div>
-        `;
-      } else {
-        avatarHtml = `
-          <div class="colinha-vert-avatar-wrap colinha-vert-avatar-placeholder">
-            <span>👤</span>
-          </div>
-        `;
-      }
-
       let boxesHtml = "";
       for (let d = 0; d < cfg.digitos; d++) {
         const val = digitsArr[d] !== undefined ? digitsArr[d] : "";
@@ -212,10 +190,9 @@
       }
 
       return `
-        <div class="colinha-vert-row ${cfg.id === 'depFed' ? 'colinha-vert-row-marquinhos' : ''}">
+        <div class="colinha-vert-row colinha-vert-row-${cfg.id}">
           <div class="colinha-vert-cargo-label">${cargoTitle}</div>
           <div class="colinha-vert-row-content">
-            ${avatarHtml}
             <div class="colinha-vert-boxes">${boxesHtml}</div>
           </div>
         </div>
@@ -876,48 +853,58 @@
     if (!canvas) return null;
     const ctx = canvas.getContext("2d");
 
-    // Proporção Exata 9:16 de Altíssima Resolução: 1000 x 1778 px (Fiel ao mockup proposta_layout_santinho.jpg)
+    // Proporção Exata 682:1024 (1000 x 1501 px HD) Fiel ao novo modelo de referência
     const W = 1000;
-    const H = 1778;
+    const H = 1501;
     canvas.width = W;
     canvas.height = H;
 
-    // 1. Fundo Oficial em degradê ou composto 9:16 com Marquinhos Trad e Logo Oficial na direita
+    // 1. Fundo Oficial HD extraído da nova imagem de referência enviada pelo usuário
     const bgOficial = (await carregarImagemAsync("base_fundo_santinho_916.webp")) ||
                       (await carregarImagemAsync("base_fundo_santinho_916.png"));
 
     if (bgOficial) {
       ctx.drawImage(bgOficial, 0, 0, W, H);
     } else {
-      // Fallback elegante com degradê caso a imagem base falhe
-      const grad = ctx.createLinearGradient(0, 0, W, H);
-      grad.addColorStop(0, "#ffffff");
-      grad.addColorStop(0.55, "#f0fdf4");
-      grad.addColorStop(1, "#dcfce7");
-      ctx.fillStyle = grad;
+      ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, W, H);
 
       const fotoMarquinhos = await carregarImagemAsync("marquinhos_sem_fundo.png");
       if (fotoMarquinhos) {
-        ctx.drawImage(fotoMarquinhos, 420, 260, 580, 1050);
+        ctx.drawImage(fotoMarquinhos, 420, 60, 580, 1400);
       }
       const logoMarquinhos = await carregarImagemAsync("marquinhos_logo_oficial.png");
       if (logoMarquinhos) {
-        ctx.drawImage(logoMarquinhos, 430, 1340, 540, 360);
+        ctx.drawImage(logoMarquinhos, 480, 970, 480, 380);
       }
     }
 
-    // 2. COLUNA ESQUERDA: AS 6 LINHAS DE VOTO (FIEL AO MOCKUP: CARGO, FOTO E NÚMEROS - SEM NOME)
-    const startX = 40;
-    const startY = 85;
-    const rowStep = 270; // 6 linhas bem distribuídas na altura total de 1778px
+    // 2. LINHAS DE VOTAÇÃO: 6 LINHAS DE CAIXAS DE DÍGITOS (SEM AVATAR / FOTO)
+    // Coordenadas calculadas na escala 1000x1501 (proporção 682x1024):
+    // Row 1 (Dep Fed, 4 dígitos): Label Y=70, Box Y=111, H=147
+    // Row 2 (Dep Est, 5 dígitos): Label Y=318, Box Y=359, H=147
+    // Row 3 (Senador 1, 3 dígitos): Label Y=553, Box Y=594, H=147
+    // Row 4 (Senador 2, 3 dígitos): Label Y=787, Box Y=828, H=147
+    // Row 5 (Governador, 2 dígitos): Label Y=1022, Box Y=1063, H=147
+    // Row 6 (Presidente, 2 dígitos): Label Y=1242, Box Y=1283, H=147
+    const ROW_GEOMETRY = [
+      { labelY: 70, boxY: 111 },
+      { labelY: 318, boxY: 359 },
+      { labelY: 553, boxY: 594 },
+      { labelY: 787, boxY: 828 },
+      { labelY: 1022, boxY: 1063 },
+      { labelY: 1242, boxY: 1283 }
+    ];
+
+    const startX = 35;
+    const boxH = 147;
 
     for (let i = 0; i < CARGOS_CONFIG.length; i++) {
       const cfg = CARGOS_CONFIG[i];
       const cand = colinhaState[cfg.id];
-      const y = startY + i * rowStep;
+      const geom = ROW_GEOMETRY[i];
 
-      // 2.1 TÍTULO DO CARGO (Preto / Chumbo Escuro em caixa alta)
+      // 2.1 TÍTULO DO CARGO (Preto Sólido, Negrito Pesado em Caixa Alta)
       let cargoTitle = cfg.cargo.toUpperCase();
       if (cfg.id === "sen1") cargoTitle = "SENADOR 1";
       else if (cfg.id === "sen2") cargoTitle = "SENADOR 2";
@@ -925,82 +912,46 @@
       ctx.save();
       ctx.textAlign = "left";
       ctx.textBaseline = "top";
-      ctx.fillStyle = "#0f172a";
-      ctx.font = '900 28px "Outfit", sans-serif';
-      ctx.fillText(cargoTitle, startX, y);
+      ctx.fillStyle = "#000000";
+      ctx.font = '950 32px "Outfit", sans-serif';
+      ctx.fillText(cargoTitle, startX, geom.labelY);
       ctx.restore();
 
-      // 2.2 FOTO / AVATAR DO CANDIDATO (Borda Dourada / Amarela como no Mockup)
-      const avatarX = startX;
-      const avatarY = y + 42;
-      const avatarW = 86;
-      const avatarH = 118;
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.roundRect(avatarX, avatarY, avatarW, avatarH, 12);
-      ctx.clip();
-
-      let imgCandObj = null;
-      if (cfg.id === "depFed") {
-        imgCandObj = await carregarImagemAsync("welcome_marquinhos_hero.png");
-      } else if (cand && cand.foto_url) {
-        imgCandObj = await carregarImagemAsync(cand.foto_url);
-      }
-
-      if (imgCandObj) {
-        ctx.drawImage(imgCandObj, avatarX, avatarY, avatarW, avatarH);
-      } else {
-        ctx.fillStyle = "#f1f5f9";
-        ctx.fillRect(avatarX, avatarY, avatarW, avatarH);
-        ctx.fillStyle = "#94a3b8";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.font = '700 34px "Outfit", sans-serif';
-        ctx.fillText("👤", avatarX + avatarW / 2, avatarY + avatarH / 2);
-      }
-      ctx.restore();
-
-      // Borda amarela/dourada no avatar (conforme mockup)
-      ctx.save();
-      ctx.strokeStyle = "#eab308";
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.roundRect(avatarX, avatarY, avatarW, avatarH, 12);
-      ctx.stroke();
-      ctx.restore();
-
-      // 2.3 CAIXAS DE DÍGITOS GRANDES (Brancas, Borda Verde #15803d, Dígitos Pretos Gigantes)
+      // 2.2 CAIXAS DE DÍGITOS GRANDES (Brancas, Borda Verde #15803d, Dígitos Pretos Gigantes)
       const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
-      // Se tiver 5 dígitos (Dep Estadual), ajusta levemente a largura da caixa para caber perfeitamente
-      const boxW = cfg.digitos === 5 ? 74 : 86;
-      const boxH = 118;
-      const boxGap = cfg.digitos === 5 ? 8 : 10;
-      const boxesStartX = avatarX + avatarW + 14;
+      // Se for Deputado Estadual (5 dígitos), largura ligeiramente ajustada (108px vs 119px)
+      const boxW = cfg.digitos === 5 ? 108 : 119;
+      const boxGap = cfg.digitos === 5 ? 7 : 8;
 
       for (let d = 0; d < cfg.digitos; d++) {
-        const bx = boxesStartX + d * (boxW + boxGap);
+        const bx = startX + d * (boxW + boxGap);
         const val = digitsArr[d] !== undefined ? digitsArr[d] : "";
 
-        // Caixa Branca com contorno verde sólido
+        // Sombra suave externa idêntica ao modelo
         ctx.save();
+        ctx.shadowColor = "rgba(0, 0, 0, 0.16)";
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetY = 4;
+
         ctx.fillStyle = "#ffffff";
         ctx.strokeStyle = "#15803d";
-        ctx.lineWidth = 4.5;
+        ctx.lineWidth = 6;
         ctx.beginPath();
-        ctx.roundRect(bx, avatarY, boxW, boxH, 12);
+        ctx.roundRect(bx, geom.boxY, boxW, boxH, 20);
         ctx.fill();
         ctx.stroke();
+        ctx.restore();
 
         // Dígito preto nítido e encorpado
         if (val) {
+          ctx.save();
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillStyle = "#000000";
-          ctx.font = cfg.digitos === 5 ? '950 68px "Outfit", sans-serif' : '950 78px "Outfit", sans-serif';
-          ctx.fillText(val, bx + boxW / 2, avatarY + boxH / 2 + 2);
+          ctx.font = cfg.digitos === 5 ? '950 95px "Outfit", sans-serif' : '950 102px "Outfit", sans-serif';
+          ctx.fillText(val, bx + boxW / 2, geom.boxY + boxH / 2 + 4);
+          ctx.restore();
         }
-        ctx.restore();
       }
     }
 
