@@ -179,118 +179,61 @@
     const rowsHtml = CARGOS_CONFIG.map((cfg, i) => {
       const cand = colinhaState[cfg.id];
       const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
-      const rowColor = ROW_COLORS[i];
-
       let cargoTitle = cfg.cargo.toUpperCase();
-      if (cfg.id === "sen1") cargoTitle = "SENADOR (1ª VAGA)";
-      else if (cfg.id === "sen2") cargoTitle = "SENADOR (2ª VAGA)";
-
-      let candNome = cand && cand.urna ? cand.urna.toUpperCase() : (cand && cand.nome ? cand.nome.toUpperCase() : "");
-
-      let boxesHtml = "";
-      for (let d = 0; d < cfg.digitos; d++) {
-        const val = digitsArr[d] !== undefined ? digitsArr[d] : "";
-        boxesHtml += `<span class="colinha-mockup-digit-box ${val ? 'has-digit' : ''}">${val}</span>`;
-      }
-
-      // Destaque visual especial de liderança para Marquinhos Trad (1º Voto - Deputado Federal)
-      let nameInnerHtml = "";
-      let rowExtraClass = "";
-      if (cfg.id === "depFed") {
-        rowExtraClass = "colinha-row-marquinhos-destaque";
-        nameInnerHtml = `
-          <div class="colinha-nome-marquinhos-duas-linhas">
-            <span class="mq-l1">MARQUINHOS</span>
-            <span class="mq-l2">TRAD</span>
-          </div>
-        `;
-      } else {
-        nameInnerHtml = `<div class="colinha-mockup-cand-name ${candNome ? 'filled' : 'empty'}">${candNome || 'A DEFINIR'}</div>`;
-      }
+      if (cfg.id === "sen1") cargoTitle = "SENADOR 1";
+      else if (cfg.id === "sen2") cargoTitle = "SENADOR 2";
 
       let fotoUrl = cand && cand.foto_url ? cand.foto_url : "";
       let avatarHtml = "";
       if (cfg.id === "depFed") {
         avatarHtml = `
-          <div class="colinha-mockup-avatar-wrap">
-            <img src="welcome_marquinhos_hero.png" alt="Marquinhos Trad" class="colinha-mockup-avatar-img">
+          <div class="colinha-vert-avatar-wrap">
+            <img src="welcome_marquinhos_hero.png" alt="Marquinhos Trad" class="colinha-vert-avatar-img">
           </div>
         `;
       } else if (fotoUrl) {
         avatarHtml = `
-          <div class="colinha-mockup-avatar-wrap">
-            <img src="${fotoUrl}" alt="${candNome}" class="colinha-mockup-avatar-img" onerror="this.style.display='none'">
+          <div class="colinha-vert-avatar-wrap">
+            <img src="${fotoUrl}" alt="${cargoTitle}" class="colinha-vert-avatar-img" onerror="this.style.display='none'">
           </div>
         `;
       } else {
         avatarHtml = `
-          <div class="colinha-mockup-avatar-wrap colinha-mockup-avatar-placeholder">
+          <div class="colinha-vert-avatar-wrap colinha-vert-avatar-placeholder">
             <span>👤</span>
           </div>
         `;
       }
 
+      let boxesHtml = "";
+      for (let d = 0; d < cfg.digitos; d++) {
+        const val = digitsArr[d] !== undefined ? digitsArr[d] : "";
+        boxesHtml += `<span class="colinha-vert-digit-box ${val ? 'has-digit' : ''}">${val}</span>`;
+      }
+
       return `
-        <div class="colinha-mockup-row ${rowExtraClass}">
-          ${avatarHtml}
-          <div class="colinha-mockup-badge" style="background:${rowColor.bg};color:${rowColor.text};">${i + 1}</div>
-          <div class="colinha-mockup-info">
-            ${nameInnerHtml}
-            <div class="colinha-mockup-cargo">${cargoTitle}</div>
+        <div class="colinha-vert-row ${cfg.id === 'depFed' ? 'colinha-vert-row-marquinhos' : ''}">
+          <div class="colinha-vert-cargo-label">${cargoTitle}</div>
+          <div class="colinha-vert-row-content">
+            ${avatarHtml}
+            <div class="colinha-vert-boxes">${boxesHtml}</div>
           </div>
-          <div class="colinha-mockup-boxes">${boxesHtml}</div>
         </div>
       `;
     }).join("");
 
-    let headerSloganHtml = "";
-    if (eleitorNome) {
-      headerSloganHtml = `
-        <div class="colinha-mockup-personalizado-wrap">
-          <span class="colinha-nome-destaque">${eleitorNome}</span>
-          <span class="colinha-vota-assim-sub">VOTA ASSIM</span>
-        </div>
-      `;
-    } else {
-      headerSloganHtml = `<div class="colinha-mockup-slogan-topo">VEM COM A GENTE</div>`;
-    }
-
     return `
-      <div class="colinha-mockup-card-container">
-        <!-- Lado Esquerdo Oficial (Fiel à Imagem de Referência 2) -->
-        <div class="colinha-mockup-left">
-          <picture>
-            <source srcset="marquinhos_painel_lateral.webp" type="image/webp">
-            <img src="marquinhos_painel_lateral.jpg" alt="Marquinhos Trad Deputado Federal 4333" class="colinha-painel-lateral-img">
-          </picture>
-        </div>
+      <div class="colinha-vert-card-container">
+        <!-- Fundo com Marquinhos e Logo Oficial na Direita -->
+        <picture class="colinha-vert-bg-picture">
+          <source srcset="base_fundo_santinho_916.webp" type="image/webp">
+          <img src="base_fundo_santinho_916.png" alt="Marquinhos Trad 4333" class="colinha-vert-bg-img">
+        </picture>
 
-        <!-- Lado Direito: Cédula com os 6 Votos (Fiel à Imagem de Referência 2) -->
-        <div class="colinha-mockup-right">
-          <!-- Cabeçalho com Nome e Cores Cívicas -->
-          <div class="colinha-mockup-header">
-            ${headerSloganHtml}
-            <div class="colinha-header-color-bar">
-              <span class="bar-g"></span>
-              <span class="bar-y"></span>
-              <span class="bar-b"></span>
-            </div>
-          </div>
-
-          <!-- As 6 Linhas com caixas numéricas -->
-          <div class="colinha-mockup-rows-list">
+        <!-- Coluna de Votação na Esquerda (Exatamente como o mockup) -->
+        <div class="colinha-vert-left-col">
+          <div class="colinha-vert-rows-wrap">
             ${rowsHtml}
-          </div>
-
-          <!-- Rodapé Cívico com Marcas Oficiais -->
-          <div class="colinha-mockup-footer">
-            <span class="footer-txt-left">ELEIÇÕES 2026</span>
-            <div class="footer-stripes">
-              <span class="stripe-green"></span>
-              <span class="stripe-yellow"></span>
-              <span class="stripe-blue"></span>
-            </div>
-            <span class="footer-txt-right">DEMOCRACIA SEMPRE</span>
           </div>
         </div>
       </div>
@@ -933,124 +876,69 @@
     if (!canvas) return null;
     const ctx = canvas.getContext("2d");
 
-    // Proporção Exata 2:3 de Alta Resolução: 1000 x 1500 px (Fiel à Imagem de Referência 2)
+    // Proporção Exata 9:16 de Altíssima Resolução: 1000 x 1778 px (Fiel ao mockup proposta_layout_santinho.jpg)
     const W = 1000;
-    const H = 1500;
+    const H = 1778;
     canvas.width = W;
     canvas.height = H;
 
-    // 1. Fundo Geral Branco Puro com cantos suavemente arredondados
-    ctx.fillStyle = "#ffffff";
-    ctx.beginPath();
-    ctx.roundRect(0, 0, W, H, 24);
-    ctx.fill();
+    // 1. Fundo Oficial em degradê ou composto 9:16 com Marquinhos Trad e Logo Oficial na direita
+    const bgOficial = (await carregarImagemAsync("base_fundo_santinho_916.webp")) ||
+                      (await carregarImagemAsync("base_fundo_santinho_916.png"));
 
-    // 2. PAINEL LATERAL ESQUERDO OFICIAL (Exatamente 41% da largura = 410px)
-    const panelW = 410;
-
-    ctx.save();
-    // Máscara com cantos arredondados na esquerda
-    ctx.beginPath();
-    ctx.roundRect(0, 0, panelW, H, [24, 0, 0, 24]);
-    ctx.clip();
-
-    // Carrega a arte lateral oficial extraída da referência
-    const painelOficial = (await carregarImagemAsync("marquinhos_painel_lateral.webp")) ||
-                          (await carregarImagemAsync("marquinhos_painel_lateral.jpg"));
-
-    if (painelOficial) {
-      // Preenche todo o painel esquerdo sem folgas ou distorções
-      ctx.drawImage(painelOficial, 0, 0, panelW, H);
+    if (bgOficial) {
+      ctx.drawImage(bgOficial, 0, 0, W, H);
     } else {
-      // Fallback em degradê verde se imagem falhar
-      const greenGrad = ctx.createLinearGradient(0, 0, 0, H);
-      greenGrad.addColorStop(0, "#15803d");
-      greenGrad.addColorStop(0.55, "#14532d");
-      greenGrad.addColorStop(1, "#072815");
-      ctx.fillStyle = greenGrad;
-      ctx.fillRect(0, 0, panelW, H);
+      // Fallback elegante com degradê caso a imagem base falhe
+      const grad = ctx.createLinearGradient(0, 0, W, H);
+      grad.addColorStop(0, "#ffffff");
+      grad.addColorStop(0.55, "#f0fdf4");
+      grad.addColorStop(1, "#dcfce7");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
 
-      const fotoOficialNova = await carregarImagemAsync("marquinhos_colinha_foto.jpg");
-      if (fotoOficialNova) {
-        ctx.drawImage(fotoOficialNova, 0, 0, panelW, 920);
+      const fotoMarquinhos = await carregarImagemAsync("marquinhos_sem_fundo.png");
+      if (fotoMarquinhos) {
+        ctx.drawImage(fotoMarquinhos, 420, 260, 580, 1050);
       }
-      const logoOficial = await carregarImagemAsync("marquinhos_logo_oficial.png");
-      if (logoOficial) {
-        ctx.drawImage(logoOficial, 20, 930, panelW - 40, 420);
+      const logoMarquinhos = await carregarImagemAsync("marquinhos_logo_oficial.png");
+      if (logoMarquinhos) {
+        ctx.drawImage(logoMarquinhos, 430, 1340, 540, 360);
       }
     }
-    ctx.restore(); // Fecha o clip do painel lateral esquerdo
 
-    // 3. PAINEL DIREITO: CÉDULA COM OS 6 VOTOS (FIEL À IMAGEM 2)
-    const rightX = 435;
-    const rightW = 535;
-    const centerRightX = panelW + (W - panelW) / 2; // ~705px
-
-    // 3.1 Cabeçalho Personalizado Oficial
-    const eleitorNome = getEleitorNome();
-
-    if (eleitorNome) {
-      // Nome do eleitor em destaque verde escuro/esmeralda cívico
-      ctx.save();
-      ctx.textAlign = "center";
-      const nomeCompletoTexto = `${eleitorNome} VOTA ASSIM`;
-      ctx.fillStyle = "#15803d";
-      ctx.font = '900 40px "Outfit", sans-serif';
-      ctx.fillText(nomeCompletoTexto, centerRightX, 115);
-      ctx.restore();
-    } else {
-      // Slogan oficial quando não há nome
-      ctx.save();
-      ctx.textAlign = "center";
-      ctx.fillStyle = "#0c2c62";
-      ctx.font = '900 42px "Outfit", sans-serif';
-      ctx.fillText("VEM COM A GENTE", centerRightX, 115);
-      ctx.restore();
-    }
-
-    // Barra de cores cívicas centralizada abaixo do título
-    const barW = 240;
-    const barH = 6;
-    const barX = centerRightX - barW / 2;
-    const barY = 155;
-    const segW = barW / 3;
-
-    ctx.fillStyle = "#15803d"; // Verde
-    ctx.fillRect(barX, barY, segW, barH);
-    ctx.fillStyle = "#eab308"; // Amarelo
-    ctx.fillRect(barX + segW, barY, segW, barH);
-    ctx.fillStyle = "#0284c7"; // Azul
-    ctx.fillRect(barX + segW * 2, barY, segW, barH);
-
-    // 3.2 As 6 Linhas de Votação com Badges Coloridas e Caixas Numéricas
-    const ROW_COLORS = [
-      { bg: "#15803d", text: "#ffffff" }, // 1: Verde (Marquinhos Trad)
-      { bg: "#0284c7", text: "#ffffff" }, // 2: Azul/Ciano (Estadual)
-      { bg: "#eab308", text: "#ffffff" }, // 3: Amarelo Ouro (Senador 1)
-      { bg: "#15803d", text: "#ffffff" }, // 4: Verde (Senador 2)
-      { bg: "#0284c7", text: "#ffffff" }, // 5: Azul/Ciano (Governador)
-      { bg: "#eab308", text: "#ffffff" }  // 6: Amarelo Ouro (Presidente)
-    ];
-
-    const rowStartY = 210;
-    const rowH = 130;
-    const rowGap = 28;
+    // 2. COLUNA ESQUERDA: AS 6 LINHAS DE VOTO (FIEL AO MOCKUP: CARGO, FOTO E NÚMEROS - SEM NOME)
+    const startX = 40;
+    const startY = 85;
+    const rowStep = 270; // 6 linhas bem distribuídas na altura total de 1778px
 
     for (let i = 0; i < CARGOS_CONFIG.length; i++) {
       const cfg = CARGOS_CONFIG[i];
       const cand = colinhaState[cfg.id];
-      const y = rowStartY + i * (rowH + rowGap);
-      const rowColor = ROW_COLORS[i];
+      const y = startY + i * rowStep;
 
-      // Avatar com Foto Real do Candidato (Idêntico ao layout de referência)
-      const avatarW = 72;
-      const avatarH = 92;
-      const avatarX = rightX;
-      const avatarY = y + (rowH - avatarH) / 2;
+      // 2.1 TÍTULO DO CARGO (Preto / Chumbo Escuro em caixa alta)
+      let cargoTitle = cfg.cargo.toUpperCase();
+      if (cfg.id === "sen1") cargoTitle = "SENADOR 1";
+      else if (cfg.id === "sen2") cargoTitle = "SENADOR 2";
+
+      ctx.save();
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.fillStyle = "#0f172a";
+      ctx.font = '900 28px "Outfit", sans-serif';
+      ctx.fillText(cargoTitle, startX, y);
+      ctx.restore();
+
+      // 2.2 FOTO / AVATAR DO CANDIDATO (Borda Dourada / Amarela como no Mockup)
+      const avatarX = startX;
+      const avatarY = y + 42;
+      const avatarW = 86;
+      const avatarH = 118;
 
       ctx.save();
       ctx.beginPath();
-      ctx.roundRect(avatarX, avatarY, avatarW, avatarH, 10);
+      ctx.roundRect(avatarX, avatarY, avatarW, avatarH, 12);
       ctx.clip();
 
       let imgCandObj = null;
@@ -1063,163 +951,58 @@
       if (imgCandObj) {
         ctx.drawImage(imgCandObj, avatarX, avatarY, avatarW, avatarH);
       } else {
-        ctx.fillStyle = "#e2e8f0";
+        ctx.fillStyle = "#f1f5f9";
         ctx.fillRect(avatarX, avatarY, avatarW, avatarH);
         ctx.fillStyle = "#94a3b8";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.font = '700 24px "Outfit", sans-serif';
+        ctx.font = '700 34px "Outfit", sans-serif';
         ctx.fillText("👤", avatarX + avatarW / 2, avatarY + avatarH / 2);
       }
       ctx.restore();
 
-      // Borda elegante no avatar
-      ctx.strokeStyle = "#cbd5e1";
-      ctx.lineWidth = 2;
+      // Borda amarela/dourada no avatar (conforme mockup)
+      ctx.save();
+      ctx.strokeStyle = "#eab308";
+      ctx.lineWidth = 4;
       ctx.beginPath();
-      ctx.roundRect(avatarX, avatarY, avatarW, avatarH, 10);
+      ctx.roundRect(avatarX, avatarY, avatarW, avatarH, 12);
       ctx.stroke();
+      ctx.restore();
 
-      // Badge com Número da Ordem (1 a 6)
-      const badgeW = 44;
-      const badgeH = 92;
-      const badgeX = avatarX + avatarW + 8;
-      const badgeY = y + (rowH - badgeH) / 2;
-
-      ctx.fillStyle = rowColor.bg;
-      ctx.beginPath();
-      ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 8);
-      ctx.fill();
-
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillStyle = rowColor.text;
-      ctx.font = '900 36px "Outfit", sans-serif';
-      ctx.fillText(String(i + 1), badgeX + badgeW / 2, badgeY + badgeH / 2 + 1);
-
-      // Caixas de Dígitos Brancas (Otimizadas para 5 dígitos e garantia de espaço para o nome)
+      // 2.3 CAIXAS DE DÍGITOS GRANDES (Brancas, Borda Verde #15803d, Dígitos Pretos Gigantes)
       const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
-      const boxW = cfg.digitos === 5 ? 44 : 50;
-      const boxH = 88;
-      const boxGap = cfg.digitos === 5 ? 5 : 7;
-      const totalBoxesW = cfg.digitos * boxW + (cfg.digitos - 1) * boxGap;
-      const boxesStartX = rightX + rightW - totalBoxesW;
-      const boxY = y + (rowH - boxH) / 2;
-
-      // Caixa das Informações do Candidato com Auto-Scaling Inteligente
-      const infoX = badgeX + badgeW + 10;
-      const maxTextW = Math.max(100, boxesStartX - infoX - 10);
-
-      ctx.textAlign = "left";
-      ctx.textBaseline = "top";
-
-      if (cfg.id === "depFed") {
-        // Auto-scaling para MARQUINHOS TRAD
-        const nomeTexto = "MARQUINHOS TRAD";
-        let fontSizeNome = 34;
-        ctx.font = `950 ${fontSizeNome}px "Outfit", sans-serif`;
-        while (ctx.measureText(nomeTexto).width > maxTextW && fontSizeNome > 18) {
-          fontSizeNome -= 1;
-          ctx.font = `950 ${fontSizeNome}px "Outfit", sans-serif`;
-        }
-
-        ctx.fillStyle = "#15803d";
-        ctx.fillText(nomeTexto, infoX, y + 26);
-
-        ctx.fillStyle = "#15803d";
-        ctx.font = '800 20px "Outfit", sans-serif';
-        ctx.fillText("DEPUTADO FEDERAL", infoX, y + 74);
-      } else {
-        const candNome = cand && cand.urna ? cand.urna.toUpperCase() : "";
-        const displayNome = candNome || "A DEFINIR";
-
-        ctx.fillStyle = candNome ? "#0c2c62" : "#94a3b8";
-
-        // Auto-scaling inteligente de fonte (de 32px até 16px)
-        let fontSizeNome = 32;
-        ctx.font = `900 ${fontSizeNome}px "Outfit", sans-serif`;
-        let textMetrics = ctx.measureText(displayNome).width;
-
-        while (textMetrics > maxTextW && fontSizeNome > 17) {
-          fontSizeNome -= 1;
-          ctx.font = `900 ${fontSizeNome}px "Outfit", sans-serif`;
-          textMetrics = ctx.measureText(displayNome).width;
-        }
-
-        // Se ainda assim for muito longo (ex: nomes com mais de 20 caracteres), quebra em 2 linhas
-        if (textMetrics > maxTextW && displayNome.includes(" ")) {
-          const partes = displayNome.split(" ");
-          const meio = Math.ceil(partes.length / 2);
-          const l1 = partes.slice(0, meio).join(" ");
-          const l2 = partes.slice(meio).join(" ");
-
-          fontSizeNome = 20;
-          ctx.font = `900 ${fontSizeNome}px "Outfit", sans-serif`;
-          while ((ctx.measureText(l1).width > maxTextW || ctx.measureText(l2).width > maxTextW) && fontSizeNome > 13) {
-            fontSizeNome -= 1;
-            ctx.font = `900 ${fontSizeNome}px "Outfit", sans-serif`;
-          }
-
-          ctx.fillText(l1, infoX, y + 16);
-          ctx.fillText(l2, infoX, y + 42);
-        } else {
-          ctx.fillText(displayNome, infoX, y + 28);
-        }
-
-        let cargoTitle = cfg.cargo.toUpperCase();
-        if (cfg.id === "sen1") cargoTitle = "SENADOR (1ª VAGA)";
-        else if (cfg.id === "sen2") cargoTitle = "SENADOR (2ª VAGA)";
-
-        ctx.fillStyle = "#64748b";
-        ctx.font = '800 19px "Outfit", sans-serif';
-        ctx.fillText(cargoTitle, infoX, y + 74);
-      }
+      // Se tiver 5 dígitos (Dep Estadual), ajusta levemente a largura da caixa para caber perfeitamente
+      const boxW = cfg.digitos === 5 ? 74 : 86;
+      const boxH = 118;
+      const boxGap = cfg.digitos === 5 ? 8 : 10;
+      const boxesStartX = avatarX + avatarW + 14;
 
       for (let d = 0; d < cfg.digitos; d++) {
         const bx = boxesStartX + d * (boxW + boxGap);
         const val = digitsArr[d] !== undefined ? digitsArr[d] : "";
 
+        // Caixa Branca com contorno verde sólido
+        ctx.save();
         ctx.fillStyle = "#ffffff";
-        ctx.strokeStyle = "#0f172a";
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#15803d";
+        ctx.lineWidth = 4.5;
         ctx.beginPath();
-        ctx.roundRect(bx, boxY, boxW, boxH, 8);
+        ctx.roundRect(bx, avatarY, boxW, boxH, 12);
         ctx.fill();
         ctx.stroke();
 
+        // Dígito preto nítido e encorpado
         if (val) {
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillStyle = "#000000";
-          ctx.font = cfg.digitos === 5 ? '950 44px "Outfit", sans-serif' : '950 48px "Outfit", sans-serif';
-          ctx.fillText(val, bx + boxW / 2, boxY + boxH / 2 + 2);
+          ctx.font = cfg.digitos === 5 ? '950 68px "Outfit", sans-serif' : '950 78px "Outfit", sans-serif';
+          ctx.fillText(val, bx + boxW / 2, avatarY + boxH / 2 + 2);
         }
+        ctx.restore();
       }
     }
-
-    // 4. RODAPÉ CÍVICO ELEIÇÕES 2026 COM LINHAS CÍVICAS
-    const footerY = H - 75;
-    ctx.textAlign = "left";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = "#0c2c62";
-    ctx.font = '800 20px "Outfit", sans-serif';
-    ctx.fillText("ELEIÇÕES 2026", rightX, footerY);
-
-    // Listras Cívicas do Rodapé
-    const stripeW = 16;
-    const stripeH = 6;
-    const stripeStartX = rightX + 160;
-    ctx.fillStyle = "#15803d";
-    ctx.fillRect(stripeStartX, footerY - 3, stripeW, stripeH);
-    ctx.fillStyle = "#eab308";
-    ctx.fillRect(stripeStartX + stripeW + 6, footerY - 3, stripeW, stripeH);
-    ctx.fillStyle = "#0284c7";
-    ctx.fillRect(stripeStartX + (stripeW + 6) * 2, footerY - 3, stripeW, stripeH);
-
-    ctx.textAlign = "right";
-    ctx.fillStyle = "#0c2c62";
-    ctx.font = '800 20px "Outfit", sans-serif';
-    ctx.fillText("DEMOCRACIA SEMPRE", rightX + rightW, footerY);
 
     return canvas;
   }

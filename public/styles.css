@@ -2682,11 +2682,11 @@ body.modal-selecao-aberto {
   filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.28));
 }
 
-/* Viewport ampliado para acomodar com perfeição a colinha oficial saindo da urna */
+/* Viewport ampliado para acomodar com perfeição a colinha oficial 9:16 saindo da urna */
 .paper-card-viewport {
   width: 100%;
-  max-width: 580px;
-  max-height: 520px;
+  max-width: 440px;
+  max-height: 580px;
   overflow: hidden;
   position: relative;
   margin-top: -4px;
@@ -2714,7 +2714,7 @@ body.modal-selecao-aberto {
   animation: rollOutPaper 3.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.paper-card-roll .colinha-mockup-card-container {
+.paper-card-roll .colinha-vert-card-container {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
@@ -3143,156 +3143,87 @@ body {
 }
 
 /* ==========================================================================
-   NOVO DESIGN DE SANTINHO / COLINHA ELEITORAL (IDÊNTICO À REFERÊNCIA)
-   Foto na esquerda + Logo abaixo | MINHA COLINHA 2026 + 6 Linhas na direita
+   NOVO DESIGN DE SANTINHO / COLINHA OFICIAL 9:16 (FIEL AO MOCKUP)
    ========================================================================== */
-.colinha-mockup-card-container {
-  display: flex;
-  background: #ffffff;
-  border-radius: 18px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  overflow: hidden;
+.colinha-vert-card-container {
   position: relative;
   width: 100%;
-  max-width: 680px;
+  max-width: 480px;
   margin: 0 auto;
-}
-
-/* Lado Esquerdo - Painel Verde Oficial de Campanha (Fiel à Imagem 2) */
-.colinha-mockup-left {
-  width: 41%;
-  background: #072815;
-  position: relative;
-  display: flex;
+  aspect-ratio: 9 / 16;
+  border-radius: 18px;
   overflow: hidden;
-  flex-shrink: 0;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25), 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
 }
 
-.colinha-painel-lateral-img {
+.colinha-vert-bg-picture,
+.colinha-vert-bg-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
-  display: block;
+  pointer-events: none;
+  z-index: 1;
 }
 
-/* Lado Direito - Fundo Branco Oficial com os 6 Votos */
-.colinha-mockup-right {
-  width: 59%;
-  padding: 14px 12px 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: #ffffff;
-  min-width: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.colinha-mockup-header {
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.colinha-mockup-slogan-topo {
-  font-family: var(--font-display);
-  font-size: 21px;
-  font-weight: 900;
-  color: #0c2c62;
-  line-height: 1.1;
-  letter-spacing: -0.4px;
-  text-transform: uppercase;
-}
-
-/* Identidade Oficial Personalizada para o Nome do Eleitor */
-.colinha-mockup-personalizado-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 5px 8px;
-  width: 100%;
-  margin-bottom: 4px;
-}
-
-.colinha-nome-destaque {
-  font-family: var(--font-display);
-  font-size: 21px;
-  font-weight: 900;
-  color: #15803d;
-  letter-spacing: -0.3px;
-  text-transform: uppercase;
-  line-height: 1.1;
-  word-break: break-word;
-}
-
-.colinha-vota-assim-sub {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 800;
-  color: #0c2c62;
-  letter-spacing: -0.3px;
-  text-transform: uppercase;
-  line-height: 1.1;
-}
-
-.colinha-header-color-bar {
-  display: flex;
-  gap: 3px;
-  width: 100%;
-  margin: 4px 0 8px;
-}
-
-.colinha-header-color-bar span {
-  height: 3px;
-  border-radius: 2px;
-}
-
-.colinha-header-color-bar .bar-g { flex: 2; background: #15803d; }
-.colinha-header-color-bar .bar-y { flex: 1.2; background: #eab308; }
-.colinha-header-color-bar .bar-b { flex: 1.2; background: #0284c7; }
-
-/* Grade de Linhas com Caixas Numéricas */
-.colinha-mockup-rows-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 8px;
+.colinha-vert-left-col {
   position: relative;
   z-index: 2;
+  width: 60%;
+  height: 100%;
+  padding: 18px 12px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-.colinha-mockup-row {
+.colinha-vert-rows-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.colinha-vert-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.colinha-vert-cargo-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.colinha-vert-row-content {
   display: flex;
   align-items: center;
-  background: #ffffff;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 8px;
-  overflow: hidden;
-  height: 56px;
-  padding: 3px 6px;
   gap: 6px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  width: 100%;
 }
 
-/* Avatar do Candidato na Linha (Idêntico ao Layout da Referência) */
-.colinha-mockup-avatar-wrap {
-  width: 40px;
+.colinha-vert-avatar-wrap {
+  width: 38px;
   height: 48px;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
-  background: #f1f5f9;
-  border: 1.5px solid #cbd5e1;
+  background: #f8fafc;
+  border: 2px solid #eab308; /* Borda amarela/dourada como no mockup */
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.colinha-mockup-avatar-img {
+.colinha-vert-avatar-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -3300,218 +3231,54 @@ body {
   display: block;
 }
 
-.colinha-mockup-avatar-placeholder {
-  font-size: 16px;
-  background: #f8fafc;
+.colinha-vert-avatar-placeholder {
+  font-size: 18px;
   color: #94a3b8;
 }
 
-.colinha-mockup-badge {
-  width: 26px;
-  height: 38px;
+.colinha-vert-boxes {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.colinha-vert-digit-box {
+  width: 25px;
+  height: 48px;
+  background: #ffffff;
+  border: 2.2px solid #15803d; /* Contorno verde bandeira como no mockup */
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-display);
-  font-size: 19px;
-  font-weight: 900;
-  color: #ffffff;
-  flex-shrink: 0;
-}
-
-.colinha-mockup-info {
-  flex: 1;
-  padding: 0 4px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 0;
-  overflow: hidden;
-  text-align: left;
-}
-
-/* LINHA ESPECIAL DE DESTAQUE: MARQUINHOS TRAD */
-.colinha-row-marquinhos-destaque {
-  border-color: #15803d;
-  background: #f0fdf4;
-  box-shadow: 0 2px 6px rgba(21, 128, 61, 0.12);
-}
-
-.colinha-nome-marquinhos-duas-linhas {
-  display: flex;
-  flex-direction: column;
-  line-height: 0.96;
-  gap: 1px;
-}
-
-.colinha-nome-marquinhos-duas-linhas .mq-l1 {
-  font-family: var(--font-display);
-  font-size: 15.5px;
+  font-size: 26px;
   font-weight: 950;
-  color: #0c2c62;
-  letter-spacing: -0.2px;
-}
-
-.colinha-nome-marquinhos-duas-linhas .mq-l2 {
-  font-family: var(--font-display);
-  font-size: 15.5px;
-  font-weight: 950;
-  color: #15803d;
-  letter-spacing: 0.4px;
-}
-
-/* NOME DO CANDIDATO PADRÃO */
-.colinha-mockup-cand-name {
-  font-family: var(--font-display);
-  font-size: 14.5px;
-  font-weight: 900;
-  line-height: 1.1;
-  color: #0c2c62;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.colinha-mockup-cand-name.filled {
-  color: #0c2c62;
-}
-
-.colinha-mockup-cand-name.empty {
-  color: #94a3b8;
-  font-style: italic;
-  font-weight: 700;
-  font-size: 13px;
-}
-
-/* CARGO DISCRETO */
-.colinha-mockup-cargo {
-  font-family: var(--font-display);
-  font-size: 9px;
-  font-weight: 800;
-  color: #64748b;
-  line-height: 1.1;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-top: 1px;
-}
-
-/* CAIXAS DE DÍGITOS BRANCAS RETANGULARES (Como na Imagem 2) */
-.colinha-mockup-boxes {
-  display: flex;
-  gap: 2.5px;
-  align-items: center;
-  flex-shrink: 0;
-  margin-left: auto;
-}
-
-.colinha-mockup-digit-box {
-  width: 21px;
-  height: 36px;
-  background: #ffffff;
-  border: 1.5px solid #0f172a;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 900;
   color: #000000;
   line-height: 1;
+  box-shadow: 0 2px 4px rgba(21, 128, 61, 0.12);
 }
 
-.colinha-mockup-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 6px;
-  border-top: 1px solid #e2e8f0;
-  font-family: var(--font-display);
-  font-size: 9.5px;
-  font-weight: 800;
-  color: #0c2c62;
-  position: relative;
-  z-index: 2;
-}
-
-/* Rodapé */
-.colinha-mockup-footer {
-  border-top: 1px solid #cbd5e1;
-  padding-top: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-family: var(--font-display);
-  font-size: 8.5px;
-  font-weight: 800;
-  color: #0c2c62;
-}
-
-/* Responsividade Fina para Telas Pequenas de Celular */
-@media (max-width: 520px) {
-  .colinha-mockup-card-container {
-    border-radius: 14px;
+@media (max-width: 400px) {
+  .colinha-vert-left-col {
+    width: 64%;
+    padding: 12px 8px 10px 10px;
   }
-  .colinha-mockup-left {
-    width: 32%;
+  .colinha-vert-rows-wrap {
+    gap: 8px;
   }
-  .colinha-mockup-right {
-    width: 68%;
-    padding: 10px 8px 8px;
+  .colinha-vert-cargo-label {
+    font-size: 9.5px;
   }
-  .colinha-mockup-title {
-    font-size: 19px;
-  }
-  .colinha-mockup-ano {
-    font-size: 40px;
-  }
-  .colinha-nome-destaque {
-    font-size: 17px;
-  }
-  .colinha-vota-assim-sub {
-    font-size: 13.5px;
-  }
-  .colinha-mockup-row {
-    height: 58px;
-    padding: 2px 4px;
-    gap: 4px;
-  }
-  .colinha-mockup-avatar-wrap {
+  .colinha-vert-avatar-wrap {
     width: 32px;
-    height: 40px;
-    border-radius: 4px;
+    height: 42px;
   }
-  .colinha-mockup-badge {
-    width: 22px;
-    height: 34px;
-    font-size: 16px;
-  }
-  .colinha-mockup-info {
-    padding: 0 6px;
-  }
-  .colinha-mockup-cand-name {
-    font-size: 14.5px;
-    line-height: 1.1;
-  }
-  .colinha-mockup-cand-name.empty {
-    font-size: 12px;
-  }
-  .colinha-mockup-cargo {
-    font-size: 9px;
-    line-height: 1.1;
-  }
-  .colinha-mockup-digit-box {
-    width: 20px;
-    height: 35px;
-    font-size: 20px;
-  }
-  .colinha-mockup-boxes {
-    gap: 2px;
-    padding-right: 4px;
+  .colinha-vert-digit-box {
+    width: 21px;
+    height: 42px;
+    font-size: 22px;
   }
 }
 
