@@ -208,8 +208,31 @@
         nameInnerHtml = `<div class="colinha-mockup-cand-name ${candNome ? 'filled' : 'empty'}">${candNome || 'A DEFINIR'}</div>`;
       }
 
+      let fotoUrl = cand && cand.foto_url ? cand.foto_url : "";
+      let avatarHtml = "";
+      if (cfg.id === "depFed") {
+        avatarHtml = `
+          <div class="colinha-mockup-avatar-wrap">
+            <img src="welcome_marquinhos_hero.png" alt="Marquinhos Trad" class="colinha-mockup-avatar-img">
+          </div>
+        `;
+      } else if (fotoUrl) {
+        avatarHtml = `
+          <div class="colinha-mockup-avatar-wrap">
+            <img src="${fotoUrl}" alt="${candNome}" class="colinha-mockup-avatar-img" onerror="this.style.display='none'">
+          </div>
+        `;
+      } else {
+        avatarHtml = `
+          <div class="colinha-mockup-avatar-wrap colinha-mockup-avatar-placeholder">
+            <span>👤</span>
+          </div>
+        `;
+      }
+
       return `
         <div class="colinha-mockup-row ${rowExtraClass}">
+          ${avatarHtml}
           <div class="colinha-mockup-badge" style="background:${rowColor.bg};color:${rowColor.text};">${i + 1}</div>
           <div class="colinha-mockup-info">
             ${nameInnerHtml}
@@ -1019,10 +1042,48 @@
       const y = rowStartY + i * (rowH + rowGap);
       const rowColor = ROW_COLORS[i];
 
+      // Avatar com Foto Real do Candidato (Idêntico ao layout de referência)
+      const avatarW = 72;
+      const avatarH = 92;
+      const avatarX = rightX;
+      const avatarY = y + (rowH - avatarH) / 2;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.roundRect(avatarX, avatarY, avatarW, avatarH, 10);
+      ctx.clip();
+
+      let imgCandObj = null;
+      if (cfg.id === "depFed") {
+        imgCandObj = await carregarImagemAsync("welcome_marquinhos_hero.png");
+      } else if (cand && cand.foto_url) {
+        imgCandObj = await carregarImagemAsync(cand.foto_url);
+      }
+
+      if (imgCandObj) {
+        ctx.drawImage(imgCandObj, avatarX, avatarY, avatarW, avatarH);
+      } else {
+        ctx.fillStyle = "#e2e8f0";
+        ctx.fillRect(avatarX, avatarY, avatarW, avatarH);
+        ctx.fillStyle = "#94a3b8";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = '700 24px "Outfit", sans-serif';
+        ctx.fillText("👤", avatarX + avatarW / 2, avatarY + avatarH / 2);
+      }
+      ctx.restore();
+
+      // Borda elegante no avatar
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(avatarX, avatarY, avatarW, avatarH, 10);
+      ctx.stroke();
+
       // Badge com Número da Ordem (1 a 6)
-      const badgeW = 54;
+      const badgeW = 44;
       const badgeH = 92;
-      const badgeX = rightX;
+      const badgeX = avatarX + avatarW + 8;
       const badgeY = y + (rowH - badgeH) / 2;
 
       ctx.fillStyle = rowColor.bg;
@@ -1033,21 +1094,21 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillStyle = rowColor.text;
-      ctx.font = '900 42px "Outfit", sans-serif';
+      ctx.font = '900 36px "Outfit", sans-serif';
       ctx.fillText(String(i + 1), badgeX + badgeW / 2, badgeY + badgeH / 2 + 1);
 
       // Caixas de Dígitos Brancas (Otimizadas para 5 dígitos e garantia de espaço para o nome)
       const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
-      const boxW = cfg.digitos === 5 ? 46 : 52;
+      const boxW = cfg.digitos === 5 ? 44 : 50;
       const boxH = 88;
-      const boxGap = cfg.digitos === 5 ? 6 : 8;
+      const boxGap = cfg.digitos === 5 ? 5 : 7;
       const totalBoxesW = cfg.digitos * boxW + (cfg.digitos - 1) * boxGap;
       const boxesStartX = rightX + rightW - totalBoxesW;
       const boxY = y + (rowH - boxH) / 2;
 
       // Caixa das Informações do Candidato com Auto-Scaling Inteligente
-      const infoX = badgeX + badgeW + 14;
-      const maxTextW = Math.max(120, boxesStartX - infoX - 12);
+      const infoX = badgeX + badgeW + 10;
+      const maxTextW = Math.max(100, boxesStartX - infoX - 10);
 
       ctx.textAlign = "left";
       ctx.textBaseline = "top";
