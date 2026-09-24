@@ -188,7 +188,7 @@
       if (cfg.id === "depFed") {
         avatarHtml = `
           <div class="colinha-vert-avatar-wrap">
-            <img src="welcome_marquinhos_hero.png" alt="Marquinhos Trad" class="colinha-vert-avatar-img">
+            <img src="marquinhos_avatar_ref.png" alt="Marquinhos Trad" class="colinha-vert-avatar-img">
           </div>
         `;
       } else if (fotoUrl) {
@@ -877,47 +877,51 @@
     const ctx = canvas.getContext("2d");
 
     // Proporção Exata 9:16 de Altíssima Resolução: 1000 x 1778 px (Fiel ao mockup proposta_layout_santinho.jpg)
+    // Proporção Exata 448:801 (1000 x 1788 px HD) Fiel ao mockup enviado
     const W = 1000;
-    const H = 1778;
+    const H = 1788;
     canvas.width = W;
     canvas.height = H;
 
-    // 1. Fundo Oficial em degradê ou composto 9:16 com Marquinhos Trad e Logo Oficial na direita
+    // 1. Fundo Oficial HD extraído da imagem de referência enviada pelo usuário
     const bgOficial = (await carregarImagemAsync("base_fundo_santinho_916.webp")) ||
                       (await carregarImagemAsync("base_fundo_santinho_916.png"));
 
     if (bgOficial) {
       ctx.drawImage(bgOficial, 0, 0, W, H);
     } else {
-      // Fallback elegante com degradê caso a imagem base falhe
-      const grad = ctx.createLinearGradient(0, 0, W, H);
-      grad.addColorStop(0, "#ffffff");
-      grad.addColorStop(0.55, "#f0fdf4");
-      grad.addColorStop(1, "#dcfce7");
-      ctx.fillStyle = grad;
+      ctx.fillStyle = "#f1f1ef";
       ctx.fillRect(0, 0, W, H);
-
-      const fotoMarquinhos = await carregarImagemAsync("marquinhos_sem_fundo.png");
-      if (fotoMarquinhos) {
-        ctx.drawImage(fotoMarquinhos, 420, 260, 580, 1050);
-      }
-      const logoMarquinhos = await carregarImagemAsync("marquinhos_logo_oficial.png");
-      if (logoMarquinhos) {
-        ctx.drawImage(logoMarquinhos, 430, 1340, 540, 360);
-      }
     }
 
-    // 2. COLUNA ESQUERDA: AS 6 LINHAS DE VOTO (FIEL AO MOCKUP: CARGO, FOTO E NÚMEROS - SEM NOME)
-    const startX = 40;
-    const startY = 85;
-    const rowStep = 270; // 6 linhas bem distribuídas na altura total de 1778px
+    // 2. LINHAS DE VOTAÇÃO: COORDENADAS EXATAS EXTRAÍDAS DA REFERÊNCIA (escala 2.232)
+    // Row 1: Label Y=103, Box Y=154, H=170
+    // Row 2: Label Y=379, Box Y=431, H=170
+    // Row 3: Label Y=658, Box Y=708, H=170
+    // Row 4: Label Y=938, Box Y=987, H=170
+    // Row 5: Label Y=1214, Box Y=1266, H=170
+    // Row 6: Label Y=1493, Box Y=1542, H=170
+    const ROW_GEOMETRY = [
+      { labelY: 103, boxY: 154 },
+      { labelY: 379, boxY: 431 },
+      { labelY: 658, boxY: 708 },
+      { labelY: 938, boxY: 987 },
+      { labelY: 1214, boxY: 1266 },
+      { labelY: 1493, boxY: 1542 }
+    ];
+
+    const avatarX = 47;
+    const avatarW = 130;
+    const boxH = 170;
+    const boxW = 130;
+    const gap = 14;
 
     for (let i = 0; i < CARGOS_CONFIG.length; i++) {
       const cfg = CARGOS_CONFIG[i];
       const cand = colinhaState[cfg.id];
-      const y = startY + i * rowStep;
+      const geom = ROW_GEOMETRY[i];
 
-      // 2.1 TÍTULO DO CARGO (Preto / Chumbo Escuro em caixa alta)
+      // 2.1 TÍTULO DO CARGO (Preto Sólido, Fonte Robusta sem serifa)
       let cargoTitle = cfg.cargo.toUpperCase();
       if (cfg.id === "sen1") cargoTitle = "SENADOR 1";
       else if (cfg.id === "sen2") cargoTitle = "SENADOR 2";
@@ -925,82 +929,91 @@
       ctx.save();
       ctx.textAlign = "left";
       ctx.textBaseline = "top";
-      ctx.fillStyle = "#0f172a";
-      ctx.font = '900 28px "Outfit", sans-serif';
-      ctx.fillText(cargoTitle, startX, y);
+      ctx.fillStyle = "#000000";
+      ctx.font = '950 34px "Outfit", sans-serif';
+      ctx.fillText(cargoTitle, avatarX, geom.labelY);
       ctx.restore();
 
-      // 2.2 FOTO / AVATAR DO CANDIDATO (Borda Dourada / Amarela como no Mockup)
-      const avatarX = startX;
-      const avatarY = y + 42;
-      const avatarW = 86;
-      const avatarH = 118;
+      // 2.2 FOTO / AVATAR DO CANDIDATO
+      ctx.save();
+      ctx.shadowColor = "rgba(0, 0, 0, 0.22)";
+      ctx.shadowBlur = 10;
+      ctx.shadowOffsetY = 5;
+
+      ctx.beginPath();
+      ctx.roundRect(avatarX, geom.boxY, avatarW, boxH, 22);
+      ctx.fillStyle = "#facc15";
+      ctx.fill();
+      ctx.restore();
 
       ctx.save();
       ctx.beginPath();
-      ctx.roundRect(avatarX, avatarY, avatarW, avatarH, 12);
+      ctx.roundRect(avatarX, geom.boxY, avatarW, boxH, 22);
       ctx.clip();
 
       let imgCandObj = null;
       if (cfg.id === "depFed") {
-        imgCandObj = await carregarImagemAsync("welcome_marquinhos_hero.png");
+        imgCandObj = (await carregarImagemAsync("marquinhos_avatar_ref.png")) ||
+                     (await carregarImagemAsync("welcome_marquinhos_hero.png"));
       } else if (cand && cand.foto_url) {
         imgCandObj = await carregarImagemAsync(cand.foto_url);
       }
 
       if (imgCandObj) {
-        ctx.drawImage(imgCandObj, avatarX, avatarY, avatarW, avatarH);
+        ctx.drawImage(imgCandObj, avatarX, geom.boxY, avatarW, boxH);
       } else {
-        ctx.fillStyle = "#f1f5f9";
-        ctx.fillRect(avatarX, avatarY, avatarW, avatarH);
-        ctx.fillStyle = "#94a3b8";
+        ctx.fillStyle = "#facc15";
+        ctx.fillRect(avatarX, geom.boxY, avatarW, boxH);
+        ctx.fillStyle = "#854d0e";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.font = '700 34px "Outfit", sans-serif';
-        ctx.fillText("👤", avatarX + avatarW / 2, avatarY + avatarH / 2);
+        ctx.font = '700 48px "Outfit", sans-serif';
+        ctx.fillText("👤", avatarX + avatarW / 2, geom.boxY + boxH / 2);
       }
       ctx.restore();
 
-      // Borda amarela/dourada no avatar (conforme mockup)
+      // Borda Amarela Ouro Sólida no avatar
       ctx.save();
       ctx.strokeStyle = "#eab308";
-      ctx.lineWidth = 4;
+      ctx.lineWidth = 7;
       ctx.beginPath();
-      ctx.roundRect(avatarX, avatarY, avatarW, avatarH, 12);
+      ctx.roundRect(avatarX, geom.boxY, avatarW, boxH, 22);
       ctx.stroke();
       ctx.restore();
 
       // 2.3 CAIXAS DE DÍGITOS GRANDES (Brancas, Borda Verde #15803d, Dígitos Pretos Gigantes)
       const digitsArr = cand && cand.nr ? String(cand.nr).split("") : [];
-      // Se tiver 5 dígitos (Dep Estadual), ajusta levemente a largura da caixa para caber perfeitamente
-      const boxW = cfg.digitos === 5 ? 74 : 86;
-      const boxH = 118;
-      const boxGap = cfg.digitos === 5 ? 8 : 10;
-      const boxesStartX = avatarX + avatarW + 14;
+      const boxesStartX = avatarX + avatarW + gap;
 
       for (let d = 0; d < cfg.digitos; d++) {
-        const bx = boxesStartX + d * (boxW + boxGap);
+        const bx = boxesStartX + d * (boxW + gap);
         const val = digitsArr[d] !== undefined ? digitsArr[d] : "";
 
-        // Caixa Branca com contorno verde sólido
+        // Sombra suave externa idêntica ao mockup
         ctx.save();
+        ctx.shadowColor = "rgba(0, 0, 0, 0.2)";
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetY = 5;
+
         ctx.fillStyle = "#ffffff";
         ctx.strokeStyle = "#15803d";
-        ctx.lineWidth = 4.5;
+        ctx.lineWidth = 7;
         ctx.beginPath();
-        ctx.roundRect(bx, avatarY, boxW, boxH, 12);
+        ctx.roundRect(bx, geom.boxY, boxW, boxH, 22);
         ctx.fill();
         ctx.stroke();
+        ctx.restore();
 
-        // Dígito preto nítido e encorpado
+        // Dígito preto nítido e encorpado idêntico à referência
         if (val) {
+          ctx.save();
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillStyle = "#000000";
-          ctx.font = cfg.digitos === 5 ? '950 68px "Outfit", sans-serif' : '950 78px "Outfit", sans-serif';
-          ctx.fillText(val, bx + boxW / 2, avatarY + boxH / 2 + 2);
+          ctx.font = '950 110px "Outfit", sans-serif';
+          ctx.fillText(val, bx + boxW / 2, geom.boxY + boxH / 2 + 5);
+          ctx.restore();
         }
-        ctx.restore();
       }
     }
 

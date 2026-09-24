@@ -3150,11 +3150,11 @@ body {
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
-  aspect-ratio: 9 / 16;
-  border-radius: 18px;
+  aspect-ratio: 448 / 801;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25), 0 2px 10px rgba(0, 0, 0, 0.1);
-  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.28), 0 2px 10px rgba(0, 0, 0, 0.12);
+  background: #f1f1ef;
 }
 
 .colinha-vert-bg-picture,
@@ -3168,12 +3168,14 @@ body {
   z-index: 1;
 }
 
+/* Coluna de Votos: posicionada exatamente no topo e esquerda como no mockup */
 .colinha-vert-left-col {
   position: relative;
   z-index: 2;
-  width: 60%;
+  width: 100%;
   height: 100%;
-  padding: 18px 12px 16px 14px;
+  padding: 5.7% 4.7% 4% 4.7%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -3182,103 +3184,118 @@ body {
 .colinha-vert-rows-wrap {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 3.8%;
   width: 100%;
+  height: 100%;
 }
 
 .colinha-vert-row {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 1.6%;
   width: 100%;
 }
 
+/* Rótulo do Cargo: preto forte, caixa alta, fonte display */
 .colinha-vert-cargo-label {
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 900;
-  color: #0f172a;
-  letter-spacing: 0.3px;
+  color: #000000;
+  letter-spacing: -0.2px;
   text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 3px;
 }
 
 .colinha-vert-row-content {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 1.6%;
   width: 100%;
 }
 
+/* Foto do Candidato: moldura vertical com fundo/borda amarela forte como no mockup */
 .colinha-vert-avatar-wrap {
-  width: 38px;
-  height: 48px;
-  border-radius: 8px;
+  width: 13.5%;
+  aspect-ratio: 58 / 76;
+  border-radius: 12px;
   overflow: hidden;
-  background: #f8fafc;
-  border: 2px solid #eab308; /* Borda amarela/dourada como no mockup */
+  background: #facc15;
+  border: 3.5px solid #eab308;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16);
 }
 
 .colinha-vert-avatar-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 15%;
+  object-position: center 10%;
   display: block;
 }
 
 .colinha-vert-avatar-placeholder {
-  font-size: 18px;
-  color: #94a3b8;
+  font-size: 24px;
+  color: #854d0e;
 }
 
 .colinha-vert-boxes {
   display: flex;
-  gap: 3px;
+  gap: 1.6%;
   align-items: center;
   flex-wrap: nowrap;
 }
 
+/* Caixas de Dígitos: Brancas, contorno verde vibrante idêntico ao mockup e sombra sutil */
 .colinha-vert-digit-box {
-  width: 25px;
-  height: 48px;
+  width: 13.5%;
+  aspect-ratio: 58 / 76;
   background: #ffffff;
-  border: 2.2px solid #15803d; /* Contorno verde bandeira como no mockup */
-  border-radius: 6px;
+  border: 3.5px solid #15803d;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-display);
-  font-size: 26px;
+  font-size: 38px;
   font-weight: 950;
   color: #000000;
   line-height: 1;
-  box-shadow: 0 2px 4px rgba(21, 128, 61, 0.12);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.14);
 }
 
-@media (max-width: 400px) {
-  .colinha-vert-left-col {
-    width: 64%;
-    padding: 12px 8px 10px 10px;
-  }
-  .colinha-vert-rows-wrap {
-    gap: 8px;
-  }
+@media (max-width: 480px) {
   .colinha-vert-cargo-label {
-    font-size: 9.5px;
+    font-size: 13px;
+    margin-bottom: 2px;
   }
   .colinha-vert-avatar-wrap {
-    width: 32px;
-    height: 42px;
+    border-radius: 8px;
+    border-width: 2.8px;
   }
   .colinha-vert-digit-box {
-    width: 21px;
-    height: 42px;
-    font-size: 22px;
+    border-radius: 8px;
+    border-width: 2.8px;
+    font-size: 29px;
+  }
+}
+
+@media (max-width: 360px) {
+  .colinha-vert-cargo-label {
+    font-size: 11px;
+  }
+  .colinha-vert-avatar-wrap {
+    border-radius: 6px;
+    border-width: 2px;
+  }
+  .colinha-vert-digit-box {
+    border-radius: 6px;
+    border-width: 2px;
+    font-size: 23px;
   }
 }
 
