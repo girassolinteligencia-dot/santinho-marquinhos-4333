@@ -69,16 +69,23 @@
     }, duracao);
   }
 
+  // Limpeza de chaves legadas permanentes no localStorage para garantir privacidade e sigilo total
+  try {
+    localStorage.removeItem("santinho_eleitor_nome");
+    localStorage.removeItem("santinho_marquinhos_4333_v1");
+    localStorage.removeItem("santinho_marquinhos_boas_vindas_vista");
+  } catch (e) {}
+
   let eleitorNomeGlobal = "";
   try {
-    eleitorNomeGlobal = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
+    eleitorNomeGlobal = (sessionStorage.getItem("santinho_eleitor_nome") || "").trim();
   } catch (e) {}
 
   function getEleitorNome() {
     let nome = eleitorNomeGlobal;
     if (!nome) {
       try {
-        nome = (localStorage.getItem("santinho_eleitor_nome") || "").trim();
+        nome = (sessionStorage.getItem("santinho_eleitor_nome") || "").trim();
       } catch (e) {}
     }
     return nome ? nome.split(" ")[0].toUpperCase() : "";
@@ -88,14 +95,14 @@
     eleitorNomeGlobal = (novoNome || "").trim();
     try {
       if (eleitorNomeGlobal) {
-        localStorage.setItem("santinho_eleitor_nome", eleitorNomeGlobal);
+        sessionStorage.setItem("santinho_eleitor_nome", eleitorNomeGlobal);
       } else {
-        localStorage.removeItem("santinho_eleitor_nome");
+        sessionStorage.removeItem("santinho_eleitor_nome");
       }
     } catch (e) {}
   }
 
-  // ---------- Persistência Local (Offline / LGPD) ----------
+  // ---------- Persistência em Sessão (Volátil / Sigilo Absoluto LGPD) ----------
   function carregarColinha() {
     let base = {
       depFed: CANDIDATO_MARQUINHOS_4333,
@@ -105,9 +112,9 @@
       gov: null,
       pres: null
     };
-    // Recupera dados salvos se existirem
+    // Recupera dados da sessão atual se o usuário atualizar a página
     try {
-      const salvo = localStorage.getItem("santinho_marquinhos_4333_v1");
+      const salvo = sessionStorage.getItem("santinho_marquinhos_4333_v1");
       if (salvo) {
         const parsed = JSON.parse(salvo);
         if (parsed && typeof parsed === "object") {
@@ -121,7 +128,7 @@
   function salvarColinha(dispararImpressaoSeCompleto = false) {
     try {
       colinhaState.depFed = CANDIDATO_MARQUINHOS_4333; // Garante permanência do 1º voto
-      localStorage.setItem("santinho_marquinhos_4333_v1", JSON.stringify(colinhaState));
+      sessionStorage.setItem("santinho_marquinhos_4333_v1", JSON.stringify(colinhaState));
     } catch (e) {}
     renderSlots();
     atualizarProgresso(dispararImpressaoSeCompleto);
@@ -323,7 +330,7 @@
     const vitrineContainer = document.querySelector(".container-vitrine");
     const appHeader = document.querySelector(".app-header");
     const welcomeSection = document.getElementById("welcome-section");
-    const boasVindasVista = localStorage.getItem("santinho_marquinhos_boas_vindas_vista") === "true";
+    const boasVindasVista = sessionStorage.getItem("santinho_marquinhos_boas_vindas_vista") === "true";
 
     renderizarStepperFunil();
     renderizarVitrineNicho();
@@ -1266,6 +1273,7 @@
       };
       setEleitorNome("");
       try {
+        sessionStorage.removeItem("santinho_marquinhos_boas_vindas_vista");
         localStorage.removeItem("santinho_marquinhos_boas_vindas_vista");
       } catch (e) {}
 
@@ -1356,7 +1364,7 @@
         setEleitorNome(primeiroNome);
         if (avisoNome) avisoNome.style.display = "none";
 
-        localStorage.setItem("santinho_marquinhos_boas_vindas_vista", "true");
+        sessionStorage.setItem("santinho_marquinhos_boas_vindas_vista", "true");
         etapaAtual = 1; // Inicia no 2º voto (Deputado Estadual)
         atualizarProgresso();
         window.scrollTo({ top: 0, behavior: "smooth" });
